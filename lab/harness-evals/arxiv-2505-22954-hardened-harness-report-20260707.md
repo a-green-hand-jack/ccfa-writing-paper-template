@@ -50,7 +50,7 @@ All required checks passed after the case fixes below.
 - Added appendix/experiment evidence records in `lab/research/evidence.yaml` and reciprocal rows in `state/evidence-matrix.csv`.
 - Added verified reported-number entries in `state/numbers/groups/appendix.yaml` for appendix and experiment-section metrics that came directly from the migrated arXiv source.
 - Added targeted numeric exceptions in `state/numbers/exceptions.yaml` for non-claim numerics: LaTeX layout dimensions, model/date metadata, raw SWE-bench task IDs, Git diff modes/hashes/hunk ranges, and code constants inside supplementary diff listings.
-- Tightened the model/date numeric exception during main-agent review so it matches only model-version/date literals. The first draft used a context-wide pattern that could also excuse registered result/metadata literals on the same line, so those literals now live under the explicit registered-nonmacro exception instead.
+- Tightened the model/date numeric exception during main-agent review so it matches only model-version/date literals. The first draft used a context-wide pattern that could also excuse registered result/metadata literals on the same line. Upstream harness `e7ef260` now defaults exceptions to literal matching and treats verified non-macro numbers as registered literals, so the case no longer needs a registered-nonmacro exception.
 - Added result ledger entries in `lab/artifacts/result-index.yaml` and `state/result-status.yaml`, then bound the three previously failing tables in `lab/artifacts/table-index.yaml`.
 - Added this report under `lab/harness-evals/` and updated `lab/ANATOMY.md`.
 
@@ -65,16 +65,16 @@ All required checks passed after the case fixes below.
 
 - Citation migration needs a first-class bulk status. The case had 100+ original-author citations from the arXiv source; requiring per-citation context is reasonable for new writing, but noisy for a migration audit. The current checker can be satisfied with a generic context on every entry, which is formally compliant but low signal.
 - Numeric scanning is too broad for supplementary source packages. It scans raw task-id lists and Git patch listings as if every number were a paper claim. That is useful for catching hidden numbers, but the noise is severe on real arXiv source bundles.
-- Numeric exceptions need path scoping. The current exception matcher sees only literal/context, not the file path, so task-list and code-diff exceptions must be broader than ideal.
-- Context-wide exception matching is risky. A model-version exception can accidentally match the whole sentence and therefore excuse unrelated result literals in the same context unless the pattern is carefully anchored.
-- Verified non-macro numbers are not enough to satisfy literal scanning. The case now registers reported appendix numbers with evidence and provenance, but the checker still needed an exception because only macro-backed verified numbers are added to the literal allowlist. This feels like a validator design bug.
+- Numeric exception path scoping remains useful. Upstream harness `e7ef260` added `path_pattern`, but this case still uses literal-only exceptions for task ids and Git diff fragments until those paths are normalized.
+- Context-wide exception matching used to be risky: a model-version exception could accidentally match the whole sentence and excuse unrelated result literals in the same context. Upstream harness `e7ef260` fixed the default by requiring explicit `match_scope` for context matching.
+- Verified non-macro numbers were a design bug in the first hardened checker: the case registered reported appendix numbers with evidence and provenance, but still needed an exception. Upstream harness `e7ef260` now treats verified non-macro ledger values as registered literals.
 - Table binding is valuable for quantitative tables, but too blunt for configuration tables such as `tab:fm-hyperparam`. Binding a result ID made the check pass, but `explicitly_qualitative` or a `kind: configuration` escape hatch would be more honest.
 
 ## Upstream Improvement Ideas
 
 - Add `migration_source: arxiv` or `bulk_import_status: needs-review` support for citation ledgers, with a separate audit target for citations that actually need sentence-level review.
-- Let numeric exceptions match on `path`, `literal`, and `context`.
-- Prefer literal-first exception matching, or require an explicit `match_scope` field, so a context exception cannot silently excuse unrelated literals on the same line.
-- Treat verified non-macro numeric ledger entries as registered literal values, or require macros explicitly and say so in the error.
+- Convert broad task-id and Git-diff numeric exceptions to `path_pattern`-scoped exceptions.
+- Continue using literal-first exception matching and explicit `match_scope` for any future context exception.
+- Keep verified non-macro numeric ledger entries in the registry rather than duplicating them in exceptions.
 - Classify tables as `quantitative`, `qualitative`, or `configuration` so table binding expectations are explicit.
 - Collapse repeated release-manifest errors by surface/file class when `check-writing-harness.py` aggregates checks.

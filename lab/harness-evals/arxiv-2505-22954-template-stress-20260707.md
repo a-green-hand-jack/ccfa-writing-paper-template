@@ -14,7 +14,7 @@ Upstream harness reference: `/home/user/Projects/research-project-harness` at `e
 
 Use the migrated arXiv:2505.22954 case as a realistic stress target for the generated `ccfa-writing-paper-template`. This run is not a happy-path validation. It intentionally mutated disposable copies under `/tmp` to test whether the harness catches plausible drift in claims, evidence, numbers, citations, floats, release surfaces, and notation.
 
-The real worktree was kept report-only. Destructive probes were run on `/tmp/ccfa-stress-probe-*` copies made from `git archive HEAD`.
+The real worktree was kept report-only. Destructive probes were run on `/tmp/ccfa-stress-probe-*` copies made from `git archive HEAD`; those disposable copies are execution evidence, not repository artifacts.
 
 ## Baseline
 
@@ -56,7 +56,7 @@ OK latex-compile
 | Numeric exception path gate | Added fake `77.7\\%` in intro plus an exact literal exception scoped to `path_pattern: ^paper/sections/appendix\\.tex$`. | The exception should not apply outside its path. | Failed: `ERROR unregistered numeric literal ... 77.7\\% at paper/sections/intro.tex:24`. | Caught. | Good new affordance; the case has not yet used it for task ids / diff fragments. | Convert broad task-id and Git-diff exceptions to `path_pattern`-scoped exceptions. |
 | Citation ledger mismatch | Removed the `citation-ledger` entry for active cited key `GoogleDeepMind2025GeminiThinking`. | A citation validator should fail because paper content cites a key that is no longer in the citation ledger. | `check-citation-fitness.py` passed: `OK citation_fitness`. `check-reference-existence.py` failed: `ERROR paper cites key not registered in citation-ledger: GoogleDeepMind2025GeminiThinking`. | Caught only by adjacent validator. | The split between "reference existence" and "citation fitness" is easy to misuse; running only citation fitness gives a false sense of coverage. | Either make `check-citation-fitness.py` include the active citation-key coverage precondition, or rename/document the split very loudly in workflows. |
 | Table result binding drift | Removed `result_ids`/`numeric_ids` from first verified table in `lab/artifacts/table-index.yaml`. | `check-figures-tables.py` should fail for verified/final quantitative table with no numeric/result binding. | Failed: `ERROR table tab-DGM-greedy verified/final without numeric_ids or result_ids`. | Caught. | Clear for quantitative tables. Configuration tables remain awkward. | Add table `kind` such as `quantitative`, `qualitative`, `configuration`. |
-| Release surface leakage | Created `release/arxiv/state/leak.txt`. | `check-release-package.py` should fail for harness/state path leakage and manifest mismatch. | Failed with leakage and unmanifested-file errors. | Caught, noisy. | Same leakage is reported twice for the same surface/path. | Deduplicate release-package errors by surface/path/category. |
+| Release surface leakage | Created `release/arxiv/state/leak.txt`. | `check-release-package.py` should fail for harness/state path leakage and manifest mismatch. | Failed with leakage and unmanifested-file errors. | Caught, noisy. | Parent/child leakage paths plus manifest mismatch produce repeated same-category noise for one bad file. | Deduplicate release-package errors by surface/path/category. |
 | Notation conflict | Added a second `DGM` notation entry with a different meaning. | `check-notation.py` should fail on conflicting symbol definitions. | Failed: `ERROR notation symbol has conflicting meanings: DGM`. | Caught. | Good conflict check. It still does not prove registered notation is actually used or first defined at the right semantic location. | Add optional usage/first-definition scanning for active notation. |
 
 ## Constructive Workflow Probes
@@ -112,7 +112,7 @@ Upstream implication: add first-class `bulk_import_status` / `migration_source` 
 
 1. Make `check-citation-fitness.py` either call the active citation-key coverage checks from `check-reference-existence.py`, or emit a warning that it assumes reference existence already passed. The citation-ledger mismatch probe showed direct `check-citation-fitness.py` can pass after an active cited key is removed from the citation ledger.
 2. Add path-scoped numeric exception fixtures to upstream tests and migrate this case's SWE-bench task-id / Git-diff exceptions to `path_pattern` entries.
-3. Deduplicate release-package leakage and manifest errors. The leakage probe reports the same `release/arxiv/state` leak twice.
+3. Deduplicate release-package leakage and manifest errors. The leakage probe reports repeated same-category noise for one leaked `release/arxiv/state/leak.txt` file.
 4. Add optional active notation usage / first-definition validation. The conflict check works, but usage correctness is still mostly structural.
 
 ### Workflow And Documentation Friction

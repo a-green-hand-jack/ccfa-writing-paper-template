@@ -3,7 +3,9 @@
   "status": "active",
   "purpose": "export tex-only release surfaces without harness state leakage",
   "inputs": [
-    "state/ccfa.yaml"
+    "paper/",
+    "release/manifest.yaml",
+    "state/worktrees.yaml"
   ],
   "outputs": [
     "release/arxiv/",
@@ -11,15 +13,77 @@
     "release/github-tex/",
     "release/manifest.yaml"
   ],
+  "validators": [
+    "scripts/check-capability-parity.py",
+    "scripts/export-tex-release.sh",
+    "scripts/check-release-package.py",
+    "scripts/check-release-freshness.py"
+  ],
+  "human_gates": [
+    {
+      "id": "release-export",
+      "required_when": "Publishing or handing off a tex-only release surface.",
+      "record": "release/manifest.yaml"
+    },
+    {
+      "id": "scope-change",
+      "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+      "record": "human/decisions/README.md"
+    }
+  ],
+  "allowed_paths": [
+    "release/arxiv/",
+    "release/overleaf/",
+    "release/github-tex/",
+    "release/manifest.yaml",
+    "memory/current-status.md",
+    "human/inbox/README.md"
+  ],
+  "read_only_paths": [
+    ".agent/capabilities/tex-release-export.yaml",
+    "paper/",
+    "release/manifest.yaml",
+    "state/worktrees.yaml",
+    "scripts/check-capability-parity.py",
+    "scripts/export-tex-release.sh",
+    "scripts/check-release-package.py",
+    "scripts/check-release-freshness.py"
+  ],
+  "forbidden_paths": [
+    ".git/**",
+    ".venv/**",
+    "__pycache__/**",
+    ".pytest_cache/**"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/tex-release-export/"
   },
   "codex_adapter": {
     "workflow": ".agents/workflows/tex-release-export.md"
   },
-  "validators": [
-    "scripts/check-capability-parity.py"
-  ],
   "parity": "required",
+  "completion_contract": {
+    "success_requires": [
+      "Read the source capability spec before editing.",
+      "Changed files are limited to declared outputs.",
+      "Every factual paper change is backed by repository evidence, not chat context.",
+      "Declared validators pass, or the unresolved blocker is recorded."
+    ],
+    "required_outputs": [
+      "release/arxiv/",
+      "release/overleaf/",
+      "release/github-tex/",
+      "release/manifest.yaml"
+    ],
+    "required_validators": [
+      "scripts/check-capability-parity.py",
+      "scripts/export-tex-release.sh",
+      "scripts/check-release-package.py",
+      "scripts/check-release-freshness.py"
+    ],
+    "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+    "blocker_record": "memory/current-status.md",
+    "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+  },
   "exceptions": []
 }

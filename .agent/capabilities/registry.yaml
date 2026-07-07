@@ -7,7 +7,9 @@
       "status": "active",
       "purpose": "initialize the paper repo control plane",
       "inputs": [
-        "state/ccfa.yaml"
+        "PROJECT.md",
+        "state/ccfa.yaml",
+        "ANATOMY.md"
       ],
       "outputs": [
         "README.md",
@@ -15,16 +17,74 @@
         "state/ccfa.yaml",
         "memory/current-status.md"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-worktrees.py"
+      ],
+      "human_gates": [
+        {
+          "id": "initialize-control-plane",
+          "required_when": "Changing slug, owner, venue, paper type, or release surfaces.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "README.md",
+        "ANATOMY.md",
+        "state/ccfa.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/paper-init.yaml",
+        "PROJECT.md",
+        "state/ccfa.yaml",
+        "ANATOMY.md",
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-worktrees.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/paper-init/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/paper-init.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "README.md",
+          "ANATOMY.md",
+          "state/ccfa.yaml",
+          "memory/current-status.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-writing-harness.py",
+          "scripts/check-worktrees.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -32,12 +92,53 @@
       "status": "active",
       "purpose": "record and gate accepted contributions",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/ccfa.yaml",
+        "state/confirmed-contribution.md",
+        "state/contribution-map.yaml",
+        "human/decisions/README.md"
       ],
       "outputs": [
         "state/confirmed-contribution.md",
         "state/contribution-map.yaml",
         "DECISIONS.md"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py"
+      ],
+      "human_gates": [
+        {
+          "id": "confirm-contribution",
+          "required_when": "Marking a contribution as accepted or paper-facing.",
+          "record": "state/confirmed-contribution.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/confirmed-contribution.md",
+        "state/contribution-map.yaml",
+        "DECISIONS.md",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/contribution-lock.yaml",
+        "state/ccfa.yaml",
+        "state/confirmed-contribution.md",
+        "state/contribution-map.yaml",
+        "human/decisions/README.md",
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/contribution-lock/"
@@ -45,10 +146,27 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/contribution-lock.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/confirmed-contribution.md",
+          "state/contribution-map.yaml",
+          "DECISIONS.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-writing-harness.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -56,7 +174,10 @@
       "status": "active",
       "purpose": "trace claims to evidence and gaps",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/contribution-map.yaml",
+        "lab/research/claims.yaml",
+        "lab/research/evidence.yaml",
+        "lab/research/evidence-gap-register.yaml"
       ],
       "outputs": [
         "state/claim-evidence-map.yaml",
@@ -64,16 +185,73 @@
         "lab/research/evidence.yaml",
         "lab/research/evidence-gap-register.yaml"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "human_gates": [
+        {
+          "id": "promote-core-claim",
+          "required_when": "Adding, removing, or strengthening a core claim.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/claim-evidence-map.yaml",
+        "state/evidence-matrix.csv",
+        "lab/research/evidence.yaml",
+        "lab/research/evidence-gap-register.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/claim-evidence-map.yaml",
+        "state/contribution-map.yaml",
+        "lab/research/claims.yaml",
+        "lab/research/evidence.yaml",
+        "lab/research/evidence-gap-register.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/claim-evidence-map/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/claim-evidence-map.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/claim-evidence-map.yaml",
+          "state/evidence-matrix.csv",
+          "lab/research/evidence.yaml",
+          "lab/research/evidence-gap-register.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-claim-evidence.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -81,7 +259,10 @@
       "status": "active",
       "purpose": "plan must-have experiments before prose promotion",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/claim-evidence-map.yaml",
+        "lab/research/claim-experiment-plan.yaml",
+        "lab/research/expected-results.yaml",
+        "lab/research/experiment-ledger.yaml"
       ],
       "outputs": [
         "lab/research/claim-experiment-plan.yaml",
@@ -89,16 +270,76 @@
         "lab/research/experiment-ledger.yaml",
         "lab/research/evidence-gap-register.yaml"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-claim-experiment-plan.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "human_gates": [
+        {
+          "id": "accept-must-have-experiment",
+          "required_when": "Declaring an experiment required for a core claim.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "lab/research/claim-experiment-plan.yaml",
+        "lab/research/expected-results.yaml",
+        "lab/research/experiment-ledger.yaml",
+        "lab/research/evidence-gap-register.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/claim-experiment-plan.yaml",
+        "state/claim-evidence-map.yaml",
+        "lab/research/claim-experiment-plan.yaml",
+        "lab/research/expected-results.yaml",
+        "lab/research/experiment-ledger.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-claim-experiment-plan.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/claim-experiment-plan/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/claim-experiment-plan.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "lab/research/claim-experiment-plan.yaml",
+          "lab/research/expected-results.yaml",
+          "lab/research/experiment-ledger.yaml",
+          "lab/research/evidence-gap-register.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-claim-experiment-plan.py",
+          "scripts/check-claim-evidence.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -106,7 +347,11 @@
       "status": "active",
       "purpose": "verify and expose paper numbers through generated LaTeX macros",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/claim-evidence-map.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/numbers/macros.yaml",
+        "lab/artifacts/result-index.yaml",
+        "lab/research/evidence.yaml"
       ],
       "outputs": [
         "state/numeric-registry.yaml",
@@ -115,16 +360,79 @@
         "paper/generated/results-macros.tex",
         "lab/artifacts/result-index.yaml"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-numeric-consistency.py",
+        "scripts/check-result-status.py"
+      ],
+      "human_gates": [
+        {
+          "id": "verify-number",
+          "required_when": "Marking a numeric result verified or paper-facing.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/numeric-registry.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/numbers/macros.yaml",
+        "paper/generated/results-macros.tex",
+        "lab/artifacts/result-index.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/numeric-registry.yaml",
+        "state/claim-evidence-map.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/numbers/macros.yaml",
+        "lab/artifacts/result-index.yaml",
+        "lab/research/evidence.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-numeric-consistency.py",
+        "scripts/check-result-status.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/numeric-registry/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/numeric-registry.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/numeric-registry.yaml",
+          "state/numbers/numeric-index.yaml",
+          "state/numbers/macros.yaml",
+          "paper/generated/results-macros.tex",
+          "lab/artifacts/result-index.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-numeric-consistency.py",
+          "scripts/check-result-status.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -132,7 +440,11 @@
       "status": "active",
       "purpose": "verify citation existence and citation fitness",
       "inputs": [
-        "state/ccfa.yaml"
+        "paper/refs.bib",
+        "paper/sections/",
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml"
       ],
       "outputs": [
         "lab/research/reference-ledger.yaml",
@@ -140,16 +452,77 @@
         "lab/research/related-work-map.yaml",
         "paper/refs.bib"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-reference-existence.py",
+        "scripts/check-citation-fitness.py"
+      ],
+      "human_gates": [
+        {
+          "id": "accept-reference",
+          "required_when": "Treating a reference as canonical, missing, or citation-fit.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml",
+        "paper/refs.bib",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/reference-audit.yaml",
+        "paper/refs.bib",
+        "paper/sections/",
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-reference-existence.py",
+        "scripts/check-citation-fitness.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/reference-audit/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/reference-audit.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "lab/research/reference-ledger.yaml",
+          "lab/research/citation-ledger.yaml",
+          "lab/research/related-work-map.yaml",
+          "paper/refs.bib"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-reference-existence.py",
+          "scripts/check-citation-fitness.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -157,11 +530,53 @@
       "status": "active",
       "purpose": "bind section outline to claims, evidence, and venue fit",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/confirmed-contribution.md",
+        "state/claim-evidence-map.yaml",
+        "state/venue-profile.yaml",
+        "state/paper-story.md"
       ],
       "outputs": [
         "state/outline-contract.md",
         "state/paper-story.md"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "human_gates": [
+        {
+          "id": "approve-outline",
+          "required_when": "Binding sections to accepted claims or venue-sensitive positioning.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/outline-contract.md",
+        "state/paper-story.md",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/outline-contract.yaml",
+        "state/confirmed-contribution.md",
+        "state/claim-evidence-map.yaml",
+        "state/venue-profile.yaml",
+        "state/paper-story.md",
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-claim-evidence.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/outline-contract/"
@@ -169,10 +584,27 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/outline-contract.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/outline-contract.md",
+          "state/paper-story.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-writing-harness.py",
+          "scripts/check-claim-evidence.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -180,7 +612,11 @@
       "status": "active",
       "purpose": "draft sections only from registered claims, numbers, and references",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/writing-contract.md",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml",
+        "state/paper-story.md"
       ],
       "outputs": [
         "paper/sections/",
@@ -188,16 +624,83 @@
         "state/numeric-registry.yaml",
         "lab/research/citation-ledger.yaml"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-paper-surface.py",
+        "scripts/check-claim-evidence.py",
+        "scripts/check-numeric-consistency.py",
+        "scripts/check-reference-existence.py"
+      ],
+      "human_gates": [
+        {
+          "id": "promote-prose",
+          "required_when": "Moving factual prose into paper sections.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "paper/sections/",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/section-draft.yaml",
+        "state/writing-contract.md",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml",
+        "state/paper-story.md",
+        "scripts/check-capability-parity.py",
+        "scripts/check-paper-surface.py",
+        "scripts/check-claim-evidence.py",
+        "scripts/check-numeric-consistency.py",
+        "scripts/check-reference-existence.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/section-draft/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/section-draft.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "paper/sections/",
+          "state/claim-evidence-map.yaml",
+          "state/numeric-registry.yaml",
+          "lab/research/citation-ledger.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-paper-surface.py",
+          "scripts/check-claim-evidence.py",
+          "scripts/check-numeric-consistency.py",
+          "scripts/check-reference-existence.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -205,12 +708,59 @@
       "status": "active",
       "purpose": "track figure and table mentions, claims, and compiled placement",
       "inputs": [
-        "state/ccfa.yaml"
+        "paper/sections/",
+        "paper/figures/",
+        "paper/tables/",
+        "lab/artifacts/figure-index.yaml",
+        "lab/artifacts/table-index.yaml"
       ],
       "outputs": [
         "state/float-placement-map.yaml",
         "lab/artifacts/figure-index.yaml",
         "lab/artifacts/table-index.yaml"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/index-float-refs.py",
+        "scripts/check-float-placement.py",
+        "scripts/check-figures-tables.py"
+      ],
+      "human_gates": [
+        {
+          "id": "accept-float",
+          "required_when": "Adding a figure or table that carries a claim, result, or reviewer-facing artifact.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/float-placement-map.yaml",
+        "lab/artifacts/figure-index.yaml",
+        "lab/artifacts/table-index.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/float-placement-map.yaml",
+        "paper/sections/",
+        "paper/figures/",
+        "paper/tables/",
+        "lab/artifacts/figure-index.yaml",
+        "lab/artifacts/table-index.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/index-float-refs.py",
+        "scripts/check-float-placement.py",
+        "scripts/check-figures-tables.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/float-placement-map/"
@@ -218,10 +768,29 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/float-placement-map.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/float-placement-map.yaml",
+          "lab/artifacts/figure-index.yaml",
+          "lab/artifacts/table-index.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/index-float-refs.py",
+          "scripts/check-float-placement.py",
+          "scripts/check-figures-tables.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -229,11 +798,55 @@
       "status": "active",
       "purpose": "compile and review LaTeX without changing evidence state",
       "inputs": [
-        "state/ccfa.yaml"
+        "paper/main.tex",
+        "paper/macros.tex",
+        "paper/venue_preamble.tex",
+        "paper/sections/",
+        "paper/refs.bib"
       ],
       "outputs": [
         "release/reports/",
         "paper/main.tex"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-latex.sh",
+        "scripts/check-paper-surface.py"
+      ],
+      "human_gates": [
+        {
+          "id": "compile-repair-scope",
+          "required_when": "Fixing compile issues requires changing claims, numbers, references, or venue policy.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "release/reports/",
+        "paper/main.tex",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/latex-compile-review.yaml",
+        "paper/main.tex",
+        "paper/macros.tex",
+        "paper/venue_preamble.tex",
+        "paper/sections/",
+        "paper/refs.bib",
+        "scripts/check-capability-parity.py",
+        "scripts/check-latex.sh",
+        "scripts/check-paper-surface.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/latex-compile-review/"
@@ -241,10 +854,27 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/latex-compile-review.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "release/reports/",
+          "paper/main.tex"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-latex.sh",
+          "scripts/check-paper-surface.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -252,12 +882,55 @@
       "status": "active",
       "purpose": "adapt stable writing choices while forcing current-year official checks",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/ccfa.yaml",
+        "state/conference-template.yaml",
+        "state/venue-profile.yaml",
+        "paper/venue_preamble.tex"
       ],
       "outputs": [
         "state/venue-profile.yaml",
         "state/conference-template.yaml",
         "state/ccfa.yaml"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-conference-template.py",
+        "scripts/check-anonymity.py"
+      ],
+      "human_gates": [
+        {
+          "id": "current-year-official-rules",
+          "required_when": "Recording or changing current-year venue, anonymity, page-limit, or template rules.",
+          "record": "state/conference-template.yaml"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "state/venue-profile.yaml",
+        "state/conference-template.yaml",
+        "state/ccfa.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/venue-adapt.yaml",
+        "state/ccfa.yaml",
+        "state/conference-template.yaml",
+        "state/venue-profile.yaml",
+        "paper/venue_preamble.tex",
+        "scripts/check-capability-parity.py",
+        "scripts/check-conference-template.py",
+        "scripts/check-anonymity.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/venue-adapt/"
@@ -265,10 +938,28 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/venue-adapt.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "state/venue-profile.yaml",
+          "state/conference-template.yaml",
+          "state/ccfa.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-conference-template.py",
+          "scripts/check-anonymity.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -276,12 +967,54 @@
       "status": "active",
       "purpose": "prepare response traceability after reviews arrive",
       "inputs": [
-        "state/ccfa.yaml"
+        "human/reviews/",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml",
+        "memory/current-status.md"
       ],
       "outputs": [
         "human/reviews/",
         "human/decisions/",
         "memory/current-status.md"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py"
+      ],
+      "human_gates": [
+        {
+          "id": "response-position",
+          "required_when": "Committing to a reviewer response, concession, new experiment, or claim change.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "human/reviews/",
+        "human/decisions/",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/rebuttal-plan.yaml",
+        "human/reviews/",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml",
+        "memory/current-status.md",
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/rebuttal-plan/"
@@ -289,10 +1022,27 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/rebuttal-plan.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "human/reviews/",
+          "human/decisions/",
+          "memory/current-status.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-writing-harness.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -300,12 +1050,58 @@
       "status": "active",
       "purpose": "gate final metadata, claims, numbers, references, and release files",
       "inputs": [
-        "state/ccfa.yaml"
+        "state/ccfa.yaml",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "paper/main.tex",
+        "release/manifest.yaml"
       ],
       "outputs": [
         "release/reports/",
         "release/manifest.yaml",
         "memory/current-status.md"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py"
+      ],
+      "human_gates": [
+        {
+          "id": "final-submission",
+          "required_when": "Declaring the camera-ready or submission package ready to send.",
+          "record": "human/decisions/README.md"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "release/reports/",
+        "release/manifest.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/camera-ready-check.yaml",
+        "state/ccfa.yaml",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "paper/main.tex",
+        "release/manifest.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/camera-ready-check/"
@@ -313,10 +1109,29 @@
       "codex_adapter": {
         "workflow": ".agents/workflows/camera-ready-check.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "release/reports/",
+          "release/manifest.yaml",
+          "memory/current-status.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-writing-harness.py",
+          "scripts/check-release-package.py",
+          "scripts/check-release-freshness.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     },
     {
@@ -324,7 +1139,9 @@
       "status": "active",
       "purpose": "export tex-only release surfaces without harness state leakage",
       "inputs": [
-        "state/ccfa.yaml"
+        "paper/",
+        "release/manifest.yaml",
+        "state/worktrees.yaml"
       ],
       "outputs": [
         "release/arxiv/",
@@ -332,16 +1149,78 @@
         "release/github-tex/",
         "release/manifest.yaml"
       ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/export-tex-release.sh",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py"
+      ],
+      "human_gates": [
+        {
+          "id": "release-export",
+          "required_when": "Publishing or handing off a tex-only release surface.",
+          "record": "release/manifest.yaml"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "release/arxiv/",
+        "release/overleaf/",
+        "release/github-tex/",
+        "release/manifest.yaml",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/tex-release-export.yaml",
+        "paper/",
+        "release/manifest.yaml",
+        "state/worktrees.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/export-tex-release.sh",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/tex-release-export/"
       },
       "codex_adapter": {
         "workflow": ".agents/workflows/tex-release-export.md"
       },
-      "validators": [
-        "scripts/check-capability-parity.py"
-      ],
       "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs.",
+          "Every factual paper change is backed by repository evidence, not chat context.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "release/arxiv/",
+          "release/overleaf/",
+          "release/github-tex/",
+          "release/manifest.yaml"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/export-tex-release.sh",
+          "scripts/check-release-package.py",
+          "scripts/check-release-freshness.py"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
       "exceptions": []
     }
   ],

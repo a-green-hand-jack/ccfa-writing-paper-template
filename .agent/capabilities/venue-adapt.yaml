@@ -3,12 +3,55 @@
   "status": "active",
   "purpose": "adapt stable writing choices while forcing current-year official checks",
   "inputs": [
-    "state/ccfa.yaml"
+    "state/ccfa.yaml",
+    "state/conference-template.yaml",
+    "state/venue-profile.yaml",
+    "paper/venue_preamble.tex"
   ],
   "outputs": [
     "state/venue-profile.yaml",
     "state/conference-template.yaml",
     "state/ccfa.yaml"
+  ],
+  "validators": [
+    "scripts/check-capability-parity.py",
+    "scripts/check-conference-template.py",
+    "scripts/check-anonymity.py"
+  ],
+  "human_gates": [
+    {
+      "id": "current-year-official-rules",
+      "required_when": "Recording or changing current-year venue, anonymity, page-limit, or template rules.",
+      "record": "state/conference-template.yaml"
+    },
+    {
+      "id": "scope-change",
+      "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+      "record": "human/decisions/README.md"
+    }
+  ],
+  "allowed_paths": [
+    "state/venue-profile.yaml",
+    "state/conference-template.yaml",
+    "state/ccfa.yaml",
+    "memory/current-status.md",
+    "human/inbox/README.md"
+  ],
+  "read_only_paths": [
+    ".agent/capabilities/venue-adapt.yaml",
+    "state/ccfa.yaml",
+    "state/conference-template.yaml",
+    "state/venue-profile.yaml",
+    "paper/venue_preamble.tex",
+    "scripts/check-capability-parity.py",
+    "scripts/check-conference-template.py",
+    "scripts/check-anonymity.py"
+  ],
+  "forbidden_paths": [
+    ".git/**",
+    ".venv/**",
+    "__pycache__/**",
+    ".pytest_cache/**"
   ],
   "claude_adapter": {
     "skill": ".claude/skills/venue-adapt/"
@@ -16,9 +59,27 @@
   "codex_adapter": {
     "workflow": ".agents/workflows/venue-adapt.md"
   },
-  "validators": [
-    "scripts/check-capability-parity.py"
-  ],
   "parity": "required",
+  "completion_contract": {
+    "success_requires": [
+      "Read the source capability spec before editing.",
+      "Changed files are limited to declared outputs.",
+      "Every factual paper change is backed by repository evidence, not chat context.",
+      "Declared validators pass, or the unresolved blocker is recorded."
+    ],
+    "required_outputs": [
+      "state/venue-profile.yaml",
+      "state/conference-template.yaml",
+      "state/ccfa.yaml"
+    ],
+    "required_validators": [
+      "scripts/check-capability-parity.py",
+      "scripts/check-conference-template.py",
+      "scripts/check-anonymity.py"
+    ],
+    "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+    "blocker_record": "memory/current-status.md",
+    "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+  },
   "exceptions": []
 }

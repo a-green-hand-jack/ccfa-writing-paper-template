@@ -35,3 +35,4 @@ python scripts/check-release-freshness.py
 ```
 
 The release directories are tex-only export surfaces. Do not edit them as the primary paper source.
+Successful exports rewrite `release/manifest.yaml` with deterministic sha256, relpath, and size entries for each surface.

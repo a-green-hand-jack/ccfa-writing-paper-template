@@ -1,3 +1,4 @@
 # overleaf Release Surface
 
-Tex-only export target. Do not store harness internals here.
+Generated from `paper/` by `scripts/export-tex-release.sh`.
+Do not edit this directory as the primary paper source.

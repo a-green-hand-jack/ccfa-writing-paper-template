@@ -3,7 +3,11 @@
   "status": "active",
   "purpose": "draft sections only from registered claims, numbers, and references",
   "inputs": [
-    "state/ccfa.yaml"
+    "state/writing-contract.md",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "lab/research/citation-ledger.yaml",
+    "state/paper-story.md"
   ],
   "outputs": [
     "paper/sections/",
@@ -11,15 +15,82 @@
     "state/numeric-registry.yaml",
     "lab/research/citation-ledger.yaml"
   ],
+  "validators": [
+    "scripts/check-capability-parity.py",
+    "scripts/check-paper-surface.py",
+    "scripts/check-claim-evidence.py",
+    "scripts/check-numeric-consistency.py",
+    "scripts/check-reference-existence.py"
+  ],
+  "human_gates": [
+    {
+      "id": "promote-prose",
+      "required_when": "Moving factual prose into paper sections.",
+      "record": "human/decisions/README.md"
+    },
+    {
+      "id": "scope-change",
+      "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+      "record": "human/decisions/README.md"
+    }
+  ],
+  "allowed_paths": [
+    "paper/sections/",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "lab/research/citation-ledger.yaml",
+    "memory/current-status.md",
+    "human/inbox/README.md"
+  ],
+  "read_only_paths": [
+    ".agent/capabilities/section-draft.yaml",
+    "state/writing-contract.md",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "lab/research/citation-ledger.yaml",
+    "state/paper-story.md",
+    "scripts/check-capability-parity.py",
+    "scripts/check-paper-surface.py",
+    "scripts/check-claim-evidence.py",
+    "scripts/check-numeric-consistency.py",
+    "scripts/check-reference-existence.py"
+  ],
+  "forbidden_paths": [
+    ".git/**",
+    ".venv/**",
+    "__pycache__/**",
+    ".pytest_cache/**"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/section-draft/"
   },
   "codex_adapter": {
     "workflow": ".agents/workflows/section-draft.md"
   },
-  "validators": [
-    "scripts/check-capability-parity.py"
-  ],
   "parity": "required",
+  "completion_contract": {
+    "success_requires": [
+      "Read the source capability spec before editing.",
+      "Changed files are limited to declared outputs.",
+      "Every factual paper change is backed by repository evidence, not chat context.",
+      "Declared validators pass, or the unresolved blocker is recorded."
+    ],
+    "required_outputs": [
+      "paper/sections/",
+      "state/claim-evidence-map.yaml",
+      "state/numeric-registry.yaml",
+      "lab/research/citation-ledger.yaml"
+    ],
+    "required_validators": [
+      "scripts/check-capability-parity.py",
+      "scripts/check-paper-surface.py",
+      "scripts/check-claim-evidence.py",
+      "scripts/check-numeric-consistency.py",
+      "scripts/check-reference-existence.py"
+    ],
+    "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+    "blocker_record": "memory/current-status.md",
+    "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+  },
   "exceptions": []
 }

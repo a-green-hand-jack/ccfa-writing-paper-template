@@ -5,3 +5,11 @@ C-DGM-SWEBENCH-IMPROVEMENT,E-FIG-DGM-COMPARISONS,supports,verified,Main comparis
 C-DGM-POLYGLOT-IMPROVEMENT,E-FIG-DGM-COMPARISONS,supports,verified,Main comparison figure registered in the migrated source.
 C-SELF-IMPROVEMENT-HELPS,E-FIG-WO-SELFIMPROVE,supports,verified,
 C-OPEN-ENDED-ARCHIVE-HELPS,E-FIG-WO-OPENENDED,supports,verified,
+C-DGM-SWEBENCH-IMPROVEMENT,E-ARXIV-EXPERIMENT-REPORTED-NUMBERS,supports,verified,Experiment-section reported numbers from migrated arXiv source.
+C-DGM-POLYGLOT-IMPROVEMENT,E-ARXIV-EXPERIMENT-REPORTED-NUMBERS,supports,verified,Experiment-section reported numbers from migrated arXiv source.
+C-SELF-IMPROVEMENT-HELPS,E-ARXIV-EXPERIMENT-REPORTED-NUMBERS,supports,verified,Experiment-section reported numbers from migrated arXiv source.
+C-OPEN-ENDED-ARCHIVE-HELPS,E-ARXIV-EXPERIMENT-REPORTED-NUMBERS,supports,verified,Experiment-section reported numbers from migrated arXiv source.
+C-DGM-SWEBENCH-IMPROVEMENT,E-ARXIV-APPENDIX-REPORTED-NUMBERS,supports,verified,Appendix reported numbers from migrated arXiv source.
+C-DGM-POLYGLOT-IMPROVEMENT,E-ARXIV-APPENDIX-REPORTED-NUMBERS,supports,verified,Appendix reported numbers from migrated arXiv source.
+C-SELF-IMPROVEMENT-HELPS,E-ARXIV-APPENDIX-REPORTED-NUMBERS,supports,verified,Appendix reported numbers from migrated arXiv source.
+C-OPEN-ENDED-ARCHIVE-HELPS,E-ARXIV-APPENDIX-REPORTED-NUMBERS,supports,verified,Appendix reported numbers from migrated arXiv source.

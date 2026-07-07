@@ -1,3 +1,452 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "N-TRANSFER-POLYGLOT-CLAUDE35-BASE",
+      "value": "32.0",
+      "display": {
+        "latex": "32.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:43",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-POLYGLOT-CLAUDE35-DGM",
+      "value": "33.3",
+      "display": {
+        "latex": "33.3\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:43",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-POLYGLOT-CLAUDE37-BASE",
+      "value": "35.6",
+      "display": {
+        "latex": "35.6\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:43",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-POLYGLOT-CLAUDE37-DGM",
+      "value": "36.8",
+      "display": {
+        "latex": "36.8\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:43",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-GREEDY-SWEBENCH",
+      "value": "39.7",
+      "display": {
+        "latex": "39.7\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:46",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-GREEDY-POLYGLOT",
+      "value": "30.0",
+      "display": {
+        "latex": "30.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:46",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-POLYGLOT-SUBSET-FINAL",
+      "value": "38.0",
+      "display": {
+        "latex": "38.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:71",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-WO-OPENENDED-SWEBENCH",
+      "value": "23.0",
+      "display": {
+        "latex": "23.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:58",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-WO-OPENENDED-POLYGLOT",
+      "value": "14.0",
+      "display": {
+        "latex": "14.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:58",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-WO-SELFIMPROVE-SWEBENCH",
+      "value": "39.0",
+      "display": {
+        "latex": "39.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:59",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-WO-SELFIMPROVE-POLYGLOT",
+      "value": "28.0",
+      "display": {
+        "latex": "28.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:59",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-CODE-EDITING-DGM",
+      "value": "51.3",
+      "display": {
+        "latex": "51.3\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:78",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-CODE-EDITING-WO-OPENENDED",
+      "value": "32.5",
+      "display": {
+        "latex": "32.5\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:79",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-CODE-EDITING-WO-SELFIMPROVE",
+      "value": "32.5",
+      "display": {
+        "latex": "32.5\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:80",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-STABILITY-MEAN",
+      "value": "40.7",
+      "display": {
+        "latex": "40.7\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:88",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-STABILITY-STD",
+      "value": "2.3",
+      "display": {
+        "latex": "2.3\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:88",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-PARENT-SELECTION-ALPHA0",
+      "value": "0.5",
+      "display": {
+        "latex": "0.5"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:155",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-FM-TEMPERATURE",
+      "value": "1.0",
+      "display": {
+        "latex": "1.0"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:283",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-DGM-BASELINE-COST-SWEBENCH",
+      "value": "10000",
+      "display": {
+        "latex": "10,000"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:302",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-OPENHANDS-SWEBENCH-FULL",
+      "value": "53.0",
+      "display": {
+        "latex": "53.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:341",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-OPENHANDS-SWEBENCH-SUBSET",
+      "value": "51.0",
+      "display": {
+        "latex": "51.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:341",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-AIDER-GITHUB-STARS",
+      "value": "33000",
+      "display": {
+        "latex": "33,000"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:346",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-NODE6-SWEBENCH-SCORE",
+      "value": "23.3",
+      "display": {
+        "latex": "23.3\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:371",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-NODE24-SWEBENCH-SCORE",
+      "value": "40.5",
+      "display": {
+        "latex": "40.5\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:371",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-HALLUCINATION-SCORE-NODE96",
+      "value": "1.67",
+      "display": {
+        "latex": "1.67"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:409",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-HALLUCINATION-SCORE-NODE114",
+      "value": "2.0",
+      "display": {
+        "latex": "2.0"
+      },
+      "status": "verified",
+      "source": "paper/sections/appendix.tex:409",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-EVAL-STAGE-THRESHOLD",
+      "value": "40",
+      "display": {
+        "latex": "40\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:25",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-SWEBENCH-O3-DGM",
+      "value": "33.0",
+      "display": {
+        "latex": "33.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:88",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-SWEBENCH-CLAUDE37-BASE",
+      "value": "19.0",
+      "display": {
+        "latex": "19.0\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:88",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-SWEBENCH-CLAUDE37-DGM",
+      "value": "59.5",
+      "display": {
+        "latex": "59.5\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:88",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-SWEBENCH-TO-POLYGLOT",
+      "value": "28.9",
+      "display": {
+        "latex": "28.9\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:90",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    },
+    {
+      "numeric_id": "N-TRANSFER-POLYGLOT-TO-SWEBENCH",
+      "value": "24.5",
+      "display": {
+        "latex": "24.5\\%"
+      },
+      "status": "verified",
+      "source": "paper/sections/exp.tex:90",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "evidence_ids": [
+        "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS"
+      ]
+    }
+  ]
 }

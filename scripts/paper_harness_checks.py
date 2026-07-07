@@ -4,8 +4,10 @@ from __future__ import annotations
 import json
 import os
 import csv
+import hashlib
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -16,7 +18,95 @@ ROOT = Path(os.environ.get("PAPER_HARNESS_ROOT", Path(__file__).resolve().parent
 INACTIVE_STATUSES = {"removed", "dropped", "superseded", "inactive", "archived"}
 VERIFIED_STATUSES = {"verified", "complete", "accepted"}
 PLANNED_STATUSES = {"planned", "todo", "draft", "placeholder"}
+SUPPORT_RELATIONSHIPS = {"supports", "qualifies"}
+CONTRADICT_RELATIONSHIPS = {"contradicts"}
+ALLOWED_EVIDENCE_RELATIONSHIPS = SUPPORT_RELATIONSHIPS | CONTRADICT_RELATIONSHIPS | {
+    "motivates",
+    "background",
+}
+CLAIM_STATEMENT_FIELDS = ("statement", "text", "claim", "summary")
+EVIDENCE_SUPPORT_FIELDS = ("claim_ids", "supports_claims", "supported_claims", "claims_supported")
+EVIDENCE_PROVENANCE_FIELDS = (
+    "source",
+    "provenance",
+    "artifact",
+    "artifact_path",
+    "artifacts",
+    "external_source",
+    "run_id",
+    "url",
+    "uri",
+    "doi",
+)
+EVIDENCE_QUALITY_FIELDS = (
+    "strength",
+    "evidence_strength",
+    "support_strength",
+    "fitness",
+    "evidence_fitness",
+    "fitness_status",
+    "source_status",
+    "status",
+    "verification_state",
+)
+INSUFFICIENT_EVIDENCE_QUALITY = {
+    "bare",
+    "draft",
+    "fail",
+    "failed",
+    "insufficient",
+    "low",
+    "missing",
+    "placeholder",
+    "planned",
+    "todo",
+    "unknown",
+    "unverified",
+    "unsupported",
+    "weak",
+}
+CITATION_FITNESS_STATUSES = {"strong", "adequate", "weak", "missing-better-source", "needs-review"}
+WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review"}
+CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
+NUMERIC_LITERAL_RE = re.compile(
+    r"(?<![A-Za-z0-9_\\])"
+    r"[-+]?"
+    r"(?:"
+    r"\d+(?:\.\d+)?\s*(?:\\%|%)"
+    r"|\d{1,3}(?:,\d{3})+(?:\.\d+)?"
+    r"|\d+\.\d+(?:[eE][-+]?\d+)?"
+    r"|\d+(?:\.\d+)?[eE][-+]?\d+"
+    r"|\d{4,}"
+    r")"
+    r"(?![A-Za-z0-9_])"
+)
+MASKED_NUMERIC_CONTEXT_COMMANDS = (
+    "cite",
+    "citep",
+    "citet",
+    "citealp",
+    "parencite",
+    "textcite",
+    "ref",
+    "eqref",
+    "autoref",
+    "cref",
+    "Cref",
+    "label",
+    "url",
+    "href",
+    "include",
+    "input",
+    "includegraphics",
+    "bibliography",
+    "bibliographystyle",
+    "vspace",
+    "hspace",
+    "setlength",
+)
+PROVENANCE_FIELDS = ("source", "generated_by", "artifact_path", "input_data", "checksum", "external_source")
+PROVENANCE_PATH_FIELDS = ("source", "generated_by", "artifact_path", "input_data", "external_source")
 REQUIRED_PAPER_SURFACE = [
     "paper/main.tex",
     "paper/macros.tex",
@@ -45,6 +135,21 @@ RELEASE_ITEMS = [
     "generated",
     "supplementary",
 ]
+RELEASE_SYNC_STATUSES = {"synced", "fresh", "exported"}
+CHECKSUM_ALGORITHM = "sha256"
+FORBIDDEN_RELEASE_PARTS = {
+    ".git",
+    ".github",
+    ".agent",
+    ".claude",
+    ".agents",
+    "state",
+    "lab",
+    "memory",
+    "human",
+    "exemplars",
+}
+ALLOWABLE_RELEASE_METADATA_PARTS = {".github"}
 
 
 def load_doc(path: str):
@@ -58,6 +163,10 @@ def load_doc(path: str):
 
 def rel(path: Path) -> str:
     return str(path.relative_to(ROOT))
+
+
+def rel_posix(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
 
 
 def error(message: str) -> int:
@@ -90,6 +199,78 @@ def strings(value):
     return [str(item) for item in as_list(value) if not missingish(item)]
 
 
+def key_strings(value):
+    keys = []
+    for item in as_list(value):
+        if missingish(item):
+            continue
+        if isinstance(item, str):
+            keys.extend(part.strip() for part in item.split(",") if not missingish(part))
+        else:
+            keys.append(str(item))
+    return keys
+
+
+def meaningful(value) -> bool:
+    if isinstance(value, dict):
+        return any(meaningful(item) for item in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return any(meaningful(item) for item in value)
+    return not missingish(value)
+
+
+def has_any_field(item: dict, fields) -> bool:
+    return any(meaningful(item.get(field)) for field in fields)
+
+
+def citation_bibkeys(citation: dict) -> list[str]:
+    keys = []
+    for field in ["bibkey", "bibkeys"]:
+        keys.extend(key_strings(citation.get(field)))
+    return list(dict.fromkeys(keys))
+
+
+def reference_bibkeys(ref: dict) -> list[str]:
+    keys = []
+    for field in ["bibkey", "bibkeys"]:
+        keys.extend(key_strings(ref.get(field)))
+    return list(dict.fromkeys(keys))
+
+
+def active_now(item: dict) -> bool:
+    return is_active(item) and not is_planned(item)
+
+
+def missing_candidate_notes(area: dict) -> bool:
+    if has_any_field(area, ["notes", "missing_notes", "coverage_notes"]):
+        return True
+    candidates = as_list(area.get("missing_candidates"))
+    if not candidates:
+        return False
+    for candidate in candidates:
+        if not isinstance(candidate, dict) or not has_any_field(candidate, ["notes", "reason", "rationale"]):
+            return False
+    return True
+
+
+def leaf_values(value):
+    if isinstance(value, dict):
+        values = []
+        for child in value.values():
+            values.extend(leaf_values(child))
+        return values
+    if isinstance(value, (list, tuple, set)):
+        values = []
+        for child in value:
+            values.extend(leaf_values(child))
+        return values
+    return [value]
+
+
+def has_value(value) -> bool:
+    return any(not missingish(item) for item in leaf_values(value))
+
+
 def item_id(item, *fields):
     if not isinstance(item, dict):
         return None
@@ -113,6 +294,84 @@ def is_verified(item: dict) -> bool:
 
 def is_planned(item: dict) -> bool:
     return str(item.get("status", "")).lower() in PLANNED_STATUSES
+
+
+def has_meaningful_value(value) -> bool:
+    if missingish(value):
+        return False
+    if isinstance(value, dict):
+        return any(has_meaningful_value(item) for item in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return any(has_meaningful_value(item) for item in value)
+    return True
+
+
+def normalized_text(value) -> str:
+    return str(value).strip().lower()
+
+
+def claim_strength(claim: dict) -> str:
+    return normalized_text(claim.get("claim_strength", claim.get("strength", "")))
+
+
+def has_claim_statement(claim: dict) -> bool:
+    return any(has_meaningful_value(claim.get(field)) for field in CLAIM_STATEMENT_FIELDS)
+
+
+def evidence_support_claim_ids(evidence_item: dict) -> list[str]:
+    claim_ids = []
+    for field in EVIDENCE_SUPPORT_FIELDS:
+        claim_ids.extend(strings(evidence_item.get(field)))
+    return claim_ids
+
+
+def has_evidence_provenance(evidence_item: dict) -> bool:
+    return any(has_meaningful_value(evidence_item.get(field)) for field in EVIDENCE_PROVENANCE_FIELDS)
+
+
+def evidence_quality_values(evidence_item: dict) -> list[str]:
+    values = []
+    for field in EVIDENCE_QUALITY_FIELDS:
+        value = evidence_item.get(field)
+        if has_meaningful_value(value):
+            values.extend(strings(value))
+    return values
+
+
+def evidence_quality_is_sufficient(evidence_item: dict) -> bool:
+    values = evidence_quality_values(evidence_item)
+    if not values:
+        return False
+    for value in values:
+        tokens = set(re.split(r"[^a-z0-9]+", normalized_text(value)))
+        if tokens & INSUFFICIENT_EVIDENCE_QUALITY:
+            return False
+    return True
+
+
+def evidence_can_support_strong_claim(evidence_item: dict) -> bool:
+    return (
+        is_active(evidence_item)
+        and is_verified(evidence_item)
+        and has_evidence_provenance(evidence_item)
+        and evidence_quality_is_sufficient(evidence_item)
+    )
+
+
+def matrix_row_active(row: dict) -> bool:
+    return is_active(row) and not is_planned(row)
+
+
+def active_evidence_gap_claim_ids(gaps: list[dict]) -> set[str]:
+    closed_statuses = INACTIVE_STATUSES | {"closed", "filled", "resolved"}
+    return {
+        claim_id
+        for gap in gaps
+        if (claim_id := item_id(gap, "claim_id", "id"))
+        and is_active(gap)
+        and not is_planned(gap)
+        and normalized_text(gap.get("status", "")) not in closed_statuses
+    }
 
 
 def doc_items(path: str, key: str):
@@ -140,7 +399,7 @@ def collect_ids(items, fields, context: str, required: bool = True):
     return code, ids
 
 
-def path_exists_or_external(value) -> bool:
+def external_reference(value) -> bool:
     if missingish(value):
         return True
     text = str(value)
@@ -148,7 +407,36 @@ def path_exists_or_external(value) -> bool:
         return True
     if text.startswith("doi:") or text.startswith("arXiv:"):
         return True
-    return (ROOT / text.split(":", 1)[0]).exists()
+    return False
+
+
+def local_path_part(value: str) -> str:
+    return value.split(":", 1)[0]
+
+
+def looks_path_like(value) -> bool:
+    if missingish(value):
+        return False
+    text = str(value).strip()
+    if external_reference(text):
+        return True
+    path = local_path_part(text)
+    if path.startswith(("/", "./", "../", "~")):
+        return True
+    if "/" in path or "\\" in path:
+        return True
+    return bool(Path(path).suffix)
+
+
+def path_exists_or_external(value, *, path_like_only: bool = False) -> bool:
+    if missingish(value):
+        return True
+    text = str(value)
+    if external_reference(text):
+        return True
+    if path_like_only and not looks_path_like(text):
+        return True
+    return (ROOT / local_path_part(text)).exists()
 
 
 def read_csv_rows(path: str):
@@ -252,8 +540,21 @@ def require(paths):
     return 0
 
 
+def adapter_text_path(path: str) -> Path:
+    target = ROOT / path
+    if target.is_dir():
+        return target / "SKILL.md"
+    return target
+
+
 def compare_tree(source: Path, dest: Path) -> list[str]:
     mismatches = []
+    if source.is_symlink():
+        mismatches.append(f"{rel(source)} is a symlink")
+    if dest.is_symlink():
+        mismatches.append(f"{rel(dest)} is a symlink")
+    if mismatches:
+        return mismatches
     if not source.exists() and not dest.exists():
         return mismatches
     if source.exists() != dest.exists():
@@ -265,8 +566,14 @@ def compare_tree(source: Path, dest: Path) -> list[str]:
         elif source.read_bytes() != dest.read_bytes():
             mismatches.append(f"{rel(dest)} differs from {rel(source)}")
         return mismatches
-    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file())
-    dest_files = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_file())
+    source_symlinks = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_symlink())
+    dest_symlinks = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_symlink())
+    if source_symlinks:
+        mismatches.append(f"{rel(source)} contains symlinks: {[str(item) for item in source_symlinks[:10]]}")
+    if dest_symlinks:
+        mismatches.append(f"{rel(dest)} contains symlinks: {[str(item) for item in dest_symlinks[:10]]}")
+    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file() and not path.is_symlink())
+    dest_files = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_file() and not path.is_symlink())
     if source_files != dest_files:
         missing = sorted(set(source_files) - set(dest_files))
         extra = sorted(set(dest_files) - set(source_files))
@@ -280,18 +587,222 @@ def compare_tree(source: Path, dest: Path) -> list[str]:
     return mismatches
 
 
+def release_surface_root(surface: dict) -> tuple[Path | None, str | None]:
+    path_value = str(surface.get("path", "")).strip()
+    if not path_value:
+        return None, "missing path"
+    path = Path(path_value)
+    if path.is_absolute() or ".." in path.parts:
+        return None, f"unsafe release surface path: {path_value}"
+    if not path.parts or path.parts[0] != "release" or len(path.parts) < 2:
+        return None, f"release surface path must be under release/<surface>: {path_value}"
+    return ROOT / path, None
+
+
+def allowed_release_parts(surface: dict) -> set[str]:
+    allowed = set(strings(surface.get("allowed_hidden_paths", [])))
+    allowed.update(strings(surface.get("allowed_metadata_paths", [])))
+    normalized = {item.strip().strip("/") for item in allowed if item.strip()}
+    return normalized & ALLOWABLE_RELEASE_METADATA_PARTS
+
+
+def release_surface_readme(surface_id: str) -> str:
+    return (
+        f"# {surface_id} Release Surface\n\n"
+        "Generated from `paper/` by `scripts/export-tex-release.sh`.\n"
+        "Do not edit this directory as the primary paper source.\n"
+    )
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def collect_release_checksums(root: Path) -> list[dict]:
+    files = []
+    if not root.exists() or root.is_symlink():
+        return files
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        if path.is_symlink() or not path.is_file():
+            continue
+        files.append(
+            {
+                "relpath": path.relative_to(root).as_posix(),
+                "sha256": sha256_file(path),
+                "size": path.stat().st_size,
+            }
+        )
+    return files
+
+
+def scan_release_surface(surface_id: str, root: Path, surface: dict) -> int:
+    code = 0
+    if root.is_symlink():
+        return error(f"release surface {surface_id} is a symlink: {rel_posix(root)}")
+    if not root.exists():
+        return code
+    forbidden = FORBIDDEN_RELEASE_PARTS - allowed_release_parts(surface)
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        rel_parts = path.relative_to(root).parts
+        if path.is_symlink():
+            code |= error(f"release surface {surface_id} contains symlink: {path.relative_to(ROOT).as_posix()}")
+        if any(part in forbidden for part in rel_parts):
+            code |= error(f"release surface {surface_id} leaks harness or metadata path: {path.relative_to(ROOT).as_posix()}")
+    return code
+
+
+def validate_release_source_item(src: Path) -> list[str]:
+    mismatches = []
+    if not src.exists():
+        return mismatches
+    if src.is_symlink():
+        mismatches.append(f"{src.relative_to(ROOT).as_posix()} is a symlink")
+        return mismatches
+    if src.is_dir():
+        for path in sorted(src.rglob("*"), key=lambda item: item.relative_to(src).as_posix()):
+            rel_parts = path.relative_to(src).parts
+            if path.is_symlink():
+                mismatches.append(f"{path.relative_to(ROOT).as_posix()} is a symlink")
+            if any(part in FORBIDDEN_RELEASE_PARTS for part in rel_parts):
+                mismatches.append(f"{path.relative_to(ROOT).as_posix()} would leak harness or metadata path")
+    return mismatches
+
+
+def parse_manifest_files(surface_id: str, surface: dict) -> tuple[int, dict[str, dict] | None]:
+    files = surface.get("files")
+    if not isinstance(files, list):
+        return error(f"release surface {surface_id} missing manifest checksums"), None
+    code = 0
+    parsed: dict[str, dict] = {}
+    relpaths = []
+    for index, entry in enumerate(files, start=1):
+        if not isinstance(entry, dict):
+            code |= error(f"release surface {surface_id} checksum entry {index} is not a mapping")
+            continue
+        relpath = entry.get("relpath")
+        sha256 = entry.get("sha256")
+        size = entry.get("size")
+        if not isinstance(relpath, str) or not relpath:
+            code |= error(f"release surface {surface_id} checksum entry {index} missing relpath")
+            continue
+        relpath_path = Path(relpath)
+        if relpath_path.is_absolute() or ".." in relpath_path.parts:
+            code |= error(f"release surface {surface_id} checksum entry has unsafe relpath: {relpath}")
+            continue
+        if relpath in parsed:
+            code |= error(f"release surface {surface_id} duplicate checksum relpath: {relpath}")
+            continue
+        if not isinstance(sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+            code |= error(f"release surface {surface_id} checksum entry {relpath} has invalid sha256")
+        if not isinstance(size, int) or size < 0:
+            code |= error(f"release surface {surface_id} checksum entry {relpath} has invalid size")
+        parsed[relpath] = {"relpath": relpath, "sha256": sha256, "size": size}
+        relpaths.append(relpath)
+    if relpaths != sorted(relpaths):
+        code |= error(f"release surface {surface_id} manifest checksum entries are not sorted")
+    return code, parsed
+
+
+def verify_surface_manifest_checksums(surface_id: str, root: Path, surface: dict) -> int:
+    code, expected = parse_manifest_files(surface_id, surface)
+    if expected is None:
+        return code
+    actual = {entry["relpath"]: entry for entry in collect_release_checksums(root)}
+    expected_paths = set(expected)
+    actual_paths = set(actual)
+    missing = sorted(expected_paths - actual_paths)
+    extra = sorted(actual_paths - expected_paths)
+    if missing:
+        code |= error(f"release surface {surface_id} missing files from manifest: {missing[:10]}")
+    if extra:
+        code |= error(f"release surface {surface_id} has files not in manifest: {extra[:10]}")
+    for relpath in sorted(expected_paths & actual_paths):
+        expected_entry = expected[relpath]
+        actual_entry = actual[relpath]
+        if expected_entry["size"] != actual_entry["size"]:
+            code |= error(
+                f"release surface {surface_id} checksum drift for {relpath}: "
+                f"size {actual_entry['size']} != manifest {expected_entry['size']}"
+            )
+        if expected_entry["sha256"] != actual_entry["sha256"]:
+            code |= error(f"release surface {surface_id} checksum drift for {relpath}: sha256 differs from manifest")
+    return code
+
+
+def git_value(*args: str) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(ROOT), *args],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    value = result.stdout.strip()
+    return value or None
+
+
+def source_revision() -> dict:
+    commit = git_value("rev-parse", "--verify", "HEAD")
+    tree = git_value("rev-parse", "--verify", "HEAD^{tree}")
+    if not commit:
+        return {}
+    revision = {"treeish": "HEAD", "commit": commit}
+    if tree:
+        revision["tree"] = tree
+    return revision
+
+
 def check_capability_parity():
     code = require([".agent/capabilities/registry.yaml", ".claude/ANATOMY.md", ".agents/ANATOMY.md"])
     registry = load_doc(".agent/capabilities/registry.yaml")
     for cap in registry.get("capabilities", []):
         cid = cap["id"]
+        source = f".agent/capabilities/{cid}.yaml"
+        outputs = strings(cap.get("outputs"))
+        validators = strings(cap.get("validators"))
         code |= require([
-            f".agent/capabilities/{cid}.yaml",
+            source,
             cap["claude_adapter"]["skill"],
             cap["codex_adapter"]["workflow"],
         ])
-        if cap.get("status") == "active" and not cap.get("outputs"):
+        if cap.get("status") == "active" and not outputs:
             code |= error(f"active capability has no outputs: {cid}")
+        if cap.get("status") == "active" and not validators:
+            code |= error(f"active capability has no validators: {cid}")
+        if (ROOT / source).exists():
+            spec = load_doc(source)
+            spec_outputs = strings(spec.get("outputs"))
+            spec_validators = strings(spec.get("validators"))
+            if spec.get("id") != cid:
+                code |= error(f"capability spec id mismatch: {cid}")
+            if cap.get("status") == "active" and not spec_outputs:
+                code |= error(f"active capability spec has no outputs: {cid}")
+            if cap.get("status") == "active" and not spec_validators:
+                code |= error(f"active capability spec has no validators: {cid}")
+            if outputs and spec_outputs and outputs != spec_outputs:
+                code |= error(f"capability spec outputs differ from registry: {cid}")
+            if validators and spec_validators and validators != spec_validators:
+                code |= error(f"capability spec validators differ from registry: {cid}")
+        declared_paths = outputs + validators
+        for adapter in [cap["claude_adapter"]["skill"], cap["codex_adapter"]["workflow"]]:
+            text_path = adapter_text_path(adapter)
+            if not text_path.exists() or not text_path.is_file():
+                code |= error(f"capability adapter text missing: {adapter}")
+                continue
+            text = text_path.read_text(encoding="utf-8")
+            if source not in text:
+                code |= error(f"capability adapter does not mention source capability {source}: {rel(text_path)}")
+            if declared_paths and not any(path in text for path in declared_paths):
+                code |= error(f"capability adapter does not mention a declared output or validator path: {rel(text_path)}")
     for role in registry.get("roles", []):
         code |= require([role["claude_agent"], role["codex_role"]])
     return code
@@ -300,7 +811,6 @@ def check_capability_parity():
 def check_release_package():
     ccfa = load_doc("state/ccfa.yaml")
     manifest = load_doc("release/manifest.yaml")
-    forbidden_names = {".agent", ".claude", ".agents", "state", "lab", "memory", "human", "exemplars"}
     code = 0
     expected_surfaces = set(strings(ccfa.get("release", {}).get("surfaces", [])))
     manifest_surfaces = manifest.get("surfaces", [])
@@ -309,6 +819,9 @@ def check_release_package():
     if expected_surfaces and not manifest_surfaces:
         code |= error("release manifest has no surfaces but state/ccfa.yaml declares release surfaces")
     for surface in manifest.get("surfaces", []):
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
         surface_id = surface.get("id")
         if not surface_id:
             code |= error("release surface missing id")
@@ -320,13 +833,16 @@ def check_release_package():
         for field in ["path", "source", "forbidden_paths"]:
             if field not in surface:
                 code |= error(f"release surface {surface_id or '<missing>'} missing {field}")
-        root = ROOT / surface["path"]
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id or '<missing>'} {path_error}")
+            continue
         if not root.exists():
             code |= error(f"missing release surface {surface['path']}")
             continue
-        for path in root.rglob("*"):
-            if any(part in forbidden_names for part in path.relative_to(root).parts):
-                code |= error(f"release surface leaks harness path: {path.relative_to(ROOT)}")
+        code |= scan_release_surface(str(surface_id or "<missing>"), root, surface)
+        if str(surface.get("status", "")).lower() in RELEASE_SYNC_STATUSES:
+            code |= verify_surface_manifest_checksums(str(surface_id or "<missing>"), root, surface)
     if expected_surfaces and actual_surfaces != expected_surfaces:
         code |= error(
             "release manifest surfaces do not match state/ccfa.yaml: "
@@ -340,12 +856,21 @@ def check_release_freshness():
     manifest = load_doc("release/manifest.yaml")
     code = 0
     for surface in manifest.get("surfaces", []):
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
         surface_id = surface.get("id", "<missing>")
-        if str(surface.get("status", "")).lower() not in {"synced", "fresh", "exported"}:
+        if str(surface.get("status", "")).lower() not in RELEASE_SYNC_STATUSES:
             continue
-        root = ROOT / str(surface.get("path", ""))
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id} {path_error}")
+            continue
         if not root.exists():
+            code |= error(f"missing release surface {surface.get('path', '<missing>')}")
             continue
+        code |= scan_release_surface(str(surface_id), root, surface)
+        code |= verify_surface_manifest_checksums(str(surface_id), root, surface)
         for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
             dest = root / item
@@ -409,6 +934,14 @@ def paper_looks_populated() -> bool:
         bool(doc_items("lab/research/evidence.yaml", "evidence")),
         bool(doc_items("lab/research/reference-ledger.yaml", "references")),
     ])
+
+
+def has_active_core_or_strong_claims() -> bool:
+    return any(
+        is_active(claim) and claim_strength(claim) in {"core", "strong"}
+        for claim in doc_items("state/claim-evidence-map.yaml", "claims")
+        if isinstance(claim, dict)
+    )
 
 
 def check_anatomy_drift():
@@ -511,8 +1044,43 @@ def check_claim_evidence():
     experiment_code, experiment_ids = collect_ids(experiments, ["experiment_id", "id"], "experiments", required=False)
     code |= claim_code | evidence_code | experiment_code
 
-    gap_claim_ids = {item_id(item, "claim_id", "id") for item in gaps if item_id(item, "claim_id", "id")}
+    claim_by_id = {claim_id: item for item in claims if (claim_id := item_id(item, "claim_id", "id"))}
+    evidence_by_id = {evidence_id: item for item in evidence if (evidence_id := item_id(item, "evidence_id", "id"))}
+    claim_refs_by_id = {
+        claim_id: set(strings(claim.get("evidence_ids")))
+        for claim_id, claim in claim_by_id.items()
+    }
+    evidence_supports_by_id = {
+        evidence_id: set(evidence_support_claim_ids(item))
+        for evidence_id, item in evidence_by_id.items()
+    }
+    gap_claim_ids = active_evidence_gap_claim_ids(gaps)
     plan_claim_ids = {item_id(item, "claim_id", "id") for item in plans if item_id(item, "claim_id", "id")}
+
+    matrix_declared_relationships: dict[tuple[str, str], set[str]] = {}
+    matrix_relationships: dict[tuple[str, str], set[str]] = {}
+    for row_number, row in enumerate(read_csv_rows("state/evidence-matrix.csv"), start=2):
+        claim_id = str(row.get("claim_id", "")).strip()
+        evidence_id = str(row.get("evidence_id", "")).strip()
+        relationship = normalized_text(row.get("relationship", ""))
+        if missingish(claim_id) or missingish(evidence_id):
+            code |= error(f"evidence-matrix row {row_number} missing claim_id or evidence_id")
+            continue
+        if claim_id not in claim_ids:
+            code |= error(f"evidence-matrix row {row_number} references unknown claim {claim_id}")
+        if evidence_id not in evidence_ids:
+            code |= error(f"evidence-matrix row {row_number} references unknown evidence {evidence_id}")
+        if missingish(relationship):
+            code |= error(f"evidence-matrix row {row_number} missing relationship")
+            continue
+        if relationship not in ALLOWED_EVIDENCE_RELATIONSHIPS:
+            code |= error(f"evidence-matrix row {row_number} has invalid relationship {relationship}")
+            continue
+        if is_active(row):
+            matrix_declared_relationships.setdefault((claim_id, evidence_id), set()).add(relationship)
+        if matrix_row_active(row):
+            matrix_relationships.setdefault((claim_id, evidence_id), set()).add(relationship)
+
     for plan in plans:
         plan_claim_id = item_id(plan, "claim_id", "id")
         if claim_ids and plan_claim_id not in claim_ids:
@@ -527,21 +1095,96 @@ def check_claim_evidence():
         claim_id = item_id(claim, "claim_id", "id")
         if not claim_id:
             continue
-        refs = strings(claim.get("evidence_ids"))
+        refs = sorted(claim_refs_by_id.get(claim_id, set()))
         for evidence_id in refs:
             if evidence_id not in evidence_ids:
                 code |= error(f"claim {claim_id} references unknown evidence {evidence_id}")
-        strength = str(claim.get("claim_strength", claim.get("strength", ""))).lower()
-        if is_active(claim) and strength in {"core", "strong"} and not refs and claim_id not in gap_claim_ids:
-            code |= error(f"{strength} claim lacks evidence and no evidence gap is registered: {claim_id}")
+                continue
+            relationships = matrix_declared_relationships.get((claim_id, evidence_id), set())
+            if relationships & CONTRADICT_RELATIONSHIPS:
+                code |= error(
+                    f"claim {claim_id} lists evidence {evidence_id} as support but evidence-matrix relationship is contradicts"
+                )
+            evidence_item = evidence_by_id.get(evidence_id)
+            if (
+                is_active(claim)
+                and evidence_item
+                and is_active(evidence_item)
+                and claim_id not in evidence_supports_by_id.get(evidence_id, set())
+                and (claim_id, evidence_id) not in matrix_relationships
+            ):
+                code |= error(
+                    f"active claim {claim_id} references evidence {evidence_id} without reciprocal evidence support or evidence-matrix row"
+                )
+        strength = claim_strength(claim)
+        if is_active(claim) and strength in {"core", "strong"}:
+            if not has_claim_statement(claim):
+                code |= error(f"{strength} claim missing statement/text/claim/summary: {claim_id}")
+            if claim_id not in gap_claim_ids:
+                candidate_evidence_ids = set(refs)
+                candidate_evidence_ids.update(
+                    evidence_id
+                    for (matrix_claim_id, evidence_id), relationships in matrix_relationships.items()
+                    if matrix_claim_id == claim_id and relationships & SUPPORT_RELATIONSHIPS
+                )
+                candidate_evidence_ids.update(
+                    evidence_id
+                    for evidence_id, supported_claims in evidence_supports_by_id.items()
+                    if claim_id in supported_claims
+                )
+                verified_supports = []
+                for evidence_id in candidate_evidence_ids:
+                    evidence_item = evidence_by_id.get(evidence_id)
+                    if not evidence_item:
+                        continue
+                    relationships = matrix_relationships.get((claim_id, evidence_id), set())
+                    reciprocal_support = (
+                        evidence_id in claim_refs_by_id.get(claim_id, set())
+                        and claim_id in evidence_supports_by_id.get(evidence_id, set())
+                    )
+                    if relationships:
+                        pair_supports_claim = bool(relationships & SUPPORT_RELATIONSHIPS) and not (
+                            relationships & CONTRADICT_RELATIONSHIPS
+                        )
+                    else:
+                        pair_supports_claim = reciprocal_support
+                    if pair_supports_claim and evidence_can_support_strong_claim(evidence_item):
+                        verified_supports.append(evidence_id)
+                if not verified_supports:
+                    code |= error(
+                        f"{strength} claim lacks verified supporting evidence and no active evidence gap is registered: {claim_id}"
+                    )
         if strength == "core" and claim_id not in plan_claim_ids:
             code |= error(f"core claim lacks experiment plan: {claim_id}")
 
     for item in evidence:
         evidence_id = item_id(item, "evidence_id", "id")
-        for claim_id in strings(item.get("claim_ids") or item.get("supports_claims")):
+        if is_verified(item):
+            if not has_evidence_provenance(item):
+                code |= error(f"verified evidence lacks source/provenance/artifact/external_source: {evidence_id}")
+            if not evidence_quality_is_sufficient(item):
+                code |= error(f"verified evidence lacks sufficient strength/fitness/status: {evidence_id}")
+        for claim_id in evidence_support_claim_ids(item):
             if claim_id not in claim_ids:
                 code |= error(f"evidence {evidence_id} references unknown claim {claim_id}")
+                continue
+            relationships = matrix_declared_relationships.get((claim_id, evidence_id), set())
+            if relationships & CONTRADICT_RELATIONSHIPS:
+                code |= error(
+                    f"evidence {evidence_id} claims support for {claim_id} but evidence-matrix relationship is contradicts"
+                )
+            claim = claim_by_id.get(claim_id)
+            if (
+                evidence_id
+                and is_active(item)
+                and claim
+                and is_active(claim)
+                and evidence_id not in claim_refs_by_id.get(claim_id, set())
+                and (claim_id, evidence_id) not in matrix_relationships
+            ):
+                code |= error(
+                    f"active evidence {evidence_id} supports claim {claim_id} without reciprocal claim evidence_ids or evidence-matrix row"
+                )
 
     for gap in gaps:
         claim_id = item_id(gap, "claim_id", "id")
@@ -555,21 +1198,6 @@ def check_claim_evidence():
             code |= error(f"expected result references unknown claim: {claim_id}")
         if experiment_id and experiment_ids and experiment_id not in experiment_ids:
             code |= error(f"expected result references unknown experiment: {experiment_id}")
-
-    allowed_relationships = {"supports", "contradicts", "qualifies", "motivates", "background"}
-    for row_number, row in enumerate(read_csv_rows("state/evidence-matrix.csv"), start=2):
-        claim_id = row.get("claim_id")
-        evidence_id = row.get("evidence_id")
-        relationship = row.get("relationship")
-        if missingish(claim_id) or missingish(evidence_id):
-            code |= error(f"evidence-matrix row {row_number} missing claim_id or evidence_id")
-            continue
-        if claim_id not in claim_ids:
-            code |= error(f"evidence-matrix row {row_number} references unknown claim {claim_id}")
-        if evidence_id not in evidence_ids:
-            code |= error(f"evidence-matrix row {row_number} references unknown evidence {evidence_id}")
-        if relationship and relationship not in allowed_relationships:
-            code |= error(f"evidence-matrix row {row_number} has invalid relationship {relationship}")
     return code
 
 
@@ -582,6 +1210,416 @@ def load_number_groups(registry: dict):
     return numbers
 
 
+def scalar_strings(value):
+    if missingish(value):
+        return []
+    if isinstance(value, dict):
+        return []
+    if isinstance(value, (list, tuple, set)):
+        values = []
+        for item in value:
+            values.extend(scalar_strings(item))
+        return values
+    return [str(value)]
+
+
+def nested_field_strings(value, fields):
+    values = []
+    if missingish(value):
+        return values
+    if isinstance(value, dict):
+        for field in fields:
+            values.extend(nested_field_strings(value.get(field), fields))
+        return values
+    if isinstance(value, (list, tuple, set)):
+        for item in value:
+            values.extend(nested_field_strings(item, fields))
+        return values
+    values.append(str(value))
+    return values
+
+
+def load_numeric_numbers():
+    registry = load_doc("state/numeric-registry.yaml") if (ROOT / "state/numeric-registry.yaml").exists() else {}
+    index = load_doc("state/numbers/numeric-index.yaml") if (ROOT / "state/numbers/numeric-index.yaml").exists() else {}
+    numbers = []
+    numbers.extend(as_list(registry.get("numbers")))
+    numbers.extend(as_list(index.get("numbers")))
+    numbers.extend(load_number_groups(registry))
+    return [item for item in numbers if isinstance(item, dict)]
+
+
+def load_float_registry_ids():
+    code = require([
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/result-status.yaml",
+        "lab/artifacts/result-index.yaml",
+    ])
+    if code:
+        return code, set(), set(), set()
+
+    claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    numbers = load_numeric_numbers()
+    status_results = doc_items("state/result-status.yaml", "results")
+    index_results = doc_items("lab/artifacts/result-index.yaml", "results")
+
+    claim_code, claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)
+    number_code, numeric_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
+    status_code, status_result_ids = collect_ids(status_results, ["result_id", "id"], "state/result-status.yaml results", required=False)
+    index_code, index_result_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
+    result_ids = status_result_ids | index_result_ids
+    return code | claim_code | number_code | status_code | index_code, claim_ids, numeric_ids, result_ids
+
+
+def check_registry_references(item: dict, context: str, claim_ids: set[str], numeric_ids: set[str], result_ids: set[str]) -> int:
+    code = 0
+    for field in ["claim_ids", "nearby_claim_ids"]:
+        for claim_id in strings(item.get(field)):
+            if claim_id not in claim_ids:
+                code |= error(f"{context} references unknown claim id {claim_id}")
+    for numeric_id in strings(item.get("numeric_ids")):
+        if numeric_id not in numeric_ids:
+            code |= error(f"{context} references unknown numeric id {numeric_id}")
+    for result_id in strings(item.get("result_ids")):
+        if result_id not in result_ids:
+            code |= error(f"{context} references unknown result id {result_id}")
+    return code
+
+
+def has_float_provenance(item: dict) -> bool:
+    for field in PROVENANCE_FIELDS:
+        if has_value(item.get(field)):
+            return True
+    provenance = item.get("provenance", {})
+    if isinstance(provenance, dict):
+        for field in PROVENANCE_FIELDS:
+            if has_value(provenance.get(field)):
+                return True
+    return False
+
+
+def check_path_field_values(item: dict, context: str, fields, *, path_like_only: bool = False) -> int:
+    code = 0
+    for field in fields:
+        for value in leaf_values(item.get(field)):
+            if not missingish(value) and not path_exists_or_external(value, path_like_only=path_like_only):
+                code |= error(f"{context} has missing {field}: {value}")
+    return code
+
+
+def check_provenance_paths(item: dict, context: str) -> int:
+    code = check_path_field_values(item, context, PROVENANCE_PATH_FIELDS, path_like_only=True)
+    provenance = item.get("provenance", {})
+    if isinstance(provenance, dict):
+        code |= check_path_field_values(provenance, context, PROVENANCE_PATH_FIELDS, path_like_only=True)
+    return code
+
+
+def float_maps(floats):
+    by_float_id = {}
+    by_label = {}
+    by_figure_id = {}
+    by_table_id = {}
+    for item in floats:
+        if not isinstance(item, dict):
+            continue
+        for field, target in [
+            ("float_id", by_float_id),
+            ("id", by_float_id),
+            ("label", by_label),
+            ("figure_id", by_figure_id),
+            ("table_id", by_table_id),
+        ]:
+            value = item.get(field)
+            if not missingish(value):
+                target[str(value)] = item
+    return by_float_id, by_label, by_figure_id, by_table_id
+
+
+def explicitly_qualitative(item: dict) -> bool:
+    if item.get("qualitative") is True:
+        return True
+    for field in ["kind", "type", "mode", "table_type"]:
+        if str(item.get(field, "")).lower() == "qualitative":
+            return True
+    return False
+
+
+def table_requires_numeric_binding(item: dict) -> bool:
+    status = str(item.get("status", "")).lower()
+    return is_verified(item) or status == "final"
+
+
+def normalize_macro_name(macro) -> str:
+    if missingish(macro):
+        return ""
+    text = str(macro).strip()
+    return text if text.startswith("\\") else "\\" + text
+
+
+def read_balanced_braces(text: str, start: int):
+    if start >= len(text) or text[start] != "{":
+        return None, start
+    depth = 0
+    escaped = False
+    chars = []
+    for index in range(start, len(text)):
+        char = text[index]
+        if escaped:
+            if depth > 0:
+                chars.append(char)
+            escaped = False
+            continue
+        if char == "\\":
+            if depth > 0:
+                chars.append(char)
+            escaped = True
+            continue
+        if char == "{":
+            depth += 1
+            if depth > 1:
+                chars.append(char)
+            continue
+        if char == "}":
+            depth -= 1
+            if depth == 0:
+                return "".join(chars), index + 1
+            chars.append(char)
+            continue
+        if depth > 0:
+            chars.append(char)
+    return None, start
+
+
+def skip_ws(text: str, index: int) -> int:
+    while index < len(text) and text[index].isspace():
+        index += 1
+    return index
+
+
+def skip_optional_args(text: str, index: int) -> int:
+    index = skip_ws(text, index)
+    while index < len(text) and text[index] == "[":
+        end = text.find("]", index + 1)
+        if end == -1:
+            return index
+        index = skip_ws(text, end + 1)
+    return index
+
+
+def extract_macro_values(text: str) -> dict[str, str]:
+    values = {}
+    command_pattern = re.compile(r"\\(?:newcommand|renewcommand|providecommand)\*?")
+    for match in command_pattern.finditer(text):
+        index = skip_ws(text, match.end())
+        macro = None
+        if index < len(text) and text[index] == "{":
+            macro, index = read_balanced_braces(text, index)
+            macro = normalize_macro_name(macro)
+        elif index < len(text) and text[index] == "\\":
+            name_match = re.match(r"\\[A-Za-z@]+", text[index:])
+            if name_match:
+                macro = normalize_macro_name(name_match.group(0))
+                index += len(name_match.group(0))
+        if not macro:
+            continue
+        index = skip_optional_args(text, index)
+        value, end = read_balanced_braces(text, index)
+        if value is not None:
+            values[macro] = value
+            index = end
+
+    def_pattern = re.compile(r"\\def\s*(\\[A-Za-z@]+)")
+    for match in def_pattern.finditer(text):
+        macro = normalize_macro_name(match.group(1))
+        index = skip_ws(text, match.end())
+        value, _ = read_balanced_braces(text, index)
+        if macro and value is not None:
+            values[macro] = value
+    return values
+
+
+def normalize_numeric_value(value) -> str:
+    text = str(value).strip()
+    text = re.sub(r"\\(?:text|mathrm|mathbf|mathit)\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\([%&_#$])", r"\1", text)
+    text = text.replace("\\,", "")
+    text = text.replace("\\ ", " ")
+    text = text.replace("~", " ")
+    text = text.replace("{", "")
+    text = text.replace("}", "")
+    text = text.replace(",", "")
+    text = re.sub(r"\bpercent\b", "%", text, flags=re.I)
+    text = re.sub(r"\s+", "", text)
+    return text.lower()
+
+
+def registered_number_values(number: dict) -> list[str]:
+    direct_values = []
+    for field in ["value", "display_value", "reported_value", "latex_value", "macro_value"]:
+        direct_values.extend(scalar_strings(number.get(field)))
+    display_values = []
+    display = number.get("display")
+    if isinstance(display, dict):
+        for field in ["value", "display_value", "reported_value", "latex_value", "macro_value", "text", "latex"]:
+            display_values.extend(scalar_strings(display.get(field)))
+    elif not missingish(display):
+        display_values.extend(scalar_strings(display))
+    return display_values or direct_values
+
+
+def evidence_refs(item: dict) -> list[str]:
+    refs = []
+    for field in ["evidence_ids", "evidence_id"]:
+        refs.extend(scalar_strings(item.get(field)))
+    for entry in as_list(item.get("evidence")):
+        if isinstance(entry, dict):
+            ident = item_id(entry, "evidence_id", "id")
+            if ident:
+                refs.append(ident)
+        elif not missingish(entry):
+            refs.append(str(entry))
+    return refs
+
+
+def result_refs(item: dict) -> list[str]:
+    refs = []
+    for field in ["result_ids", "result_id"]:
+        refs.extend(scalar_strings(item.get(field)))
+    return refs
+
+
+def path_anchor_values(item: dict) -> list[str]:
+    values = []
+    nested_fields = ["path", "artifact_path", "source", "uri", "url", "snapshot_path"]
+    for field in ["artifact_path", "artifact_paths", "source", "sources", "snapshot_path", "snapshot_paths"]:
+        values.extend(nested_field_strings(item.get(field), nested_fields))
+    for field in ["artifacts", "snapshots"]:
+        values.extend(nested_field_strings(item.get(field), nested_fields))
+    provenance = item.get("provenance")
+    if isinstance(provenance, (dict, list, tuple, set)):
+        values.extend(nested_field_strings(provenance, nested_fields))
+    return values
+
+
+def has_scalar_anchor(item: dict) -> bool:
+    for field in ["run_id", "run_ids", "snapshot", "checksum", "checksums", "sha256", "digest"]:
+        if scalar_strings(item.get(field)):
+            return True
+    provenance = item.get("provenance")
+    if isinstance(provenance, dict):
+        for field in ["run_id", "run_ids", "snapshot", "checksum", "checksums", "sha256", "digest"]:
+            if scalar_strings(provenance.get(field)):
+                return True
+    return False
+
+
+def result_numeric_refs(result: dict):
+    refs = []
+    missing_entry_id = False
+    field_present = any(field in result for field in ["numeric_id", "numeric_ids", "numbers"])
+    refs.extend(scalar_strings(result.get("numeric_id")))
+    refs.extend(scalar_strings(result.get("numeric_ids")))
+    if "numbers" in result:
+        numbers = result.get("numbers")
+        if isinstance(numbers, dict):
+            for key, value in numbers.items():
+                if isinstance(value, dict):
+                    refs.append(item_id(value, "numeric_id", "id") or str(key))
+                else:
+                    refs.append(str(key))
+        else:
+            for entry in as_list(numbers):
+                if isinstance(entry, dict):
+                    ident = item_id(entry, "numeric_id", "id")
+                    if ident:
+                        refs.append(ident)
+                    else:
+                        missing_entry_id = True
+                elif not missingish(entry):
+                    refs.append(str(entry))
+    return refs, field_present, missing_entry_id
+
+
+def exception_matches(pattern: str, literal: str, context: str) -> bool:
+    try:
+        compiled = re.compile(pattern)
+    except re.error:
+        return False
+    return bool(compiled.fullmatch(literal) or compiled.search(context))
+
+
+def strip_tex_comment(line: str) -> str:
+    for index, char in enumerate(line):
+        if char != "%":
+            continue
+        slash_count = 0
+        cursor = index - 1
+        while cursor >= 0 and line[cursor] == "\\":
+            slash_count += 1
+            cursor -= 1
+        if slash_count % 2 == 0:
+            return line[:index]
+    return line
+
+
+def mask_latex_numeric_contexts(text: str) -> str:
+    command_names = "|".join(re.escape(name) for name in MASKED_NUMERIC_CONTEXT_COMMANDS)
+    pattern = re.compile(rf"\\(?:{command_names})(?:\s*\[[^\]]*\])*(?:\s*\{{[^{{}}]*\}})+")
+    return pattern.sub(" ", text)
+
+
+def iter_paper_numeric_literals():
+    for path in paper_content_tex_files():
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            scan_line = mask_latex_numeric_contexts(strip_tex_comment(line))
+            for match in NUMERIC_LITERAL_RE.finditer(scan_line):
+                literal = match.group(0).strip()
+                if literal:
+                    yield path, line_no, literal, line.strip()
+
+
+def check_unregistered_numeric_literals(verified_values: set[str]) -> int:
+    if not paper_looks_populated():
+        return 0
+    code = 0
+    exceptions = doc_items("state/numbers/exceptions.yaml", "exceptions")
+    valid_exceptions = []
+    for index, item in enumerate(exceptions, start=1):
+        if not isinstance(item, dict):
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] must be a mapping")
+            continue
+        pattern = item.get("pattern")
+        reason = item.get("reason")
+        if missingish(pattern) or missingish(reason):
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] missing pattern/reason")
+            continue
+        try:
+            re.compile(str(pattern))
+        except re.error as exc:
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] invalid regex: {exc}")
+            continue
+        valid_exceptions.append((str(pattern), str(reason)))
+
+    for path, line_no, literal, context in iter_paper_numeric_literals():
+        normalized = normalize_numeric_value(literal)
+        if normalized in verified_values:
+            continue
+        if any(exception_matches(pattern, literal, context) for pattern, _reason in valid_exceptions):
+            continue
+        code |= error(
+            "unregistered numeric literal in populated paper content: "
+            f"{literal} at {rel(path)}:{line_no}"
+        )
+    return code
+
+
 def check_result_status():
     code = require(["state/result-status.yaml", "lab/artifacts/result-index.yaml", "state/claim-evidence-map.yaml"])
     if code:
@@ -589,11 +1627,18 @@ def check_result_status():
     status_results = doc_items("state/result-status.yaml", "results")
     index_results = doc_items("lab/artifacts/result-index.yaml", "results")
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    numbers = load_numeric_numbers()
 
     code |= collect_ids(status_results, ["result_id", "id"], "state/result-status.yaml results", required=False)[0]
     index_code, index_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
     code |= index_code
     claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)[1]
+    number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)[1]
+    verified_result_ids = {
+        result_id
+        for result in status_results + index_results
+        if is_verified(result) and (result_id := item_id(result, "result_id", "id"))
+    }
 
     for result in status_results:
         result_id = item_id(result, "result_id", "id")
@@ -601,12 +1646,23 @@ def check_result_status():
             code |= error(f"verified result missing from result-index: {result_id}")
     for result in index_results:
         result_id = item_id(result, "result_id", "id")
-        if is_verified(result):
-            if not (result.get("source") or result.get("artifacts") or result.get("evidence_ids")):
+        verified = is_verified(result) or result_id in verified_result_ids
+        if verified:
+            source_artifact_values = path_anchor_values(result)
+            if not (source_artifact_values or evidence_refs(result)):
                 code |= error(f"verified result lacks source/artifacts/evidence: {result_id}")
+            for value in source_artifact_values:
+                if not path_exists_or_external(value):
+                    code |= error(f"verified result has missing artifact/source: {result_id} {value}")
         for claim_id in strings(result.get("claims_supported")):
             if claim_ids and claim_id not in claim_ids:
                 code |= error(f"result {result_id} supports unknown claim {claim_id}")
+        refs, field_present, missing_entry_id = result_numeric_refs(result)
+        if field_present and missing_entry_id:
+            code |= error(f"result {result_id} numbers entries must include numeric_id/id")
+        for numeric_id in refs:
+            if numeric_id not in number_ids:
+                code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
     return code
 
 
@@ -615,6 +1671,7 @@ def check_numeric_consistency():
         "state/numeric-registry.yaml",
         "state/numbers/numeric-index.yaml",
         "state/numbers/macros.yaml",
+        "state/numbers/exceptions.yaml",
         "state/result-status.yaml",
         "paper/generated/results-macros.tex",
         "lab/artifacts/result-index.yaml",
@@ -623,17 +1680,14 @@ def check_numeric_consistency():
     if code:
         return code
 
-    registry = load_doc("state/numeric-registry.yaml")
-    index = load_doc("state/numbers/numeric-index.yaml")
     macro_doc = load_doc("state/numbers/macros.yaml")
     content_text = read_paper_content_tex()
     evidence_ids = collect_ids(doc_items("lab/research/evidence.yaml", "evidence"), ["evidence_id", "id"], "evidence", required=False)[1]
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
-    numbers = []
-    numbers.extend(as_list(registry.get("numbers")))
-    numbers.extend(as_list(index.get("numbers")))
-    numbers.extend(load_number_groups(registry))
-    numbers = [item for item in numbers if isinstance(item, dict)]
+    numbers = load_numeric_numbers()
+    index_results = doc_items("lab/artifacts/result-index.yaml", "results")
+    result_map = {item_id(result, "result_id", "id"): result for result in index_results if item_id(result, "result_id", "id")}
+    result_ids = set(result_map)
 
     number_code, number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
     code |= number_code
@@ -660,34 +1714,65 @@ def check_numeric_consistency():
                 macro_map[numeric_id] = str(macro)
     macro_text = (ROOT / "paper/generated/results-macros.tex").read_text(encoding="utf-8")
     generated_macros = extract_macro_names(macro_text)
+    generated_macro_values = extract_macro_values(macro_text)
 
     for numeric_id, macro in macro_map.items():
         if number_ids and numeric_id not in number_ids:
             code |= error(f"macro map references unknown numeric id {numeric_id}")
-        normalized = macro if macro.startswith("\\") else "\\" + macro
+        normalized = normalize_macro_name(macro)
         if normalized not in generated_macros:
             code |= error(f"macro map for {numeric_id} missing generated macro {normalized}")
 
+    verified_literal_values = set()
     for number in numbers:
         numeric_id = item_id(number, "numeric_id", "id")
-        for evidence_id in strings(number.get("evidence_ids")):
-            if evidence_ids and evidence_id not in evidence_ids:
+        for evidence_id in evidence_refs(number):
+            if evidence_id not in evidence_ids:
                 code |= error(f"number {numeric_id} references unknown evidence {evidence_id}")
         display = number.get("display", {}) if isinstance(number.get("display"), dict) else {}
         macro = number.get("latex_macro") or display.get("latex_macro") or macro_map.get(numeric_id)
         if not missingish(macro):
-            normalized = str(macro) if str(macro).startswith("\\") else "\\" + str(macro)
+            normalized = normalize_macro_name(macro)
             if normalized not in generated_macros:
                 code |= error(f"number {numeric_id} expects missing generated macro {normalized}")
             if is_verified(number) and normalized not in content_text:
                 code |= error(f"verified number macro is not used in paper content: {numeric_id} {normalized}")
-        if is_verified(number) and not (number.get("source") or number.get("artifact_path") or number.get("run_id") or number.get("evidence_ids")):
-            code |= error(f"verified number lacks source/artifact/evidence: {numeric_id}")
+            if normalized in generated_macro_values:
+                expected_values = {normalize_numeric_value(value) for value in registered_number_values(number)}
+                generated_value = normalize_numeric_value(generated_macro_values[normalized])
+                if expected_values and generated_value not in expected_values:
+                    code |= error(f"generated macro value drifts from registered value: {numeric_id} {normalized}")
+                if is_verified(number):
+                    verified_literal_values.add(generated_value)
+                    verified_literal_values.update(expected_values)
+        if is_verified(number):
+            number_evidence = evidence_refs(number)
+            if not number_evidence:
+                code |= error(f"verified number lacks evidence: {numeric_id}")
+            valid_path_anchors = []
+            for value in path_anchor_values(number):
+                if path_exists_or_external(value):
+                    valid_path_anchors.append(value)
+                else:
+                    code |= error(f"verified number has missing artifact/source: {numeric_id} {value}")
+            resolved_results = []
+            for result_id in result_refs(number):
+                if result_id in result_ids:
+                    resolved_results.append(result_id)
+                    result = result_map[result_id]
+                    refs, field_present, _missing_entry_id = result_numeric_refs(result)
+                    if field_present and numeric_id not in refs:
+                        code |= error(f"result-index entry {result_id} does not link back to numeric id {numeric_id}")
+                else:
+                    code |= error(f"number {numeric_id} references missing result-index result_id {result_id}")
+            if not (valid_path_anchors or has_scalar_anchor(number) or resolved_results):
+                code |= error(f"verified number lacks reproducibility anchor: {numeric_id}")
         derived = number.get("derived", {}) if isinstance(number.get("derived"), dict) else {}
         for dep_id in strings(derived.get("depends_on")):
             if number_ids and dep_id not in number_ids:
                 code |= error(f"derived number {numeric_id} depends on unknown number {dep_id}")
 
+    code |= check_unregistered_numeric_literals(verified_literal_values)
     code |= check_result_status()
     return code
 
@@ -705,21 +1790,20 @@ def check_reference_existence():
 
     reference_keys = set()
     for ref in references:
-        key = item_id(ref, "bibkey")
-        if key:
+        for key in reference_bibkeys(ref):
             reference_keys.add(key)
             if bib_keys and key not in bib_keys:
                 code |= error(f"reference ledger bibkey missing from refs.bib: {key}")
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
-        for key in strings(citation.get("bibkey") or citation.get("bibkeys")):
+        for key in citation_bibkeys(citation):
             if key not in bib_keys and key not in reference_keys:
                 code |= error(f"citation {citation_id} references unknown bibkey {key}")
 
     paper_keys = extract_cite_keys(read_paper_tex())
     citation_keys = set()
     for citation in citations:
-        citation_keys.update(strings(citation.get("bibkey") or citation.get("bibkeys")))
+        citation_keys.update(citation_bibkeys(citation))
     if paper_keys and not reference_keys:
         code |= error("paper has citations but reference-ledger is empty")
     if paper_keys and not citation_keys:
@@ -735,21 +1819,62 @@ def check_reference_existence():
 
 
 def check_citation_fitness():
-    code = require(["lab/research/citation-ledger.yaml", "lab/research/related-work-map.yaml"])
+    code = require([
+        "paper/refs.bib",
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml",
+    ])
     if code:
         return code
+    bib_keys = extract_bibkeys((ROOT / "paper/refs.bib").read_text(encoding="utf-8"))
+    references = doc_items("lab/research/reference-ledger.yaml", "references")
     citations = doc_items("lab/research/citation-ledger.yaml", "citations")
     areas = doc_items("lab/research/related-work-map.yaml", "areas")
+    paper_keys = extract_cite_keys(read_paper_content_tex())
+    reference_keys = set()
+    for ref in references:
+        reference_keys.update(reference_bibkeys(ref))
+
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
-        if not citation.get("purpose") and citation.get("bibkey"):
-            code |= error(f"citation {citation_id} missing purpose")
-        if citation.get("fitness_status") in {"weak", "missing-better-source", "needs-review"} and not citation.get("notes"):
-            code |= error(f"citation {citation_id} has weak fitness without notes")
+        keys = citation_bibkeys(citation)
+        fitness_status = str(citation.get("fitness_status", "")).strip().lower()
+        if active_now(citation):
+            if not keys:
+                code |= error(f"active citation {citation_id} missing bibkey")
+            if not has_any_field(citation, ["purpose", "intent"]):
+                code |= error(f"citation {citation_id} missing purpose/intent")
+            if not has_any_field(citation, CITATION_CONTEXT_FIELDS):
+                code |= error(f"citation {citation_id} missing context/locator")
+            if missingish(citation.get("fitness_status")):
+                code |= error(f"citation {citation_id} missing fitness_status")
+            elif fitness_status not in CITATION_FITNESS_STATUSES:
+                allowed = ", ".join(sorted(CITATION_FITNESS_STATUSES))
+                code |= error(f"citation {citation_id} has invalid fitness_status {citation.get('fitness_status')}; allowed: {allowed}")
+            for key in keys:
+                if key not in paper_keys:
+                    code |= error(f"active citation {citation_id} key not cited in paper content: {key}")
+        if fitness_status in WEAK_CITATION_FITNESS_STATUSES and not has_any_field(citation, ["notes", "replacement_candidates"]):
+            code |= error(f"citation {citation_id} has {fitness_status} fitness without notes or replacement_candidates")
+
     for area in areas:
         area_id = item_id(area, "area_id", "id")
-        if area.get("required_citation_types") and not area.get("cited_keys") and not area.get("missing_candidates"):
-            code |= error(f"related-work area {area_id} has requirements but no cited keys or missing candidates")
+        cited_keys = key_strings(area.get("cited_keys") or area.get("bibkeys"))
+        for key in cited_keys:
+            if key not in reference_keys and key not in bib_keys:
+                code |= error(f"related-work area {area_id} cites unknown bibkey {key}")
+            else:
+                if key not in reference_keys:
+                    code |= error(f"related-work area {area_id} cites key not registered in reference-ledger: {key}")
+                if key not in bib_keys:
+                    code |= error(f"related-work area {area_id} cites key missing from refs.bib: {key}")
+        if area.get("required_citation_types") and not cited_keys:
+            missing_candidates = area.get("missing_candidates")
+            if not meaningful(missing_candidates):
+                code |= error(f"related-work area {area_id} has requirements but no cited keys or missing candidates")
+            elif not missing_candidate_notes(area):
+                code |= error(f"related-work area {area_id} lists missing candidates without notes")
     return code
 
 
@@ -758,7 +1883,13 @@ def check_float_placement():
     if code:
         return code
     floats = doc_items("state/float-placement-map.yaml", "floats")
+    figures = doc_items("lab/artifacts/figure-index.yaml", "figures")
+    tables = doc_items("lab/artifacts/table-index.yaml", "tables")
     code |= collect_ids(floats, ["float_id", "id", "label"], "floats", required=False)[0]
+    figure_ids = collect_ids(figures, ["figure_id", "id"], "figures", required=False)[1]
+    table_ids = collect_ids(tables, ["table_id", "id"], "tables", required=False)[1]
+    registry_code, claim_ids, numeric_ids, result_ids = load_float_registry_ids()
+    code |= registry_code
     text = read_paper_tex()
     labels = extract_labels(text)
     refs = extract_refs(text)
@@ -770,18 +1901,20 @@ def check_float_placement():
         label = item.get("label")
         if not missingish(label):
             mapped_labels.add(str(label))
-        if is_active(item) and not is_planned(item):
-            if missingish(label):
-                code |= error(f"active float missing label: {float_id}")
-            elif str(label) not in labels:
-                code |= error(f"float map references label absent from paper tex: {label}")
-            for field in ["asset_path", "tex_source", "caption_source"]:
-                value = item.get(field)
-                if not missingish(value) and not path_exists_or_external(value):
-                    code |= error(f"float {float_id} has missing {field}: {value}")
-        for claim_id in strings(item.get("nearby_claim_ids")):
-            if missingish(claim_id):
-                code |= error(f"float {float_id} has empty nearby claim id")
+        if is_active(item):
+            figure_id = item.get("figure_id")
+            table_id = item.get("table_id")
+            if not missingish(figure_id) and str(figure_id) not in figure_ids:
+                code |= error(f"active float {float_id} references unknown figure_id {figure_id}")
+            if not missingish(table_id) and str(table_id) not in table_ids:
+                code |= error(f"active float {float_id} references unknown table_id {table_id}")
+            if not is_planned(item):
+                if missingish(label):
+                    code |= error(f"active float missing label: {float_id}")
+                elif str(label) not in labels:
+                    code |= error(f"float map references label absent from paper tex: {label}")
+                code |= check_path_field_values(item, f"float {float_id}", ["asset_path", "tex_source", "caption_source"])
+        code |= check_registry_references(item, f"float {float_id}", claim_ids, numeric_ids, result_ids)
     for label in sorted(float_labels | float_refs):
         if label not in labels:
             code |= error(f"paper references undefined float label: {label}")
@@ -796,14 +1929,49 @@ def check_figures_tables():
         return code
     figures = doc_items("lab/artifacts/figure-index.yaml", "figures")
     tables = doc_items("lab/artifacts/table-index.yaml", "tables")
+    floats = doc_items("state/float-placement-map.yaml", "floats")
     code |= collect_ids(figures, ["figure_id", "id"], "figures", required=False)[0]
     code |= collect_ids(tables, ["table_id", "id"], "tables", required=False)[0]
-    for item in figures + tables:
-        ident = item_id(item, "figure_id", "table_id", "id")
-        for field in ["path", "asset_path", "source"]:
-            value = item.get(field)
-            if not missingish(value) and not path_exists_or_external(value):
-                code |= error(f"figure/table {ident} has missing {field}: {value}")
+    registry_code, claim_ids, numeric_ids, result_ids = load_float_registry_ids()
+    code |= registry_code
+    text = read_paper_tex()
+    labels = extract_labels(text)
+    by_float_id, by_label, _, _ = float_maps(floats)
+
+    for kind, items in [("figure", figures), ("table", tables)]:
+        for item in items:
+            ident = item_id(item, f"{kind}_id", "id") or "<missing>"
+            context = f"{kind} {ident}"
+            label = item.get("label")
+            float_id = item.get("float_id")
+            mapped_float = None
+            if not missingish(float_id):
+                mapped_float = by_float_id.get(str(float_id))
+            if mapped_float is None and not missingish(label):
+                mapped_float = by_label.get(str(label))
+
+            code |= check_path_field_values(item, context, ["path", "asset_path"])
+            code |= check_provenance_paths(item, context)
+            code |= check_registry_references(item, context, claim_ids, numeric_ids, result_ids)
+
+            if is_active(item):
+                if missingish(label) and missingish(float_id):
+                    code |= error(f"active {kind} {ident} missing label or float_id")
+                elif mapped_float is None:
+                    code |= error(f"{kind} {ident} is not represented in state/float-placement-map.yaml")
+
+                mapped_label = label
+                if missingish(mapped_label) and isinstance(mapped_float, dict):
+                    mapped_label = mapped_float.get("label")
+                if not missingish(mapped_label) and str(mapped_label) not in labels:
+                    code |= error(f"{kind} {ident} label absent from paper tex: {mapped_label}")
+
+                if not is_planned(item) and not has_float_provenance(item):
+                    code |= error(f"{kind} {ident} missing provenance")
+
+            if kind == "table" and table_requires_numeric_binding(item) and not explicitly_qualitative(item):
+                if not strings(item.get("numeric_ids")) and not strings(item.get("result_ids")):
+                    code |= error(f"table {ident} verified/final without numeric_ids or result_ids")
     code |= check_float_placement()
     return code
 
@@ -968,6 +2136,8 @@ def check_writing_harness():
     code |= check_anonymity()
     if paper_looks_populated():
         code |= check_paper_populated()
+    elif has_active_core_or_strong_claims():
+        code |= check_claim_evidence()
     code |= check_lab_lightweight()
     code |= check_human_gate_assets()
     return code
@@ -976,28 +2146,64 @@ def check_writing_harness():
 def export_release():
     manifest_path = ROOT / "release/manifest.yaml"
     manifest = load_doc("release/manifest.yaml")
+    if not isinstance(manifest, dict):
+        manifest = {}
     surfaces = manifest.get("surfaces", [])
     if not surfaces:
         surfaces = [{"id": "arxiv", "path": "release/arxiv"}, {"id": "overleaf", "path": "release/overleaf"}, {"id": "github-tex", "path": "release/github-tex"}]
+    code = 0
+    normalized_surfaces = []
     for surface in surfaces:
-        dest = ROOT / str(surface.get("path", f"release/{surface.get('id', 'unknown')}"))
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
+        surface_id = str(surface.get("id", "unknown"))
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id} {path_error}")
+            continue
+        if root.is_symlink():
+            code |= error(f"release surface {surface_id} is a symlink: {rel_posix(root)}")
+            continue
+        normalized_surfaces.append(surface)
+    for item in RELEASE_ITEMS:
+        for mismatch in validate_release_source_item(ROOT / "paper" / item):
+            code |= error(f"cannot export release source: {mismatch}")
+    if code:
+        return code
+    surfaces = normalized_surfaces
+    manifest["manifest_version"] = "release-manifest-v1"
+    manifest["checksum_algorithm"] = CHECKSUM_ALGORITHM
+    manifest["source_revision"] = source_revision()
+    for surface in surfaces:
+        surface_id = str(surface.get("id", "unknown"))
+        dest, _ = release_surface_root(surface)
+        assert dest is not None
+        if dest.exists():
+            if dest.is_dir():
+                shutil.rmtree(dest)
+            else:
+                dest.unlink()
         dest.mkdir(parents=True, exist_ok=True)
+        (dest / "README.md").write_text(release_surface_readme(surface_id), encoding="utf-8")
         for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
             out = dest / item
             if not src.exists():
-                if out.is_dir():
-                    shutil.rmtree(out)
-                elif out.exists():
-                    out.unlink()
                 continue
             if src.is_dir():
-                if out.exists():
-                    shutil.rmtree(out)
                 shutil.copytree(src, out)
             else:
                 shutil.copy2(src, out)
+        code |= scan_release_surface(surface_id, dest, surface)
+        surface["path"] = str(surface.get("path", f"release/{surface_id}"))
+        surface["source"] = "paper/"
+        surface["checksum_algorithm"] = CHECKSUM_ALGORITHM
+        surface["files"] = collect_release_checksums(dest)
         surface["status"] = "synced"
+    if code:
+        return code
+    manifest["surfaces"] = surfaces
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return check_release_package()
 

@@ -47,6 +47,36 @@
       "external_source": "https://arxiv.org/abs/2505.22954",
       "provenance": "Figure asset from arXiv:2505.22954v3 source package.",
       "status": "verified"
+    },
+    {
+      "evidence_id": "E-ARXIV-EXPERIMENT-REPORTED-NUMBERS",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT",
+        "C-DGM-POLYGLOT-IMPROVEMENT",
+        "C-SELF-IMPROVEMENT-HELPS",
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ],
+      "kind": "paper-text",
+      "source": "paper/sections/exp.tex",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "status": "verified",
+      "notes": "Experiment-section reported thresholds, subset scores, model-transfer scores, and benchmark-transfer scores from the migrated arXiv source."
+    },
+    {
+      "evidence_id": "E-ARXIV-APPENDIX-REPORTED-NUMBERS",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT",
+        "C-DGM-POLYGLOT-IMPROVEMENT",
+        "C-SELF-IMPROVEMENT-HELPS",
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ],
+      "kind": "paper-text",
+      "source": "paper/sections/appendix.tex",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
+      "status": "verified",
+      "notes": "Appendix tables and prose report ablations, transfer checks, cost estimates, model settings, and hallucination case-study scores."
     }
   ]
 }

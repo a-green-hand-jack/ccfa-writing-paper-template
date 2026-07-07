@@ -17,8 +17,8 @@
         },
         {
           "relpath": "figures/README.md",
-          "sha256": "4c1e75a164d8e44052b92f5d18085fd0cd8ca17e8ce04c23da991d956db9e9ad",
-          "size": 114
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
         },
         {
           "relpath": "generated/numbers/README.md",
@@ -112,8 +112,8 @@
         },
         {
           "relpath": "tables/README.md",
-          "sha256": "a545e2dd28e30f88bf5f1e32f12efe1a5c6d3d6013e55da1786b1582fb1d3b27",
-          "size": 102
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
         },
         {
           "relpath": "venue_preamble.tex",
@@ -148,8 +148,8 @@
         },
         {
           "relpath": "figures/README.md",
-          "sha256": "4c1e75a164d8e44052b92f5d18085fd0cd8ca17e8ce04c23da991d956db9e9ad",
-          "size": 114
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
         },
         {
           "relpath": "generated/numbers/README.md",
@@ -243,8 +243,8 @@
         },
         {
           "relpath": "tables/README.md",
-          "sha256": "a545e2dd28e30f88bf5f1e32f12efe1a5c6d3d6013e55da1786b1582fb1d3b27",
-          "size": 102
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
         },
         {
           "relpath": "venue_preamble.tex",
@@ -279,8 +279,8 @@
         },
         {
           "relpath": "figures/README.md",
-          "sha256": "4c1e75a164d8e44052b92f5d18085fd0cd8ca17e8ce04c23da991d956db9e9ad",
-          "size": 114
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
         },
         {
           "relpath": "generated/numbers/README.md",
@@ -374,8 +374,8 @@
         },
         {
           "relpath": "tables/README.md",
-          "sha256": "a545e2dd28e30f88bf5f1e32f12efe1a5c6d3d6013e55da1786b1582fb1d3b27",
-          "size": 102
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
         },
         {
           "relpath": "venue_preamble.tex",

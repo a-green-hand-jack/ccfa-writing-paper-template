@@ -105,6 +105,8 @@ MASKED_NUMERIC_CONTEXT_COMMANDS = (
     "hspace",
     "setlength",
 )
+PROVENANCE_FIELDS = ("source", "generated_by", "artifact_path", "input_data", "checksum", "external_source")
+PROVENANCE_PATH_FIELDS = ("source", "generated_by", "artifact_path", "input_data", "external_source")
 REQUIRED_PAPER_SURFACE = [
     "paper/main.tex",
     "paper/macros.tex",
@@ -251,6 +253,24 @@ def missing_candidate_notes(area: dict) -> bool:
     return True
 
 
+def leaf_values(value):
+    if isinstance(value, dict):
+        values = []
+        for child in value.values():
+            values.extend(leaf_values(child))
+        return values
+    if isinstance(value, (list, tuple, set)):
+        values = []
+        for child in value:
+            values.extend(leaf_values(child))
+        return values
+    return [value]
+
+
+def has_value(value) -> bool:
+    return any(not missingish(item) for item in leaf_values(value))
+
+
 def item_id(item, *fields):
     if not isinstance(item, dict):
         return None
@@ -379,7 +399,7 @@ def collect_ids(items, fields, context: str, required: bool = True):
     return code, ids
 
 
-def path_exists_or_external(value) -> bool:
+def external_reference(value) -> bool:
     if missingish(value):
         return True
     text = str(value)
@@ -387,7 +407,36 @@ def path_exists_or_external(value) -> bool:
         return True
     if text.startswith("doi:") or text.startswith("arXiv:"):
         return True
-    return (ROOT / text.split(":", 1)[0]).exists()
+    return False
+
+
+def local_path_part(value: str) -> str:
+    return value.split(":", 1)[0]
+
+
+def looks_path_like(value) -> bool:
+    if missingish(value):
+        return False
+    text = str(value).strip()
+    if external_reference(text):
+        return True
+    path = local_path_part(text)
+    if path.startswith(("/", "./", "../", "~")):
+        return True
+    if "/" in path or "\\" in path:
+        return True
+    return bool(Path(path).suffix)
+
+
+def path_exists_or_external(value, *, path_like_only: bool = False) -> bool:
+    if missingish(value):
+        return True
+    text = str(value)
+    if external_reference(text):
+        return True
+    if path_like_only and not looks_path_like(text):
+        return True
+    return (ROOT / local_path_part(text)).exists()
 
 
 def read_csv_rows(path: str):
@@ -1200,6 +1249,109 @@ def load_numeric_numbers():
     return [item for item in numbers if isinstance(item, dict)]
 
 
+def load_float_registry_ids():
+    code = require([
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/result-status.yaml",
+        "lab/artifacts/result-index.yaml",
+    ])
+    if code:
+        return code, set(), set(), set()
+
+    claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    numbers = load_numeric_numbers()
+    status_results = doc_items("state/result-status.yaml", "results")
+    index_results = doc_items("lab/artifacts/result-index.yaml", "results")
+
+    claim_code, claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)
+    number_code, numeric_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
+    status_code, status_result_ids = collect_ids(status_results, ["result_id", "id"], "state/result-status.yaml results", required=False)
+    index_code, index_result_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
+    result_ids = status_result_ids | index_result_ids
+    return code | claim_code | number_code | status_code | index_code, claim_ids, numeric_ids, result_ids
+
+
+def check_registry_references(item: dict, context: str, claim_ids: set[str], numeric_ids: set[str], result_ids: set[str]) -> int:
+    code = 0
+    for field in ["claim_ids", "nearby_claim_ids"]:
+        for claim_id in strings(item.get(field)):
+            if claim_id not in claim_ids:
+                code |= error(f"{context} references unknown claim id {claim_id}")
+    for numeric_id in strings(item.get("numeric_ids")):
+        if numeric_id not in numeric_ids:
+            code |= error(f"{context} references unknown numeric id {numeric_id}")
+    for result_id in strings(item.get("result_ids")):
+        if result_id not in result_ids:
+            code |= error(f"{context} references unknown result id {result_id}")
+    return code
+
+
+def has_float_provenance(item: dict) -> bool:
+    for field in PROVENANCE_FIELDS:
+        if has_value(item.get(field)):
+            return True
+    provenance = item.get("provenance", {})
+    if isinstance(provenance, dict):
+        for field in PROVENANCE_FIELDS:
+            if has_value(provenance.get(field)):
+                return True
+    return False
+
+
+def check_path_field_values(item: dict, context: str, fields, *, path_like_only: bool = False) -> int:
+    code = 0
+    for field in fields:
+        for value in leaf_values(item.get(field)):
+            if not missingish(value) and not path_exists_or_external(value, path_like_only=path_like_only):
+                code |= error(f"{context} has missing {field}: {value}")
+    return code
+
+
+def check_provenance_paths(item: dict, context: str) -> int:
+    code = check_path_field_values(item, context, PROVENANCE_PATH_FIELDS, path_like_only=True)
+    provenance = item.get("provenance", {})
+    if isinstance(provenance, dict):
+        code |= check_path_field_values(provenance, context, PROVENANCE_PATH_FIELDS, path_like_only=True)
+    return code
+
+
+def float_maps(floats):
+    by_float_id = {}
+    by_label = {}
+    by_figure_id = {}
+    by_table_id = {}
+    for item in floats:
+        if not isinstance(item, dict):
+            continue
+        for field, target in [
+            ("float_id", by_float_id),
+            ("id", by_float_id),
+            ("label", by_label),
+            ("figure_id", by_figure_id),
+            ("table_id", by_table_id),
+        ]:
+            value = item.get(field)
+            if not missingish(value):
+                target[str(value)] = item
+    return by_float_id, by_label, by_figure_id, by_table_id
+
+
+def explicitly_qualitative(item: dict) -> bool:
+    if item.get("qualitative") is True:
+        return True
+    for field in ["kind", "type", "mode", "table_type"]:
+        if str(item.get(field, "")).lower() == "qualitative":
+            return True
+    return False
+
+
+def table_requires_numeric_binding(item: dict) -> bool:
+    status = str(item.get("status", "")).lower()
+    return is_verified(item) or status == "final"
+
+
 def normalize_macro_name(macro) -> str:
     if missingish(macro):
         return ""
@@ -1731,7 +1883,13 @@ def check_float_placement():
     if code:
         return code
     floats = doc_items("state/float-placement-map.yaml", "floats")
+    figures = doc_items("lab/artifacts/figure-index.yaml", "figures")
+    tables = doc_items("lab/artifacts/table-index.yaml", "tables")
     code |= collect_ids(floats, ["float_id", "id", "label"], "floats", required=False)[0]
+    figure_ids = collect_ids(figures, ["figure_id", "id"], "figures", required=False)[1]
+    table_ids = collect_ids(tables, ["table_id", "id"], "tables", required=False)[1]
+    registry_code, claim_ids, numeric_ids, result_ids = load_float_registry_ids()
+    code |= registry_code
     text = read_paper_tex()
     labels = extract_labels(text)
     refs = extract_refs(text)
@@ -1743,18 +1901,20 @@ def check_float_placement():
         label = item.get("label")
         if not missingish(label):
             mapped_labels.add(str(label))
-        if is_active(item) and not is_planned(item):
-            if missingish(label):
-                code |= error(f"active float missing label: {float_id}")
-            elif str(label) not in labels:
-                code |= error(f"float map references label absent from paper tex: {label}")
-            for field in ["asset_path", "tex_source", "caption_source"]:
-                value = item.get(field)
-                if not missingish(value) and not path_exists_or_external(value):
-                    code |= error(f"float {float_id} has missing {field}: {value}")
-        for claim_id in strings(item.get("nearby_claim_ids")):
-            if missingish(claim_id):
-                code |= error(f"float {float_id} has empty nearby claim id")
+        if is_active(item):
+            figure_id = item.get("figure_id")
+            table_id = item.get("table_id")
+            if not missingish(figure_id) and str(figure_id) not in figure_ids:
+                code |= error(f"active float {float_id} references unknown figure_id {figure_id}")
+            if not missingish(table_id) and str(table_id) not in table_ids:
+                code |= error(f"active float {float_id} references unknown table_id {table_id}")
+            if not is_planned(item):
+                if missingish(label):
+                    code |= error(f"active float missing label: {float_id}")
+                elif str(label) not in labels:
+                    code |= error(f"float map references label absent from paper tex: {label}")
+                code |= check_path_field_values(item, f"float {float_id}", ["asset_path", "tex_source", "caption_source"])
+        code |= check_registry_references(item, f"float {float_id}", claim_ids, numeric_ids, result_ids)
     for label in sorted(float_labels | float_refs):
         if label not in labels:
             code |= error(f"paper references undefined float label: {label}")
@@ -1769,14 +1929,49 @@ def check_figures_tables():
         return code
     figures = doc_items("lab/artifacts/figure-index.yaml", "figures")
     tables = doc_items("lab/artifacts/table-index.yaml", "tables")
+    floats = doc_items("state/float-placement-map.yaml", "floats")
     code |= collect_ids(figures, ["figure_id", "id"], "figures", required=False)[0]
     code |= collect_ids(tables, ["table_id", "id"], "tables", required=False)[0]
-    for item in figures + tables:
-        ident = item_id(item, "figure_id", "table_id", "id")
-        for field in ["path", "asset_path", "source"]:
-            value = item.get(field)
-            if not missingish(value) and not path_exists_or_external(value):
-                code |= error(f"figure/table {ident} has missing {field}: {value}")
+    registry_code, claim_ids, numeric_ids, result_ids = load_float_registry_ids()
+    code |= registry_code
+    text = read_paper_tex()
+    labels = extract_labels(text)
+    by_float_id, by_label, _, _ = float_maps(floats)
+
+    for kind, items in [("figure", figures), ("table", tables)]:
+        for item in items:
+            ident = item_id(item, f"{kind}_id", "id") or "<missing>"
+            context = f"{kind} {ident}"
+            label = item.get("label")
+            float_id = item.get("float_id")
+            mapped_float = None
+            if not missingish(float_id):
+                mapped_float = by_float_id.get(str(float_id))
+            if mapped_float is None and not missingish(label):
+                mapped_float = by_label.get(str(label))
+
+            code |= check_path_field_values(item, context, ["path", "asset_path"])
+            code |= check_provenance_paths(item, context)
+            code |= check_registry_references(item, context, claim_ids, numeric_ids, result_ids)
+
+            if is_active(item):
+                if missingish(label) and missingish(float_id):
+                    code |= error(f"active {kind} {ident} missing label or float_id")
+                elif mapped_float is None:
+                    code |= error(f"{kind} {ident} is not represented in state/float-placement-map.yaml")
+
+                mapped_label = label
+                if missingish(mapped_label) and isinstance(mapped_float, dict):
+                    mapped_label = mapped_float.get("label")
+                if not missingish(mapped_label) and str(mapped_label) not in labels:
+                    code |= error(f"{kind} {ident} label absent from paper tex: {mapped_label}")
+
+                if not is_planned(item) and not has_float_provenance(item):
+                    code |= error(f"{kind} {ident} missing provenance")
+
+            if kind == "table" and table_requires_numeric_binding(item) and not explicitly_qualitative(item):
+                if not strings(item.get("numeric_ids")) and not strings(item.get("result_ids")):
+                    code |= error(f"table {ident} verified/final without numeric_ids or result_ids")
     code |= check_float_placement()
     return code
 

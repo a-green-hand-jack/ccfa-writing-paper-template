@@ -1581,6 +1581,35 @@ def registered_number_values(number: dict) -> list[str]:
     return display_values or direct_values
 
 
+def numeric_alias_targets(number: dict | None) -> set[str]:
+    if not isinstance(number, dict):
+        return set()
+    targets = set()
+    for field in [
+        "alias_of",
+        "same_as",
+        "canonical_id",
+        "canonical_numeric_id",
+        "equivalent_numeric_id",
+        "equivalent_numeric_ids",
+    ]:
+        targets.update(scalar_strings(number.get(field)))
+    alias = number.get("alias")
+    if isinstance(alias, dict):
+        for field in ["of", "target", "numeric_id", "canonical_numeric_id"]:
+            targets.update(scalar_strings(alias.get(field)))
+    return {target for target in targets if target}
+
+
+def shared_macro_is_explicit_alias(owners: set[str], number_by_id: dict[str, dict]) -> bool:
+    if len(owners) < 2:
+        return True
+    for candidate in owners:
+        if all(owner == candidate or candidate in numeric_alias_targets(number_by_id.get(owner)) for owner in owners):
+            return True
+    return False
+
+
 def evidence_refs(item: dict) -> list[str]:
     refs = []
     for field in ["evidence_ids", "evidence_id"]:
@@ -1839,6 +1868,7 @@ def check_numeric_consistency():
 
     number_code, number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
     code |= number_code
+    number_by_id = {item_id(number, "numeric_id", "id"): number for number in numbers if item_id(number, "numeric_id", "id")}
 
     for claim in claims:
         claim_id = item_id(claim, "claim_id", "id")
@@ -1863,11 +1893,14 @@ def check_numeric_consistency():
     macro_text = (ROOT / "paper/generated/results-macros.tex").read_text(encoding="utf-8")
     generated_macros = extract_macro_names(macro_text)
     generated_macro_values = extract_macro_values(macro_text)
+    macro_owners: dict[str, set[str]] = {}
 
     for numeric_id, macro in macro_map.items():
         if number_ids and numeric_id not in number_ids:
             code |= error(f"macro map references unknown numeric id {numeric_id}")
         normalized = normalize_macro_name(macro)
+        if normalized and numeric_id:
+            macro_owners.setdefault(normalized, set()).add(str(numeric_id))
         if normalized not in generated_macros:
             code |= error(f"macro map for {numeric_id} missing generated macro {normalized}")
 
@@ -1883,6 +1916,8 @@ def check_numeric_consistency():
         macro = number.get("latex_macro") or display.get("latex_macro") or macro_map.get(numeric_id)
         if not missingish(macro):
             normalized = normalize_macro_name(macro)
+            if normalized and numeric_id:
+                macro_owners.setdefault(normalized, set()).add(str(numeric_id))
             if normalized not in generated_macros:
                 code |= error(f"number {numeric_id} expects missing generated macro {normalized}")
             if is_verified(number) and normalized not in content_text:
@@ -1921,6 +1956,10 @@ def check_numeric_consistency():
         for dep_id in strings(derived.get("depends_on")):
             if number_ids and dep_id not in number_ids:
                 code |= error(f"derived number {numeric_id} depends on unknown number {dep_id}")
+
+    for macro, owners in sorted(macro_owners.items()):
+        if len(owners) > 1 and not shared_macro_is_explicit_alias(owners, number_by_id):
+            code |= error(f"generated macro has multiple numeric owners without explicit alias: {macro} {sorted(owners)}")
 
     code |= check_unregistered_numeric_literals(verified_literal_values)
     code |= check_result_status()

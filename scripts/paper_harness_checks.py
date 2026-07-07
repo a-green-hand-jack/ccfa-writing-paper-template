@@ -806,6 +806,37 @@ def source_revision() -> dict:
     return revision
 
 
+def check_source_revision_freshness(manifest: dict) -> int:
+    revision = manifest.get("source_revision", {})
+    if not meaningful(revision):
+        return 0
+    if not isinstance(revision, dict):
+        return error("release manifest source_revision must be a mapping")
+
+    code = 0
+    commit = str(revision.get("commit", "")).strip().lower()
+    tree = str(revision.get("tree", "")).strip().lower()
+    treeish = revision.get("treeish")
+    if not isinstance(treeish, str) or not treeish.strip():
+        code |= error("release manifest source_revision missing treeish")
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        code |= error("release manifest source_revision has invalid commit")
+        return code
+    if git_value("cat-file", "-t", commit) != "commit":
+        code |= error(f"release manifest source_revision commit is not present: {commit}")
+        return code
+
+    expected_tree = git_value("rev-parse", "--verify", f"{commit}^{{tree}}")
+    if not re.fullmatch(r"[0-9a-f]{40}", tree):
+        code |= error("release manifest source_revision has invalid tree")
+        return code
+    if git_value("cat-file", "-t", tree) != "tree":
+        code |= error(f"release manifest source_revision tree is not present: {tree}")
+    elif expected_tree and tree != expected_tree:
+        code |= error("release manifest source_revision tree does not match commit")
+    return code
+
+
 def check_capability_parity():
     code = require([".agent/capabilities/registry.yaml", ".claude/ANATOMY.md", ".agents/ANATOMY.md"])
     registry = load_doc(".agent/capabilities/registry.yaml")
@@ -900,6 +931,8 @@ def check_release_package():
 def check_release_freshness():
     manifest = load_doc("release/manifest.yaml")
     code = 0
+    if isinstance(manifest, dict):
+        code |= check_source_revision_freshness(manifest)
     for surface in manifest.get("surfaces", []):
         if not isinstance(surface, dict):
             code |= error("release surface entry must be a mapping")

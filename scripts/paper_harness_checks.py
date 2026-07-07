@@ -1430,6 +1430,39 @@ def table_requires_numeric_binding(item: dict) -> bool:
     return is_verified(item) or status == "final"
 
 
+TABLE_ENVIRONMENTS = {"table", "table*", "sidewaystable", "sidewaystable*", "longtable"}
+
+
+def latex_block_for_label(text: str, label: str) -> str:
+    if missingish(label):
+        return ""
+    label_pattern = re.compile(rf"\\label\{{\s*{re.escape(str(label))}\s*\}}")
+    label_match = label_pattern.search(text)
+    if not label_match:
+        return ""
+
+    begin_match = None
+    for match in re.finditer(r"\\begin\{([^}]+)\}", text[: label_match.start()]):
+        if match.group(1) in TABLE_ENVIRONMENTS:
+            begin_match = match
+    if begin_match is None:
+        start = max(0, label_match.start() - 1000)
+        end = min(len(text), label_match.end() + 1000)
+        return text[start:end]
+
+    env_name = begin_match.group(1)
+    end_pattern = re.compile(rf"\\end\{{{re.escape(env_name)}\}}")
+    end_match = end_pattern.search(text, label_match.end())
+    if end_match is None:
+        return text[begin_match.start() : min(len(text), label_match.end() + 1000)]
+    return text[begin_match.start() : end_match.end()]
+
+
+def numeric_literals_in_latex(text: str) -> list[str]:
+    scan_text = "\n".join(mask_latex_numeric_contexts(strip_tex_comment(line)) for line in text.splitlines())
+    return [match.group(0).strip() for match in NUMERIC_LITERAL_RE.finditer(scan_text) if match.group(0).strip()]
+
+
 def normalize_macro_name(macro) -> str:
     if missingish(macro):
         return ""
@@ -2107,8 +2140,18 @@ def check_figures_tables():
                 if not is_planned(item) and not has_float_provenance(item):
                     code |= error(f"{kind} {ident} missing provenance")
 
-            if kind == "table" and table_requires_numeric_binding(item) and not explicitly_qualitative(item):
-                if not strings(item.get("numeric_ids")) and not strings(item.get("result_ids")):
+            if kind == "table" and table_requires_numeric_binding(item):
+                has_numeric_binding = strings(item.get("numeric_ids")) or strings(item.get("result_ids"))
+                if not has_numeric_binding and explicitly_qualitative(item):
+                    table_label = mapped_label if not missingish(mapped_label) else label
+                    numeric_literals = numeric_literals_in_latex(latex_block_for_label(text, str(table_label)))
+                    if numeric_literals:
+                        sample = ", ".join(numeric_literals[:5])
+                        code |= error(
+                            f"table {ident} marked qualitative but contains numeric literals without "
+                            f"numeric_ids or result_ids: {sample}"
+                        )
+                elif not has_numeric_binding:
                     code |= error(f"table {ident} verified/final without numeric_ids or result_ids")
     code |= check_float_placement()
     return code

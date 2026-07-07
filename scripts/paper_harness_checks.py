@@ -140,6 +140,7 @@ RELEASE_ITEMS = [
     "supplementary",
 ]
 RELEASE_SYNC_STATUSES = {"synced", "fresh", "exported"}
+RELEASE_MANIFEST_VERSION = "release-manifest-v1"
 CHECKSUM_ALGORITHM = "sha256"
 FORBIDDEN_RELEASE_PARTS = {
     ".git",
@@ -729,6 +730,50 @@ def release_surface_root(surface: dict) -> tuple[Path | None, str | None]:
     return ROOT / path, None
 
 
+def check_release_manifest_contract(manifest: dict) -> int:
+    code = 0
+    version = manifest.get("manifest_version")
+    if version != RELEASE_MANIFEST_VERSION:
+        code |= error(
+            f"release manifest manifest_version must be {RELEASE_MANIFEST_VERSION}: "
+            f"{version or '<missing>'}"
+        )
+    algorithm = manifest.get("checksum_algorithm")
+    if algorithm != CHECKSUM_ALGORITHM:
+        code |= error(
+            f"release manifest checksum_algorithm must be {CHECKSUM_ALGORITHM}: "
+            f"{algorithm or '<missing>'}"
+        )
+    if "surfaces" in manifest and not isinstance(manifest.get("surfaces"), list):
+        code |= error("release manifest surfaces must be a list")
+    return code
+
+
+def normalize_release_source(value) -> str:
+    return str(value or "").strip().strip("/")
+
+
+def check_release_surface_contract(surface_id: str, surface: dict) -> int:
+    code = 0
+    algorithm = surface.get("checksum_algorithm")
+    if algorithm != CHECKSUM_ALGORITHM:
+        code |= error(
+            f"release surface {surface_id} checksum_algorithm must be {CHECKSUM_ALGORITHM}: "
+            f"{algorithm or '<missing>'}"
+        )
+    source = surface.get("source")
+    if normalize_release_source(source) != "paper":
+        code |= error(f"release surface {surface_id} source must be paper/: {source or '<missing>'}")
+    path_value = str(surface.get("path", "")).strip()
+    if surface_id and path_value:
+        path = Path(path_value)
+        if not path.is_absolute() and ".." not in path.parts and len(path.parts) >= 2 and path.parts[0] == "release":
+            expected_path = f"release/{surface_id}"
+            if path.as_posix().strip("/") != expected_path:
+                code |= error(f"release surface {surface_id} path must be {expected_path}: {path_value}")
+    return code
+
+
 def allowed_release_parts(surface: dict) -> set[str]:
     allowed = set(strings(surface.get("allowed_hidden_paths", [])))
     allowed.update(strings(surface.get("allowed_metadata_paths", [])))
@@ -1078,13 +1123,18 @@ def check_release_package():
     ccfa = load_doc("state/ccfa.yaml")
     manifest = load_doc("release/manifest.yaml")
     code = 0
+    if not isinstance(manifest, dict):
+        return error("release manifest must be a mapping")
+    code |= check_release_manifest_contract(manifest)
     expected_surfaces = set(strings(ccfa.get("release", {}).get("surfaces", [])))
     manifest_surfaces = manifest.get("surfaces", [])
+    if not isinstance(manifest_surfaces, list):
+        manifest_surfaces = []
     seen = set()
     actual_surfaces = set()
     if expected_surfaces and not manifest_surfaces:
         code |= error("release manifest has no surfaces but state/ccfa.yaml declares release surfaces")
-    for surface in manifest.get("surfaces", []):
+    for surface in manifest_surfaces:
         if not isinstance(surface, dict):
             code |= error("release surface entry must be a mapping")
             continue
@@ -1096,8 +1146,9 @@ def check_release_package():
         else:
             seen.add(surface_id)
             actual_surfaces.add(str(surface_id))
+        code |= check_release_surface_contract(str(surface_id or "<missing>"), surface)
         code |= check_declared_release_surface_status(str(surface_id or "<missing>"), surface, expected_surfaces)
-        for field in ["path", "source", "forbidden_paths"]:
+        for field in ["path", "source", "forbidden_paths", "checksum_algorithm"]:
             if field not in surface:
                 code |= error(f"release surface {surface_id or '<missing>'} missing {field}")
         root, path_error = release_surface_root(surface)
@@ -3167,7 +3218,7 @@ def export_release():
         return code
     previous_revision = manifest.get("source_revision", {}) if isinstance(manifest.get("source_revision"), dict) else {}
     surfaces = normalized_surfaces
-    manifest["manifest_version"] = "release-manifest-v1"
+    manifest["manifest_version"] = RELEASE_MANIFEST_VERSION
     manifest["checksum_algorithm"] = CHECKSUM_ALGORITHM
     manifest["source_revision"] = source_revision()
     if meaningful(manifest["source_revision"]):

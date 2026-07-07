@@ -492,11 +492,74 @@ def read_csv_rows(path: str):
         return list(csv.DictReader(handle))
 
 
-def paper_tex_files():
+def tex_without_comments(text: str) -> str:
+    return "\n".join(strip_tex_comment(line) for line in text.splitlines())
+
+
+def resolve_tex_input(current: Path, value: str) -> Path | None:
+    target = value.strip().strip("{}").strip()
+    if not target or "\\" in target:
+        return None
+    path = Path(target)
+    if path.suffix == "":
+        path = path.with_suffix(".tex")
+    candidates = []
+    if path.is_absolute():
+        candidates.append(path)
+    else:
+        candidates.append(current.parent / path)
+        candidates.append(ROOT / "paper" / path)
+    paper_root = (ROOT / "paper").resolve()
+    for candidate in candidates:
+        resolved = candidate.expanduser().resolve()
+        if resolved.exists() and resolved.suffix == ".tex":
+            try:
+                resolved.relative_to(paper_root)
+            except ValueError:
+                continue
+            return resolved
+    return None
+
+
+def tex_input_paths(path: Path) -> list[Path]:
+    try:
+        text = tex_without_comments(path.read_text(encoding="utf-8"))
+    except UnicodeDecodeError:
+        return []
+    pattern = re.compile(r"\\(?:input|include)\s*\{([^{}]+)\}")
+    paths = []
+    for match in pattern.finditer(text):
+        target = resolve_tex_input(path, match.group(1))
+        if target is not None:
+            paths.append(target)
+    return paths
+
+
+def active_paper_tex_files() -> list[Path]:
     paper = ROOT / "paper"
     if not paper.exists():
         return []
-    return sorted(paper.rglob("*.tex"))
+    main = paper / "main.tex"
+    if not main.exists():
+        return sorted(paper.rglob("*.tex"))
+    seen: set[Path] = set()
+    ordered: list[Path] = []
+
+    def visit(path: Path):
+        resolved = path.resolve()
+        if resolved in seen:
+            return
+        seen.add(resolved)
+        ordered.append(resolved)
+        for child in tex_input_paths(resolved):
+            visit(child)
+
+    visit(main)
+    return ordered
+
+
+def paper_tex_files():
+    return active_paper_tex_files()
 
 
 def read_paper_tex() -> str:
@@ -540,6 +603,7 @@ def extract_bibkeys(text: str) -> set[str]:
 
 def extract_cite_keys(text: str) -> set[str]:
     keys = set()
+    text = tex_without_comments(text)
     pattern = re.compile(r"\\(?:cite|citep|citet|citealp|parencite|textcite)(?:\[[^\]]*\])*\{([^}]*)\}")
     for match in pattern.finditer(text):
         for key in match.group(1).split(","):
@@ -558,11 +622,13 @@ def extract_macro_names(text: str) -> set[str]:
 
 
 def extract_labels(text: str) -> set[str]:
+    text = tex_without_comments(text)
     return set(match.group(1).strip() for match in re.finditer(r"\\label\{([^}]+)\}", text))
 
 
 def extract_refs(text: str) -> set[str]:
     refs = set()
+    text = tex_without_comments(text)
     pattern = re.compile(r"\\(?:ref|eqref|autoref|cref|Cref)\{([^}]+)\}")
     for match in pattern.finditer(text):
         for ref in match.group(1).split(","):
@@ -1564,6 +1630,7 @@ TABLE_ENVIRONMENTS = {"table", "table*", "sidewaystable", "sidewaystable*", "lon
 def latex_block_for_label(text: str, label: str, environments=None) -> str:
     if missingish(label):
         return ""
+    text = tex_without_comments(text)
     environments = environments or TABLE_ENVIRONMENTS
     label_pattern = re.compile(rf"\\label\{{\s*{re.escape(str(label))}\s*\}}")
     label_match = label_pattern.search(text)

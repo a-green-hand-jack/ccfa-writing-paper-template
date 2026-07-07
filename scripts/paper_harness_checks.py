@@ -1077,6 +1077,7 @@ def check_release_package():
         else:
             seen.add(surface_id)
             actual_surfaces.add(str(surface_id))
+        code |= check_declared_release_surface_status(str(surface_id or "<missing>"), surface, expected_surfaces)
         for field in ["path", "source", "forbidden_paths"]:
             if field not in surface:
                 code |= error(f"release surface {surface_id or '<missing>'} missing {field}")
@@ -1095,7 +1096,6 @@ def check_release_package():
             "release manifest surfaces do not match state/ccfa.yaml: "
             f"expected {sorted(expected_surfaces)}, found {sorted(actual_surfaces)}"
         )
-    code |= check_release_freshness()
     return code
 
 
@@ -1120,8 +1120,6 @@ def check_release_freshness():
         if not root.exists():
             code |= error(f"missing release surface {surface.get('path', '<missing>')}")
             continue
-        code |= scan_release_surface(str(surface_id), root, surface)
-        code |= verify_surface_manifest_checksums(str(surface_id), root, surface)
         for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
             dest = root / item
@@ -2717,7 +2715,7 @@ def check_anonymity():
     return code
 
 
-def check_paper_populated():
+def check_paper_populated(include_release: bool = True):
     code = 0
     ccfa = load_doc("state/ccfa.yaml")
     paper = ccfa.get("paper", {}) if isinstance(ccfa.get("paper"), dict) else {}
@@ -2772,7 +2770,9 @@ def check_paper_populated():
     code |= check_figures_tables()
     code |= check_notation()
     code |= check_anonymity()
-    code |= check_release_package()
+    if include_release:
+        code |= check_release_package()
+        code |= check_release_freshness()
     return code
 
 
@@ -2785,9 +2785,10 @@ def check_writing_harness():
     code |= check_conference_template()
     code |= check_worktrees()
     code |= check_release_package()
+    code |= check_release_freshness()
     code |= check_anonymity()
     if paper_looks_populated():
-        code |= check_paper_populated()
+        code |= check_paper_populated(include_release=False)
     elif has_active_core_or_strong_claims():
         code |= check_claim_evidence()
     code |= check_lab_lightweight()
@@ -2857,7 +2858,7 @@ def export_release():
         return code
     manifest["surfaces"] = surfaces
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
-    return check_release_package()
+    return check_release_package() | check_release_freshness()
 
 
 CHECKS = {

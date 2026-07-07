@@ -1463,6 +1463,54 @@ def numeric_literals_in_latex(text: str) -> list[str]:
     return [match.group(0).strip() for match in NUMERIC_LITERAL_RE.finditer(scan_text) if match.group(0).strip()]
 
 
+def notation_symbol_variants(symbol: str) -> list[str]:
+    raw = str(symbol).strip()
+    variants = [raw]
+    math_wrappers = [("$", "$"), ("\\(", "\\)"), ("\\[", "\\]")]
+    for prefix, suffix in math_wrappers:
+        if raw.startswith(prefix) and raw.endswith(suffix) and len(raw) > len(prefix) + len(suffix):
+            core = raw[len(prefix) : -len(suffix)].strip()
+            if len(core) > 1 or "\\" in core or "_" in core or "{" in core:
+                variants.append(core)
+    if raw.startswith("{") and raw.endswith("}") and len(raw) > 2:
+        variants.append(raw[1:-1].strip())
+    return [variant for variant in dict.fromkeys(variants) if variant]
+
+
+def text_contains_notation_symbol(text: str, symbol: str) -> bool:
+    return any(variant in text for variant in notation_symbol_variants(symbol))
+
+
+def local_path_and_optional_line(value: str) -> tuple[Path, int | None]:
+    text = str(value).strip()
+    path_text = local_path_part(text)
+    line_no = None
+    suffix = text[len(path_text) :]
+    if suffix.startswith(":"):
+        line_text = suffix[1:]
+        if line_text.isdigit():
+            line_no = int(line_text)
+    return ROOT / path_text, line_no
+
+
+def first_defined_text(value: str) -> str | None:
+    if missingish(value) or external_reference(value):
+        return None
+    path, line_no = local_path_and_optional_line(str(value))
+    if not path.exists() or not path.is_file():
+        return None
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return None
+    if line_no is None:
+        return text
+    lines = text.splitlines()
+    if line_no < 1 or line_no > len(lines):
+        return ""
+    return lines[line_no - 1]
+
+
 def normalize_macro_name(macro) -> str:
     if missingish(macro):
         return ""
@@ -2203,6 +2251,7 @@ def check_notation():
     symbols = doc_items("state/notation.yaml", "symbols")
     terms = doc_items("state/terminology.yaml", "terms")
     seen_symbols = {}
+    paper_content = read_paper_content_tex()
     for item in symbols:
         symbol = item.get("symbol") or item.get("latex")
         if missingish(symbol):
@@ -2216,8 +2265,17 @@ def check_notation():
             code |= error(f"duplicate notation symbol: {symbol}")
         seen_symbols[symbol] = meaning
         first_defined = item.get("first_defined")
-        if not missingish(first_defined) and not path_exists_or_external(first_defined):
-            code |= error(f"notation symbol {symbol} has missing first_defined path: {first_defined}")
+        if active_now(item):
+            if not text_contains_notation_symbol(paper_content, symbol):
+                code |= error(f"active notation symbol not used in paper content: {symbol}")
+            if missingish(first_defined):
+                code |= error(f"active notation symbol missing first_defined: {symbol}")
+        if not missingish(first_defined):
+            if not path_exists_or_external(first_defined):
+                code |= error(f"notation symbol {symbol} has missing first_defined path: {first_defined}")
+            target_text = first_defined_text(str(first_defined))
+            if target_text is not None and not text_contains_notation_symbol(target_text, symbol):
+                code |= error(f"notation symbol {symbol} not found at first_defined: {first_defined}")
 
     seen_terms = {}
     for item in terms:

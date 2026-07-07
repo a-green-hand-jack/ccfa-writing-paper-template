@@ -2609,11 +2609,15 @@ def check_reference_existence():
     code |= collect_ids(citations, ["citation_id", "id", "bibkey"], "citations", required=False)[0]
 
     reference_keys = set()
+    active_reference_keys = set()
     for ref in references:
-        for key in reference_bibkeys(ref):
+        keys = reference_bibkeys(ref)
+        for key in keys:
             reference_keys.add(key)
             if bib_keys and key not in bib_keys:
                 code |= error(f"reference ledger bibkey missing from refs.bib: {key}")
+        if active_now(ref):
+            active_reference_keys.update(keys)
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
         for key in citation_bibkeys(citation):
@@ -2637,6 +2641,8 @@ def check_reference_existence():
             code |= error(f"paper cites missing BibTeX key: {key}")
         if key not in reference_keys:
             code |= error(f"paper cites key not registered in reference-ledger: {key}")
+        elif key not in active_reference_keys:
+            code |= error(f"paper cites key registered only in inactive reference-ledger entry: {key}")
         if key not in citation_keys:
             code |= error(f"paper cites key not registered in citation-ledger: {key}")
         elif key not in active_citation_keys:
@@ -2662,8 +2668,12 @@ def check_citation_fitness():
     areas = doc_items("lab/research/related-work-map.yaml", "areas")
     paper_keys = extract_cite_keys(read_paper_content_tex())
     reference_keys = set()
+    active_reference_keys = set()
     for ref in references:
-        reference_keys.update(reference_bibkeys(ref))
+        keys = reference_bibkeys(ref)
+        reference_keys.update(keys)
+        if active_now(ref):
+            active_reference_keys.update(keys)
     citation_keys = set()
     active_citation_keys = set()
     for citation in citations:
@@ -2679,6 +2689,8 @@ def check_citation_fitness():
             code |= error(f"paper cites missing BibTeX key: {key}")
         if key not in reference_keys:
             code |= error(f"paper cites key not registered in reference-ledger: {key}")
+        elif key not in active_reference_keys:
+            code |= error(f"paper cites key registered only in inactive reference-ledger entry: {key}")
         if key not in citation_keys:
             code |= error(f"paper cites key not registered in citation-ledger: {key}")
         elif key not in active_citation_keys:
@@ -2717,6 +2729,8 @@ def check_citation_fitness():
             else:
                 if key not in reference_keys:
                     code |= error(f"related-work area {area_id} cites key not registered in reference-ledger: {key}")
+                elif key not in active_reference_keys:
+                    code |= error(f"related-work area {area_id} cites key registered only in inactive reference-ledger entry: {key}")
                 if key not in bib_keys:
                     code |= error(f"related-work area {area_id} cites key missing from refs.bib: {key}")
         if area.get("required_citation_types") and not cited_keys:

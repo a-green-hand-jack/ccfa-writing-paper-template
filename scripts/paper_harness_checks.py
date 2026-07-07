@@ -1257,7 +1257,7 @@ def check_worktrees():
             code |= error("dev worktree must be private")
         if (
             physical_enabled
-            and str(item.get("status", "")).strip().lower() == "active"
+            and active_now(item)
             and branches is not None
             and worktree_entries is not None
         ):

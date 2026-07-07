@@ -8,6 +8,8 @@
       ],
       "kind": "paper-text",
       "source": "paper/main.tex:60",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "arXiv:2505.22954v3 TeX/PDF source, downloaded 2026-07-07; source package migrated into paper/.",
       "status": "verified",
       "notes": "Abstract reports SWE-bench 20.0% to 50.0% and Polyglot 14.2% to 30.7%."
     },
@@ -19,6 +21,8 @@
       ],
       "kind": "figure",
       "source": "paper/figures/dgm_comparisons.pdf",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "Figure asset from arXiv:2505.22954v3 source package.",
       "status": "verified",
       "notes": "Main comparison figure registered in the migrated source."
     },
@@ -29,6 +33,8 @@
       ],
       "kind": "figure",
       "source": "paper/figures/dgm_wo_selfimprove.pdf",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "Figure asset from arXiv:2505.22954v3 source package.",
       "status": "verified"
     },
     {
@@ -38,6 +44,8 @@
       ],
       "kind": "figure",
       "source": "paper/figures/dgm_wo_openended.pdf",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "provenance": "Figure asset from arXiv:2505.22954v3 source package.",
       "status": "verified"
     }
   ]

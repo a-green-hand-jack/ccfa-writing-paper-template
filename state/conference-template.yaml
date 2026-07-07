@@ -8,5 +8,6 @@
   "hash": "not-recorded; official template hash was not reverified for this migration test",
   "source": "arXiv TeX source and bundled ICLR 2026 style file",
   "downloaded_at": "2026-07-07",
-  "human_verified_at": null
+  "human_verified_at": null,
+  "migration_exemption": "Retrospective arXiv:2505.22954v3 source migration for harness testing; the bundled ICLR 2026 style is preserved, but official current-year submission rules were not revalidated."
 }

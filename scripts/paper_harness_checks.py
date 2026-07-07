@@ -17,6 +17,34 @@ INACTIVE_STATUSES = {"removed", "dropped", "superseded", "inactive", "archived"}
 VERIFIED_STATUSES = {"verified", "complete", "accepted"}
 PLANNED_STATUSES = {"planned", "todo", "draft", "placeholder"}
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
+REQUIRED_PAPER_SURFACE = [
+    "paper/main.tex",
+    "paper/macros.tex",
+    "paper/venue_preamble.tex",
+    "paper/refs.bib",
+    "paper/sections/title.tex",
+    "paper/sections/abstract.tex",
+    "paper/sections/intro.tex",
+    "paper/sections/related.tex",
+    "paper/sections/method.tex",
+    "paper/sections/exp.tex",
+    "paper/sections/conclusion.tex",
+    "paper/sections/limitations.tex",
+    "paper/sections/acknowledgement.tex",
+    "paper/sections/appendix.tex",
+]
+RELEASE_ITEMS = [
+    "main.tex",
+    "macros.tex",
+    "venue_preamble.tex",
+    "refs.bib",
+    "sections",
+    "figures",
+    "tables",
+    "style",
+    "generated",
+    "supplementary",
+]
 
 
 def load_doc(path: str):
@@ -148,6 +176,31 @@ def read_paper_tex() -> str:
     return "\n".join(chunks)
 
 
+def paper_content_tex_files():
+    files = []
+    paper = ROOT / "paper"
+    for path in paper_tex_files():
+        rel_parts = path.relative_to(paper).parts
+        if not rel_parts:
+            continue
+        if rel_parts[0] in {"generated", "style"}:
+            continue
+        if str(path.relative_to(ROOT)) in {"paper/macros.tex", "paper/venue_preamble.tex"}:
+            continue
+        files.append(path)
+    return files
+
+
+def read_paper_content_tex() -> str:
+    chunks = []
+    for path in paper_content_tex_files():
+        try:
+            chunks.append(path.read_text(encoding="utf-8"))
+        except UnicodeDecodeError:
+            continue
+    return "\n".join(chunks)
+
+
 def extract_bibkeys(text: str) -> set[str]:
     return set(match.group(1).strip() for match in re.finditer(r"@\w+\s*\{\s*([^,\s]+)", text))
 
@@ -197,6 +250,34 @@ def require(paths):
             error(f"missing {path}")
         return 1
     return 0
+
+
+def compare_tree(source: Path, dest: Path) -> list[str]:
+    mismatches = []
+    if not source.exists() and not dest.exists():
+        return mismatches
+    if source.exists() != dest.exists():
+        mismatches.append(f"{rel(dest)} does not match {rel(source)}")
+        return mismatches
+    if source.is_file() or dest.is_file():
+        if not source.is_file() or not dest.is_file():
+            mismatches.append(f"{rel(dest)} type differs from {rel(source)}")
+        elif source.read_bytes() != dest.read_bytes():
+            mismatches.append(f"{rel(dest)} differs from {rel(source)}")
+        return mismatches
+    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file())
+    dest_files = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_file())
+    if source_files != dest_files:
+        missing = sorted(set(source_files) - set(dest_files))
+        extra = sorted(set(dest_files) - set(source_files))
+        if missing:
+            mismatches.append(f"{rel(dest)} missing files from source: {[str(item) for item in missing[:10]]}")
+        if extra:
+            mismatches.append(f"{rel(dest)} has stale files not in source: {[str(item) for item in extra[:10]]}")
+    for item in sorted(set(source_files) & set(dest_files)):
+        if (source / item).read_bytes() != (dest / item).read_bytes():
+            mismatches.append(f"{rel(dest / item)} differs from {rel(source / item)}")
+    return mismatches
 
 
 def check_capability_parity():
@@ -251,6 +332,25 @@ def check_release_package():
             "release manifest surfaces do not match state/ccfa.yaml: "
             f"expected {sorted(expected_surfaces)}, found {sorted(actual_surfaces)}"
         )
+    code |= check_release_freshness()
+    return code
+
+
+def check_release_freshness():
+    manifest = load_doc("release/manifest.yaml")
+    code = 0
+    for surface in manifest.get("surfaces", []):
+        surface_id = surface.get("id", "<missing>")
+        if str(surface.get("status", "")).lower() not in {"synced", "fresh", "exported"}:
+            continue
+        root = ROOT / str(surface.get("path", ""))
+        if not root.exists():
+            continue
+        for item in RELEASE_ITEMS:
+            src = ROOT / "paper" / item
+            dest = root / item
+            for mismatch in compare_tree(src, dest):
+                code |= error(f"release surface {surface_id} is stale: {mismatch}")
     return code
 
 
@@ -296,6 +396,21 @@ def check_conference_template():
     return code
 
 
+def paper_looks_populated() -> bool:
+    content = read_paper_content_tex()
+    if not content.strip():
+        return False
+    if "TODO" in content:
+        return False
+    return any([
+        bool(extract_cite_keys(content)),
+        bool(extract_labels(content)),
+        bool(doc_items("state/claim-evidence-map.yaml", "claims")),
+        bool(doc_items("lab/research/evidence.yaml", "evidence")),
+        bool(doc_items("lab/research/reference-ledger.yaml", "references")),
+    ])
+
+
 def check_anatomy_drift():
     return require([
         "ANATOMY.md",
@@ -308,6 +423,30 @@ def check_anatomy_drift():
         "memory/ANATOMY.md",
         "scripts/ANATOMY.md",
     ])
+
+
+def check_paper_surface():
+    code = require(REQUIRED_PAPER_SURFACE)
+    main = ROOT / "paper/main.tex"
+    if not main.exists():
+        return code
+    text = main.read_text(encoding="utf-8")
+    for section in [
+        "title",
+        "abstract",
+        "intro",
+        "related",
+        "method",
+        "exp",
+        "conclusion",
+        "limitations",
+        "appendix",
+    ]:
+        if f"\\input{{sections/{section}}}" not in text:
+            code |= error(f"paper/main.tex does not input paper/sections/{section}.tex")
+    if "\\bibliography{refs}" not in text:
+        code |= error("paper/main.tex must use paper/refs.bib via \\bibliography{refs}")
+    return code
 
 
 def check_claim_experiment_plan():
@@ -487,7 +626,9 @@ def check_numeric_consistency():
     registry = load_doc("state/numeric-registry.yaml")
     index = load_doc("state/numbers/numeric-index.yaml")
     macro_doc = load_doc("state/numbers/macros.yaml")
+    content_text = read_paper_content_tex()
     evidence_ids = collect_ids(doc_items("lab/research/evidence.yaml", "evidence"), ["evidence_id", "id"], "evidence", required=False)[1]
+    claims = doc_items("state/claim-evidence-map.yaml", "claims")
     numbers = []
     numbers.extend(as_list(registry.get("numbers")))
     numbers.extend(as_list(index.get("numbers")))
@@ -496,6 +637,14 @@ def check_numeric_consistency():
 
     number_code, number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
     code |= number_code
+
+    for claim in claims:
+        claim_id = item_id(claim, "claim_id", "id")
+        for numeric_id in strings(claim.get("numeric_ids")):
+            if re.fullmatch(r"[A-Za-z]+\d+\s*-\s*[A-Za-z]?\d+", numeric_id):
+                code |= error(f"claim {claim_id} uses unsupported numeric id range {numeric_id}; expand ranges explicitly")
+            elif number_ids and numeric_id not in number_ids:
+                code |= error(f"claim {claim_id} references unknown numeric id {numeric_id}")
 
     macros = macro_doc.get("macros", [])
     macro_map = {}
@@ -530,6 +679,8 @@ def check_numeric_consistency():
             normalized = str(macro) if str(macro).startswith("\\") else "\\" + str(macro)
             if normalized not in generated_macros:
                 code |= error(f"number {numeric_id} expects missing generated macro {normalized}")
+            if is_verified(number) and normalized not in content_text:
+                code |= error(f"verified number macro is not used in paper content: {numeric_id} {normalized}")
         if is_verified(number) and not (number.get("source") or number.get("artifact_path") or number.get("run_id") or number.get("evidence_ids")):
             code |= error(f"verified number lacks source/artifact/evidence: {numeric_id}")
         derived = number.get("derived", {}) if isinstance(number.get("derived"), dict) else {}
@@ -566,11 +717,20 @@ def check_reference_existence():
                 code |= error(f"citation {citation_id} references unknown bibkey {key}")
 
     paper_keys = extract_cite_keys(read_paper_tex())
+    citation_keys = set()
+    for citation in citations:
+        citation_keys.update(strings(citation.get("bibkey") or citation.get("bibkeys")))
+    if paper_keys and not reference_keys:
+        code |= error("paper has citations but reference-ledger is empty")
+    if paper_keys and not citation_keys:
+        code |= error("paper has citations but citation-ledger is empty")
     for key in paper_keys:
         if key not in bib_keys:
             code |= error(f"paper cites missing BibTeX key: {key}")
-        if references and key not in reference_keys:
+        if key not in reference_keys:
             code |= error(f"paper cites key not registered in reference-ledger: {key}")
+        if key not in citation_keys:
+            code |= error(f"paper cites key not registered in citation-ledger: {key}")
     return code
 
 
@@ -691,47 +851,168 @@ def check_notation():
     return code
 
 
+def check_anonymity():
+    code = require(["state/ccfa.yaml", "release/manifest.yaml"])
+    if code:
+        return code
+    ccfa = load_doc("state/ccfa.yaml")
+    team = ccfa.get("team", {}) if isinstance(ccfa.get("team"), dict) else {}
+    mode = str(team.get("anonymous_mode", "")).lower()
+    if mode not in {"anonymous", "double-blind", "blind", "anonymized"}:
+        return 0
+
+    allowed_author_values = {"", "todo", "anonymous", "anonymous author", "anonymous authors"}
+    scan_chunks = [read_paper_tex()]
+    manifest = load_doc("release/manifest.yaml")
+    for surface in manifest.get("surfaces", []):
+        surface_root = ROOT / str(surface.get("path", ""))
+        if surface_root.exists():
+            for path in surface_root.rglob("*.tex"):
+                try:
+                    scan_chunks.append(path.read_text(encoding="utf-8"))
+                except UnicodeDecodeError:
+                    continue
+    scan_text = "\n".join(scan_chunks)
+    lower_scan = scan_text.lower()
+
+    if re.search(r"[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}", scan_text, flags=re.I):
+        code |= error("anonymous-mode paper exposes an email address in paper or release tex")
+
+    authors = strings(team.get("authors"))
+    if isinstance(team.get("authors"), str):
+        authors = [part.strip() for part in team.get("authors", "").split(",") if part.strip()]
+    for author in authors:
+        normalized = author.lower().strip()
+        if normalized in allowed_author_values or normalized.startswith("anonymous"):
+            continue
+        if normalized and normalized in lower_scan:
+            code |= error(f"anonymous-mode paper exposes author name: {author}")
+
+    for match in re.finditer(r"\\author\{([^{}]*(?:\{[^{}]*\}[^{}]*)*)\}", scan_text, flags=re.S):
+        value = re.sub(r"\s+", " ", match.group(1)).strip()
+        normalized = value.lower()
+        if missingish(value) or normalized in allowed_author_values or "anonymous" in normalized:
+            continue
+        code |= error("anonymous-mode paper has non-anonymous \\author content")
+    return code
+
+
+def check_paper_populated():
+    code = 0
+    ccfa = load_doc("state/ccfa.yaml")
+    paper = ccfa.get("paper", {}) if isinstance(ccfa.get("paper"), dict) else {}
+    for field in ["slug", "title", "owner"]:
+        if missingish(paper.get(field)):
+            code |= error(f"populated paper missing state/ccfa.yaml paper.{field}")
+
+    content = read_paper_content_tex()
+    if "TODO" in content:
+        code |= error("populated paper content still contains TODO placeholders")
+
+    claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    evidence = doc_items("lab/research/evidence.yaml", "evidence")
+    references = doc_items("lab/research/reference-ledger.yaml", "references")
+    citations = doc_items("lab/research/citation-ledger.yaml", "citations")
+    floats = doc_items("state/float-placement-map.yaml", "floats")
+    results = doc_items("lab/artifacts/result-index.yaml", "results")
+    conference = load_doc("state/conference-template.yaml")
+
+    paper_keys = extract_cite_keys(read_paper_tex())
+    labels = extract_labels(read_paper_tex())
+    refs = extract_refs(read_paper_tex())
+    float_labels = {label for label in labels | refs if float_label(label)}
+    if paper_keys and not references:
+        code |= error("populated paper with citations must register references")
+    if paper_keys and not citations:
+        code |= error("populated paper with citations must register citation ledger entries")
+    if float_labels and not floats:
+        code |= error("populated paper with floats must register float-placement map entries")
+    if not claims:
+        code |= error("populated paper must register at least one claim")
+    if not evidence:
+        code |= error("populated paper must register at least one evidence item")
+    if claims and not results:
+        code |= error("populated paper with claims must register result status/index entries")
+    if ccfa.get("venue", {}).get("must_verify_current_year_rules"):
+        verified = str(conference.get("status", "")).lower() == "verified"
+        exempt = conference.get("verification_exemption") or conference.get("migration_exemption")
+        if not verified and not exempt:
+            code |= error("populated paper requires verified current-year venue template or explicit exemption")
+    for item in evidence:
+        evidence_id = item_id(item, "evidence_id", "id") or "<missing>"
+        source = str(item.get("source", ""))
+        if is_verified(item) and source.startswith("paper/") and not (item.get("artifact_path") or item.get("run_id") or item.get("external_source") or item.get("provenance")):
+            code |= error(f"verified evidence should not point only to paper prose: {evidence_id}")
+
+    code |= check_paper_surface()
+    code |= check_claim_evidence()
+    code |= check_numeric_consistency()
+    code |= check_reference_existence()
+    code |= check_citation_fitness()
+    code |= check_figures_tables()
+    code |= check_notation()
+    code |= check_anonymity()
+    code |= check_release_package()
+    return code
+
+
 def check_writing_harness():
     code = 0
     code |= require(["state/ccfa.yaml", "state/claim-evidence-map.yaml", "state/numeric-registry.yaml", "lab/research/reference-ledger.yaml", "paper/main.tex", "release/manifest.yaml"])
     code |= check_anatomy_drift()
     code |= check_capability_parity()
+    code |= check_paper_surface()
     code |= check_conference_template()
     code |= check_worktrees()
     code |= check_release_package()
+    code |= check_anonymity()
+    if paper_looks_populated():
+        code |= check_paper_populated()
     code |= check_lab_lightweight()
     code |= check_human_gate_assets()
     return code
 
 
 def export_release():
-    surfaces = ["release/arxiv", "release/overleaf", "release/github-tex"]
-    allowed = ["main.tex", "macros.tex", "venue_preamble.tex", "refs.bib", "sections", "figures", "tables", "style", "generated", "supplementary"]
+    manifest_path = ROOT / "release/manifest.yaml"
+    manifest = load_doc("release/manifest.yaml")
+    surfaces = manifest.get("surfaces", [])
+    if not surfaces:
+        surfaces = [{"id": "arxiv", "path": "release/arxiv"}, {"id": "overleaf", "path": "release/overleaf"}, {"id": "github-tex", "path": "release/github-tex"}]
     for surface in surfaces:
-        dest = ROOT / surface
+        dest = ROOT / str(surface.get("path", f"release/{surface.get('id', 'unknown')}"))
         dest.mkdir(parents=True, exist_ok=True)
-        for item in allowed:
+        for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
-            if not src.exists():
-                continue
             out = dest / item
+            if not src.exists():
+                if out.is_dir():
+                    shutil.rmtree(out)
+                elif out.exists():
+                    out.unlink()
+                continue
             if src.is_dir():
                 if out.exists():
                     shutil.rmtree(out)
                 shutil.copytree(src, out)
             else:
                 shutil.copy2(src, out)
+        surface["status"] = "synced"
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return check_release_package()
 
 
 CHECKS = {
     "writing_harness": check_writing_harness,
+    "paper_surface": check_paper_surface,
+    "paper_populated": check_paper_populated,
     "anatomy_drift": check_anatomy_drift,
     "capability_parity": check_capability_parity,
     "claim_experiment_plan": check_claim_experiment_plan,
     "conference_template": check_conference_template,
     "lab_lightweight": check_lab_lightweight,
     "release_package": check_release_package,
+    "release_freshness": check_release_freshness,
     "worktrees": check_worktrees,
     "human_gate_assets": check_human_gate_assets,
     "claim_evidence": check_claim_evidence,
@@ -742,7 +1023,7 @@ CHECKS = {
     "index_float_refs": lambda: require(["state/float-placement-map.yaml", "paper/figures/README.md", "paper/tables/README.md"]),
     "float_placement": check_float_placement,
     "notation": check_notation,
-    "anonymity": lambda: require(["state/ccfa.yaml", "release/manifest.yaml"]),
+    "anonymity": check_anonymity,
     "figures_tables": check_figures_tables,
     "import_main_edits": lambda: require(["state/worktrees.yaml", "paper/ANATOMY.md"]),
     "export_release": export_release,

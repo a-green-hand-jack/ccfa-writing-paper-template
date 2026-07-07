@@ -2088,6 +2088,67 @@ def result_numeric_refs(result: dict):
     return refs, field_present, missing_entry_id
 
 
+def result_status_class(result: dict) -> str:
+    if is_verified(result):
+        return "verified"
+    if is_planned(result):
+        return "planned"
+    if not is_active(result):
+        return "inactive"
+    status = normalized_text(result.get("status", ""))
+    return status or "active"
+
+
+def compare_declared_result_set(result_id: str, label: str, status_values: set[str], index_values: set[str]) -> int:
+    if not status_values or not index_values or status_values == index_values:
+        return 0
+    return error(
+        f"result {result_id} {label} differ between result-status and result-index: "
+        f"state {sorted(status_values)}, index {sorted(index_values)}"
+    )
+
+
+def validate_result_ledger_parity(result: dict, index_result: dict | None) -> int:
+    if not index_result:
+        return 0
+    result_id = item_id(result, "result_id", "id")
+    if not result_id:
+        return 0
+    code = 0
+    if has_value(result.get("status")) and has_value(index_result.get("status")):
+        status_class = result_status_class(result)
+        index_status_class = result_status_class(index_result)
+        if status_class != index_status_class:
+            code |= error(
+                f"result {result_id} status differs between result-status and result-index: "
+                f"{status_class} != {index_status_class}"
+            )
+    if "claims_supported" in result and "claims_supported" in index_result:
+        code |= compare_declared_result_set(
+            result_id,
+            "claims_supported",
+            set(strings(result.get("claims_supported"))),
+            set(strings(index_result.get("claims_supported"))),
+        )
+    if any(field in result for field in ["evidence_ids", "evidence_id", "evidence"]) and any(
+        field in index_result for field in ["evidence_ids", "evidence_id", "evidence"]
+    ):
+        code |= compare_declared_result_set(
+            result_id,
+            "evidence_ids",
+            set(evidence_refs(result)),
+            set(evidence_refs(index_result)),
+        )
+    result_numeric, result_has_numeric, _ = result_numeric_refs(result)
+    index_numeric, index_has_numeric, _ = result_numeric_refs(index_result)
+    if result_has_numeric and index_has_numeric:
+        code |= compare_declared_result_set(result_id, "numeric_ids", set(result_numeric), set(index_numeric))
+    result_anchors = set(path_anchor_values(result))
+    index_anchors = set(path_anchor_values(index_result))
+    code |= compare_declared_result_set(result_id, "source/artifacts", result_anchors, index_anchors)
+    return code
+
+
 def validate_result_claim_numeric_alignment(result: dict, number_by_id: dict[str, dict]) -> int:
     result_id = item_id(result, "result_id", "id")
     if not result_id or not is_verified(result):
@@ -2336,6 +2397,7 @@ def check_result_status():
         if is_verified(result) and result_id not in index_ids:
             code |= error(f"verified result missing from result-index: {result_id}")
         index_result = index_result_by_id.get(result_id)
+        code |= validate_result_ledger_parity(result, index_result)
         index_has_numeric_refs = result_numeric_refs(index_result)[1] if index_result else False
         if index_has_numeric_refs:
             continue

@@ -70,7 +70,9 @@ WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review
 CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 CITATION_BULK_CONTEXT_THRESHOLD = 3
 CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
-FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
+FIGURE_LABEL_PREFIXES = ("fig:", "figure:")
+TABLE_LABEL_PREFIXES = ("tab:", "table:")
+FLOAT_LABEL_PREFIXES = FIGURE_LABEL_PREFIXES + TABLE_LABEL_PREFIXES
 NUMERIC_LITERAL_RE = re.compile(
     r"(?<![A-Za-z0-9_\\])"
     r"[-+]?"
@@ -649,6 +651,14 @@ def extract_refs(text: str) -> set[str]:
 
 def float_label(label: str) -> bool:
     return label.startswith(FLOAT_LABEL_PREFIXES)
+
+
+def figure_label(label: str) -> bool:
+    return label.startswith(FIGURE_LABEL_PREFIXES)
+
+
+def table_label(label: str) -> bool:
+    return label.startswith(TABLE_LABEL_PREFIXES)
 
 
 def require(paths):
@@ -1614,6 +1624,33 @@ def float_maps(floats):
             if not missingish(value):
                 target[str(value)] = item
     return by_float_id, by_label, by_figure_id, by_table_id
+
+
+def mapped_float_for_index_item(item: dict, by_float_id: dict, by_label: dict) -> dict | None:
+    if not isinstance(item, dict):
+        return None
+    float_id = item.get("float_id")
+    if not missingish(float_id):
+        mapped = by_float_id.get(str(float_id))
+        if mapped is not None:
+            return mapped
+    label = item.get("label")
+    if not missingish(label):
+        return by_label.get(str(label))
+    return None
+
+
+def label_for_index_item(item: dict, by_float_id: dict, by_label: dict) -> str | None:
+    if not isinstance(item, dict):
+        return None
+    label = item.get("label")
+    if missingish(label):
+        mapped_float = mapped_float_for_index_item(item, by_float_id, by_label)
+        if isinstance(mapped_float, dict):
+            label = mapped_float.get("label")
+    if missingish(label):
+        return None
+    return str(label)
 
 
 def explicitly_qualitative(item: dict) -> bool:
@@ -2752,6 +2789,20 @@ def check_float_placement():
     code |= collect_ids(floats, ["float_id", "id", "label"], "floats", required=False)[0]
     figure_ids = collect_ids(figures, ["figure_id", "id"], "figures", required=False)[1]
     table_ids = collect_ids(tables, ["table_id", "id"], "tables", required=False)[1]
+    active_figure_ids = {
+        ident
+        for item in figures
+        if isinstance(item, dict) and active_now(item)
+        for ident in [item_id(item, "figure_id", "id")]
+        if ident
+    }
+    active_table_ids = {
+        ident
+        for item in tables
+        if isinstance(item, dict) and active_now(item)
+        for ident in [item_id(item, "table_id", "id")]
+        if ident
+    }
     registry_code, claim_ids, numeric_ids, result_ids = load_float_registry_ids()
     code |= registry_code
     text = read_paper_tex()
@@ -2760,30 +2811,40 @@ def check_float_placement():
     float_labels = {label for label in labels if float_label(label)}
     float_refs = {ref for ref in refs if float_label(ref)}
     mapped_labels = set()
+    active_mapped_labels = set()
     for item in floats:
         float_id = item_id(item, "float_id", "id", "label")
         label = item.get("label")
         if not missingish(label):
             mapped_labels.add(str(label))
-        if is_active(item):
+            if active_now(item):
+                active_mapped_labels.add(str(label))
+        if active_now(item):
             figure_id = item.get("figure_id")
             table_id = item.get("table_id")
-            if not missingish(figure_id) and str(figure_id) not in figure_ids:
-                code |= error(f"active float {float_id} references unknown figure_id {figure_id}")
-            if not missingish(table_id) and str(table_id) not in table_ids:
-                code |= error(f"active float {float_id} references unknown table_id {table_id}")
-            if not is_planned(item):
-                if missingish(label):
-                    code |= error(f"active float missing label: {float_id}")
-                elif str(label) not in labels:
-                    code |= error(f"float map references label absent from paper tex: {label}")
-                code |= check_path_field_values(item, f"float {float_id}", ["asset_path", "tex_source", "caption_source"])
+            if not missingish(figure_id):
+                if str(figure_id) not in figure_ids:
+                    code |= error(f"active float {float_id} references unknown figure_id {figure_id}")
+                elif str(figure_id) not in active_figure_ids:
+                    code |= error(f"active float {float_id} references inactive figure_id {figure_id}")
+            if not missingish(table_id):
+                if str(table_id) not in table_ids:
+                    code |= error(f"active float {float_id} references unknown table_id {table_id}")
+                elif str(table_id) not in active_table_ids:
+                    code |= error(f"active float {float_id} references inactive table_id {table_id}")
+            if missingish(label):
+                code |= error(f"active float missing label: {float_id}")
+            elif str(label) not in labels:
+                code |= error(f"float map references label absent from paper tex: {label}")
+            code |= check_path_field_values(item, f"float {float_id}", ["asset_path", "tex_source", "caption_source"])
         code |= check_registry_references(item, f"float {float_id}", claim_ids, numeric_ids, result_ids)
     for label in sorted(float_labels | float_refs):
         if label not in labels:
             code |= error(f"paper references undefined float label: {label}")
         if label not in mapped_labels:
             code |= error(f"paper float label is not registered in state/float-placement-map.yaml: {label}")
+        elif label not in active_mapped_labels:
+            code |= error(f"paper float label registered only in inactive float-placement entry: {label}")
     return code
 
 
@@ -2800,7 +2861,52 @@ def check_figures_tables():
     code |= registry_code
     text = read_paper_tex()
     labels = extract_labels(text)
+    refs = extract_refs(text)
     by_float_id, by_label, _, _ = float_maps(floats)
+    active_by_float_id, active_by_label, _, _ = float_maps([item for item in floats if active_now(item)])
+    paper_labels = labels | refs
+    figure_labels = {label for label in paper_labels if figure_label(label)}
+    table_labels = {label for label in paper_labels if table_label(label)}
+    all_index_labels = {
+        "figure": {
+            label
+            for item in figures
+            for label in [label_for_index_item(item, by_float_id, by_label)]
+            if label is not None
+        },
+        "table": {
+            label
+            for item in tables
+            for label in [label_for_index_item(item, by_float_id, by_label)]
+            if label is not None
+        },
+    }
+    active_index_labels = {
+        "figure": {
+            label
+            for item in figures
+            if active_now(item)
+            for label in [label_for_index_item(item, active_by_float_id, active_by_label)]
+            if label is not None
+        },
+        "table": {
+            label
+            for item in tables
+            if active_now(item)
+            for label in [label_for_index_item(item, active_by_float_id, active_by_label)]
+            if label is not None
+        },
+    }
+
+    for kind, paper_kind_labels, path in [
+        ("figure", figure_labels, "lab/artifacts/figure-index.yaml"),
+        ("table", table_labels, "lab/artifacts/table-index.yaml"),
+    ]:
+        for label in sorted(paper_kind_labels):
+            if label not in all_index_labels[kind]:
+                code |= error(f"paper {kind} label is not registered in {path}: {label}")
+            elif label not in active_index_labels[kind]:
+                code |= error(f"paper {kind} label registered only in inactive {kind}-index entry: {label}")
 
     for kind, items in [("figure", figures), ("table", tables)]:
         for item in items:
@@ -2808,29 +2914,27 @@ def check_figures_tables():
             context = f"{kind} {ident}"
             label = item.get("label")
             float_id = item.get("float_id")
-            mapped_float = None
-            if not missingish(float_id):
-                mapped_float = by_float_id.get(str(float_id))
-            if mapped_float is None and not missingish(label):
-                mapped_float = by_label.get(str(label))
+            mapped_float = mapped_float_for_index_item(item, by_float_id, by_label)
+            active_mapped_float = mapped_float_for_index_item(item, active_by_float_id, active_by_label)
+            mapped_label = label
+            if missingish(mapped_label) and isinstance(mapped_float, dict):
+                mapped_label = mapped_float.get("label")
 
             code |= check_path_field_values(item, context, ["path", "asset_path"])
             code |= check_provenance_paths(item, context)
             code |= check_registry_references(item, context, claim_ids, numeric_ids, result_ids)
 
-            if is_active(item):
+            if active_now(item):
                 if missingish(label) and missingish(float_id):
                     code |= error(f"active {kind} {ident} missing label or float_id")
                 elif mapped_float is None:
                     code |= error(f"{kind} {ident} is not represented in state/float-placement-map.yaml")
-
-                mapped_label = label
-                if missingish(mapped_label) and isinstance(mapped_float, dict):
-                    mapped_label = mapped_float.get("label")
+                elif active_mapped_float is None:
+                    code |= error(f"{kind} {ident} is represented only by inactive float-placement entry")
                 if not missingish(mapped_label) and str(mapped_label) not in labels:
                     code |= error(f"{kind} {ident} label absent from paper tex: {mapped_label}")
 
-                if not is_planned(item) and not has_float_provenance(item):
+                if not has_float_provenance(item):
                     code |= error(f"{kind} {ident} missing provenance")
 
                 if kind == "figure" and not missingish(mapped_label):
@@ -2839,8 +2943,8 @@ def check_figures_tables():
             if kind == "table" and table_requires_numeric_binding(item):
                 has_numeric_binding = strings(item.get("numeric_ids")) or strings(item.get("result_ids"))
                 if not has_numeric_binding and explicitly_qualitative(item):
-                    table_label = mapped_label if not missingish(mapped_label) else label
-                    numeric_literals = numeric_literals_in_latex(latex_block_for_label(text, str(table_label)))
+                    table_label_value = mapped_label if not missingish(mapped_label) else label
+                    numeric_literals = numeric_literals_in_latex(latex_block_for_label(text, str(table_label_value)))
                     if numeric_literals:
                         sample = ", ".join(numeric_literals[:5])
                         code |= error(

@@ -65,6 +65,9 @@ INSUFFICIENT_EVIDENCE_QUALITY = {
     "unsupported",
     "weak",
 }
+CITATION_FITNESS_STATUSES = {"strong", "adequate", "weak", "missing-better-source", "needs-review"}
+WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review"}
+CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
 NUMERIC_LITERAL_RE = re.compile(
     r"(?<![A-Za-z0-9_\\])"
@@ -192,6 +195,60 @@ def as_list(value):
 
 def strings(value):
     return [str(item) for item in as_list(value) if not missingish(item)]
+
+
+def key_strings(value):
+    keys = []
+    for item in as_list(value):
+        if missingish(item):
+            continue
+        if isinstance(item, str):
+            keys.extend(part.strip() for part in item.split(",") if not missingish(part))
+        else:
+            keys.append(str(item))
+    return keys
+
+
+def meaningful(value) -> bool:
+    if isinstance(value, dict):
+        return any(meaningful(item) for item in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return any(meaningful(item) for item in value)
+    return not missingish(value)
+
+
+def has_any_field(item: dict, fields) -> bool:
+    return any(meaningful(item.get(field)) for field in fields)
+
+
+def citation_bibkeys(citation: dict) -> list[str]:
+    keys = []
+    for field in ["bibkey", "bibkeys"]:
+        keys.extend(key_strings(citation.get(field)))
+    return list(dict.fromkeys(keys))
+
+
+def reference_bibkeys(ref: dict) -> list[str]:
+    keys = []
+    for field in ["bibkey", "bibkeys"]:
+        keys.extend(key_strings(ref.get(field)))
+    return list(dict.fromkeys(keys))
+
+
+def active_now(item: dict) -> bool:
+    return is_active(item) and not is_planned(item)
+
+
+def missing_candidate_notes(area: dict) -> bool:
+    if has_any_field(area, ["notes", "missing_notes", "coverage_notes"]):
+        return True
+    candidates = as_list(area.get("missing_candidates"))
+    if not candidates:
+        return False
+    for candidate in candidates:
+        if not isinstance(candidate, dict) or not has_any_field(candidate, ["notes", "reason", "rationale"]):
+            return False
+    return True
 
 
 def item_id(item, *fields):
@@ -1581,21 +1638,20 @@ def check_reference_existence():
 
     reference_keys = set()
     for ref in references:
-        key = item_id(ref, "bibkey")
-        if key:
+        for key in reference_bibkeys(ref):
             reference_keys.add(key)
             if bib_keys and key not in bib_keys:
                 code |= error(f"reference ledger bibkey missing from refs.bib: {key}")
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
-        for key in strings(citation.get("bibkey") or citation.get("bibkeys")):
+        for key in citation_bibkeys(citation):
             if key not in bib_keys and key not in reference_keys:
                 code |= error(f"citation {citation_id} references unknown bibkey {key}")
 
     paper_keys = extract_cite_keys(read_paper_tex())
     citation_keys = set()
     for citation in citations:
-        citation_keys.update(strings(citation.get("bibkey") or citation.get("bibkeys")))
+        citation_keys.update(citation_bibkeys(citation))
     if paper_keys and not reference_keys:
         code |= error("paper has citations but reference-ledger is empty")
     if paper_keys and not citation_keys:
@@ -1611,21 +1667,62 @@ def check_reference_existence():
 
 
 def check_citation_fitness():
-    code = require(["lab/research/citation-ledger.yaml", "lab/research/related-work-map.yaml"])
+    code = require([
+        "paper/refs.bib",
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml",
+    ])
     if code:
         return code
+    bib_keys = extract_bibkeys((ROOT / "paper/refs.bib").read_text(encoding="utf-8"))
+    references = doc_items("lab/research/reference-ledger.yaml", "references")
     citations = doc_items("lab/research/citation-ledger.yaml", "citations")
     areas = doc_items("lab/research/related-work-map.yaml", "areas")
+    paper_keys = extract_cite_keys(read_paper_content_tex())
+    reference_keys = set()
+    for ref in references:
+        reference_keys.update(reference_bibkeys(ref))
+
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
-        if not citation.get("purpose") and citation.get("bibkey"):
-            code |= error(f"citation {citation_id} missing purpose")
-        if citation.get("fitness_status") in {"weak", "missing-better-source", "needs-review"} and not citation.get("notes"):
-            code |= error(f"citation {citation_id} has weak fitness without notes")
+        keys = citation_bibkeys(citation)
+        fitness_status = str(citation.get("fitness_status", "")).strip().lower()
+        if active_now(citation):
+            if not keys:
+                code |= error(f"active citation {citation_id} missing bibkey")
+            if not has_any_field(citation, ["purpose", "intent"]):
+                code |= error(f"citation {citation_id} missing purpose/intent")
+            if not has_any_field(citation, CITATION_CONTEXT_FIELDS):
+                code |= error(f"citation {citation_id} missing context/locator")
+            if missingish(citation.get("fitness_status")):
+                code |= error(f"citation {citation_id} missing fitness_status")
+            elif fitness_status not in CITATION_FITNESS_STATUSES:
+                allowed = ", ".join(sorted(CITATION_FITNESS_STATUSES))
+                code |= error(f"citation {citation_id} has invalid fitness_status {citation.get('fitness_status')}; allowed: {allowed}")
+            for key in keys:
+                if key not in paper_keys:
+                    code |= error(f"active citation {citation_id} key not cited in paper content: {key}")
+        if fitness_status in WEAK_CITATION_FITNESS_STATUSES and not has_any_field(citation, ["notes", "replacement_candidates"]):
+            code |= error(f"citation {citation_id} has {fitness_status} fitness without notes or replacement_candidates")
+
     for area in areas:
         area_id = item_id(area, "area_id", "id")
-        if area.get("required_citation_types") and not area.get("cited_keys") and not area.get("missing_candidates"):
-            code |= error(f"related-work area {area_id} has requirements but no cited keys or missing candidates")
+        cited_keys = key_strings(area.get("cited_keys") or area.get("bibkeys"))
+        for key in cited_keys:
+            if key not in reference_keys and key not in bib_keys:
+                code |= error(f"related-work area {area_id} cites unknown bibkey {key}")
+            else:
+                if key not in reference_keys:
+                    code |= error(f"related-work area {area_id} cites key not registered in reference-ledger: {key}")
+                if key not in bib_keys:
+                    code |= error(f"related-work area {area_id} cites key missing from refs.bib: {key}")
+        if area.get("required_citation_types") and not cited_keys:
+            missing_candidates = area.get("missing_candidates")
+            if not meaningful(missing_candidates):
+                code |= error(f"related-work area {area_id} has requirements but no cited keys or missing candidates")
+            elif not missing_candidate_notes(area):
+                code |= error(f"related-work area {area_id} lists missing candidates without notes")
     return code
 
 

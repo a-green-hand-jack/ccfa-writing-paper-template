@@ -1,5 +1,23 @@
 {
   "existence_check": "required",
   "fitness_check": "required",
+  "citation_ledger": {
+    "active_required_fields": [
+      "purpose_or_intent",
+      "context_or_locator",
+      "fitness_status"
+    ],
+    "allowed_fitness_statuses": [
+      "strong",
+      "adequate",
+      "weak",
+      "missing-better-source",
+      "needs-review"
+    ],
+    "weak_status_requires_one_of": [
+      "notes",
+      "replacement_candidates"
+    ]
+  },
   "references": []
 }

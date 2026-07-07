@@ -1933,7 +1933,15 @@ def check_claim_numeric_literal_bindings(claims: list[dict], number_by_id: dict[
         literals = claim_numeric_literals(claim)
         if not literals:
             continue
-        linked_numeric_ids = set(strings(claim.get("numeric_ids"))) | numbers_by_claim_id.get(claim_id, set())
+        explicit_numeric_ids = set(strings(claim.get("numeric_ids")))
+        for numeric_id in explicit_numeric_ids:
+            number = number_by_id.get(numeric_id)
+            if not number:
+                continue
+            number_claim_ids = set(strings(number.get("claim_ids")))
+            if number_claim_ids and claim_id not in number_claim_ids:
+                code |= error(f"claim {claim_id} numeric_id {numeric_id} is not reciprocated by number claim_ids")
+        linked_numeric_ids = explicit_numeric_ids or numbers_by_claim_id.get(claim_id, set())
         if not linked_numeric_ids:
             sample = ", ".join(literals[:5])
             code |= error(f"claim {claim_id} has numeric literal without numeric binding: {sample}")
@@ -2053,6 +2061,30 @@ def result_numeric_refs(result: dict):
                 elif not missingish(entry):
                     refs.append(str(entry))
     return refs, field_present, missing_entry_id
+
+
+def validate_result_claim_numeric_alignment(result: dict, number_by_id: dict[str, dict]) -> int:
+    result_id = item_id(result, "result_id", "id")
+    if not result_id or not is_verified(result):
+        return 0
+    refs, _field_present, _missing_entry_id = result_numeric_refs(result)
+    if not refs:
+        return 0
+    result_claim_ids = set(strings(result.get("claims_supported")))
+    if not result_claim_ids:
+        return 0
+    code = 0
+    for numeric_id in refs:
+        number = number_by_id.get(numeric_id)
+        if not number:
+            continue
+        number_claim_ids = set(strings(number.get("claim_ids")))
+        if number_claim_ids and result_claim_ids.isdisjoint(number_claim_ids):
+            code |= error(f"result {result_id} claim bindings do not match numeric {numeric_id} claim_ids")
+        number_result_ids = set(result_refs(number))
+        if number_result_ids and result_id not in number_result_ids:
+            code |= error(f"result {result_id} numeric {numeric_id} is not reciprocated by number result_id")
+    return code
 
 
 VALID_EXCEPTION_MATCH_SCOPES = {"literal", "context", "literal_or_context"}
@@ -2183,6 +2215,8 @@ def check_result_status():
     code |= index_code
     claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)[1]
     number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)[1]
+    number_by_id = {item_id(number, "numeric_id", "id"): number for number in numbers if item_id(number, "numeric_id", "id")}
+    index_result_by_id = {item_id(result, "result_id", "id"): result for result in index_results if item_id(result, "result_id", "id")}
     verified_result_ids = {
         result_id
         for result in status_results + index_results
@@ -2193,6 +2227,17 @@ def check_result_status():
         result_id = item_id(result, "result_id", "id")
         if is_verified(result) and result_id not in index_ids:
             code |= error(f"verified result missing from result-index: {result_id}")
+        index_result = index_result_by_id.get(result_id)
+        index_has_numeric_refs = result_numeric_refs(index_result)[1] if index_result else False
+        if index_has_numeric_refs:
+            continue
+        refs, field_present, missing_entry_id = result_numeric_refs(result)
+        if field_present and missing_entry_id:
+            code |= error(f"result {result_id} numbers entries must include numeric_id/id")
+        for numeric_id in refs:
+            if numeric_id not in number_ids:
+                code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
+        code |= validate_result_claim_numeric_alignment(result, number_by_id)
     for result in index_results:
         result_id = item_id(result, "result_id", "id")
         verified = is_verified(result) or result_id in verified_result_ids
@@ -2212,6 +2257,7 @@ def check_result_status():
         for numeric_id in refs:
             if numeric_id not in number_ids:
                 code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
+        code |= validate_result_claim_numeric_alignment(result, number_by_id)
     return code
 
 

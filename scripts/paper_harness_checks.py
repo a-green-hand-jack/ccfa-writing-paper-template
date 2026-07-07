@@ -778,6 +778,29 @@ def verify_surface_manifest_checksums(surface_id: str, root: Path, surface: dict
     return code
 
 
+def declared_release_surfaces() -> set[str]:
+    path = ROOT / "state/ccfa.yaml"
+    if not path.exists():
+        return set()
+    ccfa = load_doc("state/ccfa.yaml")
+    return set(strings(ccfa.get("release", {}).get("surfaces", [])))
+
+
+def check_declared_release_surface_status(surface_id: str, surface: dict, expected_surfaces: set[str]) -> int:
+    if surface_id not in expected_surfaces:
+        return 0
+    status = str(surface.get("status", "")).strip().lower()
+    if status in {"", "empty"} and not meaningful(surface.get("files")):
+        return 0
+    if status in RELEASE_SYNC_STATUSES:
+        return 0
+    allowed = ", ".join(sorted(RELEASE_SYNC_STATUSES))
+    return error(
+        f"release surface {surface_id} declared in state/ccfa.yaml must be synced; "
+        f"status {status or '<missing>'} is not allowed for paper release checks; allowed: {allowed}"
+    )
+
+
 def git_value(*args: str) -> str | None:
     try:
         result = subprocess.run(
@@ -931,6 +954,7 @@ def check_release_package():
 def check_release_freshness():
     manifest = load_doc("release/manifest.yaml")
     code = 0
+    expected_surfaces = declared_release_surfaces()
     if isinstance(manifest, dict):
         code |= check_source_revision_freshness(manifest)
     for surface in manifest.get("surfaces", []):
@@ -938,6 +962,7 @@ def check_release_freshness():
             code |= error("release surface entry must be a mapping")
             continue
         surface_id = surface.get("id", "<missing>")
+        code |= check_declared_release_surface_status(str(surface_id), surface, expected_surfaces)
         if str(surface.get("status", "")).lower() not in RELEASE_SYNC_STATUSES:
             continue
         root, path_error = release_surface_root(surface)

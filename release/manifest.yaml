@@ -4,7 +4,7 @@
       "id": "arxiv",
       "path": "release/arxiv",
       "source": "paper/",
-      "status": "empty",
+      "status": "synced",
       "forbidden_paths": [
         ".agent",
         ".claude",
@@ -20,7 +20,7 @@
       "id": "overleaf",
       "path": "release/overleaf",
       "source": "paper/",
-      "status": "empty",
+      "status": "synced",
       "forbidden_paths": [
         ".agent",
         ".claude",
@@ -36,7 +36,7 @@
       "id": "github-tex",
       "path": "release/github-tex",
       "source": "paper/",
-      "status": "empty",
+      "status": "synced",
       "forbidden_paths": [
         ".agent",
         ".claude",

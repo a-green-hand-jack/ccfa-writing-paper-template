@@ -13,7 +13,9 @@ Source capability: `.agent/capabilities/numeric-registry.yaml`. Read this file f
 
 - `state/claim-evidence-map.yaml`
 - `state/numbers/numeric-index.yaml`
+- `state/numbers/groups/*.yaml`
 - `state/numbers/macros.yaml`
+- `state/numbers/exceptions.yaml`
 - `lab/artifacts/result-index.yaml`
 - `lab/research/evidence.yaml`
 
@@ -21,7 +23,9 @@ Source capability: `.agent/capabilities/numeric-registry.yaml`. Read this file f
 
 - `state/numeric-registry.yaml`
 - `state/numbers/numeric-index.yaml`
+- `state/numbers/groups/*.yaml`
 - `state/numbers/macros.yaml`
+- `state/numbers/exceptions.yaml`
 - `paper/generated/results-macros.tex`
 - `lab/artifacts/result-index.yaml`
 

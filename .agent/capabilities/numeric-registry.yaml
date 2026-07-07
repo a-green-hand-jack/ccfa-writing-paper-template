@@ -5,14 +5,18 @@
   "inputs": [
     "state/claim-evidence-map.yaml",
     "state/numbers/numeric-index.yaml",
+    "state/numbers/groups/*.yaml",
     "state/numbers/macros.yaml",
+    "state/numbers/exceptions.yaml",
     "lab/artifacts/result-index.yaml",
     "lab/research/evidence.yaml"
   ],
   "outputs": [
     "state/numeric-registry.yaml",
     "state/numbers/numeric-index.yaml",
+    "state/numbers/groups/*.yaml",
     "state/numbers/macros.yaml",
+    "state/numbers/exceptions.yaml",
     "paper/generated/results-macros.tex",
     "lab/artifacts/result-index.yaml"
   ],
@@ -36,7 +40,9 @@
   "allowed_paths": [
     "state/numeric-registry.yaml",
     "state/numbers/numeric-index.yaml",
+    "state/numbers/groups/*.yaml",
     "state/numbers/macros.yaml",
+    "state/numbers/exceptions.yaml",
     "paper/generated/results-macros.tex",
     "lab/artifacts/result-index.yaml",
     "memory/current-status.md",
@@ -46,7 +52,9 @@
     ".agent/capabilities/numeric-registry.yaml",
     "state/claim-evidence-map.yaml",
     "state/numbers/numeric-index.yaml",
+    "state/numbers/groups/*.yaml",
     "state/numbers/macros.yaml",
+    "state/numbers/exceptions.yaml",
     "lab/artifacts/result-index.yaml",
     "lab/research/evidence.yaml",
     "scripts/check-capability-parity.py",
@@ -76,7 +84,9 @@
     "required_outputs": [
       "state/numeric-registry.yaml",
       "state/numbers/numeric-index.yaml",
+      "state/numbers/groups/*.yaml",
       "state/numbers/macros.yaml",
+      "state/numbers/exceptions.yaml",
       "paper/generated/results-macros.tex",
       "lab/artifacts/result-index.yaml"
     ],

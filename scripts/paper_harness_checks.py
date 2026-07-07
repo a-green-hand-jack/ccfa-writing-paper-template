@@ -1874,6 +1874,19 @@ def check_citation_fitness():
     reference_keys = set()
     for ref in references:
         reference_keys.update(reference_bibkeys(ref))
+    citation_keys = set()
+    for citation in citations:
+        citation_keys.update(citation_bibkeys(citation))
+
+    if paper_keys and not citation_keys:
+        code |= error("paper has citations but citation-ledger is empty")
+    for key in paper_keys:
+        if key not in bib_keys:
+            code |= error(f"paper cites missing BibTeX key: {key}")
+        if key not in reference_keys:
+            code |= error(f"paper cites key not registered in reference-ledger: {key}")
+        if key not in citation_keys:
+            code |= error(f"paper cites key not registered in citation-ledger: {key}")
 
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")

@@ -252,6 +252,13 @@ def require(paths):
     return 0
 
 
+def adapter_text_path(path: str) -> Path:
+    target = ROOT / path
+    if target.is_dir():
+        return target / "SKILL.md"
+    return target
+
+
 def compare_tree(source: Path, dest: Path) -> list[str]:
     mismatches = []
     if not source.exists() and not dest.exists():
@@ -285,13 +292,43 @@ def check_capability_parity():
     registry = load_doc(".agent/capabilities/registry.yaml")
     for cap in registry.get("capabilities", []):
         cid = cap["id"]
+        source = f".agent/capabilities/{cid}.yaml"
+        outputs = strings(cap.get("outputs"))
+        validators = strings(cap.get("validators"))
         code |= require([
-            f".agent/capabilities/{cid}.yaml",
+            source,
             cap["claude_adapter"]["skill"],
             cap["codex_adapter"]["workflow"],
         ])
-        if cap.get("status") == "active" and not cap.get("outputs"):
+        if cap.get("status") == "active" and not outputs:
             code |= error(f"active capability has no outputs: {cid}")
+        if cap.get("status") == "active" and not validators:
+            code |= error(f"active capability has no validators: {cid}")
+        if (ROOT / source).exists():
+            spec = load_doc(source)
+            spec_outputs = strings(spec.get("outputs"))
+            spec_validators = strings(spec.get("validators"))
+            if spec.get("id") != cid:
+                code |= error(f"capability spec id mismatch: {cid}")
+            if cap.get("status") == "active" and not spec_outputs:
+                code |= error(f"active capability spec has no outputs: {cid}")
+            if cap.get("status") == "active" and not spec_validators:
+                code |= error(f"active capability spec has no validators: {cid}")
+            if outputs and spec_outputs and outputs != spec_outputs:
+                code |= error(f"capability spec outputs differ from registry: {cid}")
+            if validators and spec_validators and validators != spec_validators:
+                code |= error(f"capability spec validators differ from registry: {cid}")
+        declared_paths = outputs + validators
+        for adapter in [cap["claude_adapter"]["skill"], cap["codex_adapter"]["workflow"]]:
+            text_path = adapter_text_path(adapter)
+            if not text_path.exists() or not text_path.is_file():
+                code |= error(f"capability adapter text missing: {adapter}")
+                continue
+            text = text_path.read_text(encoding="utf-8")
+            if source not in text:
+                code |= error(f"capability adapter does not mention source capability {source}: {rel(text_path)}")
+            if declared_paths and not any(path in text for path in declared_paths):
+                code |= error(f"capability adapter does not mention a declared output or validator path: {rel(text_path)}")
     for role in registry.get("roles", []):
         code |= require([role["claude_agent"], role["codex_role"]])
     return code

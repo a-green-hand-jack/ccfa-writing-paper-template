@@ -9,7 +9,7 @@ if ! command -v git >/dev/null 2>&1; then
   exit 2
 fi
 
-SLUG="$(python3 - <<'PY'
+SLUG="$(PYTHONDONTWRITEBYTECODE=1 python3 - <<'PY'
 import json
 from pathlib import Path
 try:
@@ -85,5 +85,5 @@ if [ "$MAIN_NEEDS_REBUILD" -eq 1 ]; then
 fi
 
 git worktree add "$MAIN_PATH" main
-python3 scripts/check-worktrees.py
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-worktrees.py
 echo "OK main worktree created at $MAIN_PATH"

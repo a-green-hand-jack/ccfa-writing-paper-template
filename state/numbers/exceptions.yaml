@@ -1,0 +1,8 @@
+{
+  "exceptions": [
+    {
+      "pattern": "2027",
+      "reason": "venue year metadata"
+    }
+  ]
+}

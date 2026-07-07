@@ -1,0 +1,52 @@
+{
+  "worktrees": [
+    {
+      "id": "main",
+      "branch": "main",
+      "purpose": "collaborator-facing and release-facing tex surface",
+      "visibility": "collaborator-facing",
+      "owned_paths": [
+        "*.tex",
+        "sections/**",
+        "figures/**",
+        "tables/**",
+        "refs.bib",
+        "style/**",
+        "supplementary/**"
+      ],
+      "forbidden_paths": [
+        ".agent/**",
+        ".claude/**",
+        ".agents/**",
+        "state/**",
+        "lab/**",
+        "memory/**",
+        "human/**"
+      ],
+      "sync_source": "release/overleaf",
+      "validators": [
+        "scripts/check-latex.sh",
+        "scripts/check-release-package.py"
+      ],
+      "status": "planned"
+    },
+    {
+      "id": "dev",
+      "branch": "dev",
+      "purpose": "private evidence-first writing harness",
+      "visibility": "private",
+      "owned_paths": [
+        "**"
+      ],
+      "forbidden_paths": [],
+      "validators": [
+        "scripts/check-writing-harness.py",
+        "scripts/check-claim-evidence.py",
+        "scripts/check-numeric-consistency.py",
+        "scripts/check-reference-existence.py",
+        "scripts/check-citation-fitness.py"
+      ],
+      "status": "active"
+    }
+  ]
+}

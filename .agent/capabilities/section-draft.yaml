@@ -1,0 +1,20 @@
+{
+  "id": "section-draft",
+  "status": "active",
+  "purpose": "draft sections only from registered claims, numbers, and references",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/section-draft/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/section-draft.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

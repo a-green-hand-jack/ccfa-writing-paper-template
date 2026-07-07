@@ -1,0 +1,20 @@
+{
+  "id": "outline-contract",
+  "status": "active",
+  "purpose": "bind section outline to claims, evidence, and venue fit",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/outline-contract/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/outline-contract.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

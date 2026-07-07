@@ -1,0 +1,20 @@
+{
+  "id": "contribution-lock",
+  "status": "active",
+  "purpose": "record and gate accepted contributions",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/contribution-lock/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/contribution-lock.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

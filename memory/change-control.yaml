@@ -1,0 +1,18 @@
+{
+  "open_changes": [],
+  "tracked_change_types": [
+    "venue",
+    "paper_type",
+    "main_claim",
+    "numeric_result",
+    "reference_policy",
+    "release_surface",
+    "worktree_sync"
+  ],
+  "sync_surfaces": [
+    "PROJECT.md",
+    "state/ccfa.yaml",
+    "state/worktrees.yaml",
+    "release/manifest.yaml"
+  ]
+}

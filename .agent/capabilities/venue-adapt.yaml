@@ -1,0 +1,20 @@
+{
+  "id": "venue-adapt",
+  "status": "active",
+  "purpose": "adapt stable writing choices while forcing current-year official checks",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/venue-adapt/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/venue-adapt.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

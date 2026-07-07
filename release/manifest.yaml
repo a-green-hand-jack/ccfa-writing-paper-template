@@ -1,0 +1,53 @@
+{
+  "surfaces": [
+    {
+      "id": "arxiv",
+      "path": "release/arxiv",
+      "source": "paper/",
+      "status": "empty",
+      "forbidden_paths": [
+        ".agent",
+        ".claude",
+        ".agents",
+        "state",
+        "lab",
+        "memory",
+        "human",
+        "exemplars"
+      ]
+    },
+    {
+      "id": "overleaf",
+      "path": "release/overleaf",
+      "source": "paper/",
+      "status": "empty",
+      "forbidden_paths": [
+        ".agent",
+        ".claude",
+        ".agents",
+        "state",
+        "lab",
+        "memory",
+        "human",
+        "exemplars"
+      ]
+    },
+    {
+      "id": "github-tex",
+      "path": "release/github-tex",
+      "source": "paper/",
+      "status": "empty",
+      "forbidden_paths": [
+        ".agent",
+        ".claude",
+        ".agents",
+        "state",
+        "lab",
+        "memory",
+        "human",
+        "exemplars"
+      ]
+    }
+  ],
+  "reports": "release/reports"
+}

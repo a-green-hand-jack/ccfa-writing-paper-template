@@ -1,0 +1,20 @@
+{
+  "id": "tex-release-export",
+  "status": "active",
+  "purpose": "export tex-only release surfaces without harness state leakage",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/tex-release-export/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/tex-release-export.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

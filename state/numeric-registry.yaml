@@ -1,0 +1,13 @@
+{
+  "registry_version": "numeric-v1",
+  "index": "state/numbers/numeric-index.yaml",
+  "groups": [
+    "state/numbers/groups/main-results.yaml",
+    "state/numbers/groups/ablations.yaml",
+    "state/numbers/groups/baselines.yaml",
+    "state/numbers/groups/appendix.yaml",
+    "state/numbers/groups/hyperparameters.yaml"
+  ],
+  "macros": "state/numbers/macros.yaml",
+  "status": "empty"
+}

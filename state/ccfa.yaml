@@ -1,0 +1,44 @@
+{
+  "paper": {
+    "slug": "ccfa-paper-template",
+    "title": "TODO Paper Title",
+    "short_title": "TODO Paper",
+    "owner": "TODO"
+  },
+  "venue": {
+    "id": "iclr",
+    "year": 2027,
+    "must_verify_current_year_rules": true
+  },
+  "paper_type": {
+    "id": "method"
+  },
+  "output": {
+    "repo_mode": "standalone"
+  },
+  "team": {
+    "authors": [],
+    "anonymous_mode": "TODO"
+  },
+  "submission": {
+    "track": "TODO",
+    "deadline": "TODO",
+    "page_limit": "TODO",
+    "supplementary_policy": "TODO"
+  },
+  "template": {
+    "source": "official",
+    "raw_path_or_url": "TODO",
+    "normalized_profile": "TODO"
+  },
+  "release": {
+    "surfaces": [
+      "arxiv",
+      "overleaf",
+      "github-tex"
+    ]
+  },
+  "capabilities": {
+    "parity": "claude-and-codex"
+  }
+}

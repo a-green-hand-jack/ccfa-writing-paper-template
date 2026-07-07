@@ -1,0 +1,20 @@
+{
+  "id": "latex-compile-review",
+  "status": "active",
+  "purpose": "compile and review LaTeX without changing evidence state",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/latex-compile-review/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/latex-compile-review.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

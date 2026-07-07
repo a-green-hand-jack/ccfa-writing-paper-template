@@ -1,0 +1,20 @@
+{
+  "id": "paper-init",
+  "status": "active",
+  "purpose": "initialize the paper repo control plane",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/paper-init/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/paper-init.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

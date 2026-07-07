@@ -1,0 +1,20 @@
+{
+  "id": "claim-experiment-plan",
+  "status": "active",
+  "purpose": "plan must-have experiments before prose promotion",
+  "inputs": [
+    "state/ccfa.yaml"
+  ],
+  "outputs": [],
+  "claude_adapter": {
+    "skill": ".claude/skills/claim-experiment-plan/"
+  },
+  "codex_adapter": {
+    "workflow": ".agents/workflows/claim-experiment-plan.md"
+  },
+  "validators": [
+    "scripts/check-capability-parity.py"
+  ],
+  "parity": "required",
+  "exceptions": []
+}

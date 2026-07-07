@@ -1828,6 +1828,64 @@ def registered_number_values(number: dict) -> list[str]:
     return display_values or direct_values
 
 
+def numeric_value_equivalents(value) -> set[str]:
+    normalized = normalize_numeric_value(value)
+    values = {normalized} if normalized else set()
+    if normalized.endswith("%"):
+        values.add(normalized[:-1])
+    return values
+
+
+def claim_statement_text(claim: dict) -> str:
+    values = []
+    for field in CLAIM_STATEMENT_FIELDS:
+        value = claim.get(field)
+        if not missingish(value):
+            values.append(str(value))
+    return "\n".join(values)
+
+
+def claim_numeric_literals(claim: dict) -> list[str]:
+    text = claim_statement_text(claim)
+    return [match.group(0).strip() for match in NUMERIC_LITERAL_RE.finditer(text) if match.group(0).strip()]
+
+
+def check_claim_numeric_literal_bindings(claims: list[dict], number_by_id: dict[str, dict]) -> int:
+    code = 0
+    numbers_by_claim_id: dict[str, set[str]] = {}
+    for numeric_id, number in number_by_id.items():
+        if not is_verified(number):
+            continue
+        for claim_id in strings(number.get("claim_ids")):
+            numbers_by_claim_id.setdefault(claim_id, set()).add(numeric_id)
+
+    for claim in claims:
+        claim_id = item_id(claim, "claim_id", "id")
+        if not claim_id or not is_active(claim) or claim_strength(claim) not in {"core", "strong"}:
+            continue
+        literals = claim_numeric_literals(claim)
+        if not literals:
+            continue
+        linked_numeric_ids = set(strings(claim.get("numeric_ids"))) | numbers_by_claim_id.get(claim_id, set())
+        if not linked_numeric_ids:
+            sample = ", ".join(literals[:5])
+            code |= error(f"claim {claim_id} has numeric literal without numeric binding: {sample}")
+            continue
+        supported_values: set[str] = set()
+        for numeric_id in linked_numeric_ids:
+            number = number_by_id.get(numeric_id)
+            if not number or not is_verified(number):
+                continue
+            for value in registered_number_values(number):
+                supported_values.update(numeric_value_equivalents(value))
+        for literal in literals:
+            literal_values = numeric_value_equivalents(literal)
+            if supported_values and literal_values & supported_values:
+                continue
+            code |= error(f"claim {claim_id} numeric literal not backed by linked verified numbers: {literal}")
+    return code
+
+
 def numeric_alias_targets(number: dict | None) -> set[str]:
     if not isinstance(number, dict):
         return set()
@@ -2124,6 +2182,7 @@ def check_numeric_consistency():
                 code |= error(f"claim {claim_id} uses unsupported numeric id range {numeric_id}; expand ranges explicitly")
             elif number_ids and numeric_id not in number_ids:
                 code |= error(f"claim {claim_id} references unknown numeric id {numeric_id}")
+    code |= check_claim_numeric_literal_bindings(claims, number_by_id)
 
     macros = macro_doc.get("macros", [])
     macro_map = {}

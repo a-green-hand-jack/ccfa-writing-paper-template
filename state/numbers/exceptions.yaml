@@ -2,6 +2,7 @@
   "exceptions": [
     {
       "pattern": "2027",
+      "match_scope": "literal",
       "reason": "venue year metadata"
     },
     {

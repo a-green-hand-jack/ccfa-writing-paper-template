@@ -4,8 +4,10 @@ from __future__ import annotations
 import json
 import os
 import csv
+import hashlib
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -45,6 +47,21 @@ RELEASE_ITEMS = [
     "generated",
     "supplementary",
 ]
+RELEASE_SYNC_STATUSES = {"synced", "fresh", "exported"}
+CHECKSUM_ALGORITHM = "sha256"
+FORBIDDEN_RELEASE_PARTS = {
+    ".git",
+    ".github",
+    ".agent",
+    ".claude",
+    ".agents",
+    "state",
+    "lab",
+    "memory",
+    "human",
+    "exemplars",
+}
+ALLOWABLE_RELEASE_METADATA_PARTS = {".github"}
 
 
 def load_doc(path: str):
@@ -58,6 +75,10 @@ def load_doc(path: str):
 
 def rel(path: Path) -> str:
     return str(path.relative_to(ROOT))
+
+
+def rel_posix(path: Path) -> str:
+    return path.relative_to(ROOT).as_posix()
 
 
 def error(message: str) -> int:
@@ -261,6 +282,12 @@ def adapter_text_path(path: str) -> Path:
 
 def compare_tree(source: Path, dest: Path) -> list[str]:
     mismatches = []
+    if source.is_symlink():
+        mismatches.append(f"{rel(source)} is a symlink")
+    if dest.is_symlink():
+        mismatches.append(f"{rel(dest)} is a symlink")
+    if mismatches:
+        return mismatches
     if not source.exists() and not dest.exists():
         return mismatches
     if source.exists() != dest.exists():
@@ -272,8 +299,14 @@ def compare_tree(source: Path, dest: Path) -> list[str]:
         elif source.read_bytes() != dest.read_bytes():
             mismatches.append(f"{rel(dest)} differs from {rel(source)}")
         return mismatches
-    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file())
-    dest_files = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_file())
+    source_symlinks = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_symlink())
+    dest_symlinks = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_symlink())
+    if source_symlinks:
+        mismatches.append(f"{rel(source)} contains symlinks: {[str(item) for item in source_symlinks[:10]]}")
+    if dest_symlinks:
+        mismatches.append(f"{rel(dest)} contains symlinks: {[str(item) for item in dest_symlinks[:10]]}")
+    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file() and not path.is_symlink())
+    dest_files = sorted(path.relative_to(dest) for path in dest.rglob("*") if path.is_file() and not path.is_symlink())
     if source_files != dest_files:
         missing = sorted(set(source_files) - set(dest_files))
         extra = sorted(set(dest_files) - set(source_files))
@@ -285,6 +318,180 @@ def compare_tree(source: Path, dest: Path) -> list[str]:
         if (source / item).read_bytes() != (dest / item).read_bytes():
             mismatches.append(f"{rel(dest / item)} differs from {rel(source / item)}")
     return mismatches
+
+
+def release_surface_root(surface: dict) -> tuple[Path | None, str | None]:
+    path_value = str(surface.get("path", "")).strip()
+    if not path_value:
+        return None, "missing path"
+    path = Path(path_value)
+    if path.is_absolute() or ".." in path.parts:
+        return None, f"unsafe release surface path: {path_value}"
+    if not path.parts or path.parts[0] != "release" or len(path.parts) < 2:
+        return None, f"release surface path must be under release/<surface>: {path_value}"
+    return ROOT / path, None
+
+
+def allowed_release_parts(surface: dict) -> set[str]:
+    allowed = set(strings(surface.get("allowed_hidden_paths", [])))
+    allowed.update(strings(surface.get("allowed_metadata_paths", [])))
+    normalized = {item.strip().strip("/") for item in allowed if item.strip()}
+    return normalized & ALLOWABLE_RELEASE_METADATA_PARTS
+
+
+def release_surface_readme(surface_id: str) -> str:
+    return (
+        f"# {surface_id} Release Surface\n\n"
+        "Generated from `paper/` by `scripts/export-tex-release.sh`.\n"
+        "Do not edit this directory as the primary paper source.\n"
+    )
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def collect_release_checksums(root: Path) -> list[dict]:
+    files = []
+    if not root.exists() or root.is_symlink():
+        return files
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        if path.is_symlink() or not path.is_file():
+            continue
+        files.append(
+            {
+                "relpath": path.relative_to(root).as_posix(),
+                "sha256": sha256_file(path),
+                "size": path.stat().st_size,
+            }
+        )
+    return files
+
+
+def scan_release_surface(surface_id: str, root: Path, surface: dict) -> int:
+    code = 0
+    if root.is_symlink():
+        return error(f"release surface {surface_id} is a symlink: {rel_posix(root)}")
+    if not root.exists():
+        return code
+    forbidden = FORBIDDEN_RELEASE_PARTS - allowed_release_parts(surface)
+    for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        rel_parts = path.relative_to(root).parts
+        if path.is_symlink():
+            code |= error(f"release surface {surface_id} contains symlink: {path.relative_to(ROOT).as_posix()}")
+        if any(part in forbidden for part in rel_parts):
+            code |= error(f"release surface {surface_id} leaks harness or metadata path: {path.relative_to(ROOT).as_posix()}")
+    return code
+
+
+def validate_release_source_item(src: Path) -> list[str]:
+    mismatches = []
+    if not src.exists():
+        return mismatches
+    if src.is_symlink():
+        mismatches.append(f"{src.relative_to(ROOT).as_posix()} is a symlink")
+        return mismatches
+    if src.is_dir():
+        for path in sorted(src.rglob("*"), key=lambda item: item.relative_to(src).as_posix()):
+            rel_parts = path.relative_to(src).parts
+            if path.is_symlink():
+                mismatches.append(f"{path.relative_to(ROOT).as_posix()} is a symlink")
+            if any(part in FORBIDDEN_RELEASE_PARTS for part in rel_parts):
+                mismatches.append(f"{path.relative_to(ROOT).as_posix()} would leak harness or metadata path")
+    return mismatches
+
+
+def parse_manifest_files(surface_id: str, surface: dict) -> tuple[int, dict[str, dict] | None]:
+    files = surface.get("files")
+    if not isinstance(files, list):
+        return error(f"release surface {surface_id} missing manifest checksums"), None
+    code = 0
+    parsed: dict[str, dict] = {}
+    relpaths = []
+    for index, entry in enumerate(files, start=1):
+        if not isinstance(entry, dict):
+            code |= error(f"release surface {surface_id} checksum entry {index} is not a mapping")
+            continue
+        relpath = entry.get("relpath")
+        sha256 = entry.get("sha256")
+        size = entry.get("size")
+        if not isinstance(relpath, str) or not relpath:
+            code |= error(f"release surface {surface_id} checksum entry {index} missing relpath")
+            continue
+        relpath_path = Path(relpath)
+        if relpath_path.is_absolute() or ".." in relpath_path.parts:
+            code |= error(f"release surface {surface_id} checksum entry has unsafe relpath: {relpath}")
+            continue
+        if relpath in parsed:
+            code |= error(f"release surface {surface_id} duplicate checksum relpath: {relpath}")
+            continue
+        if not isinstance(sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+            code |= error(f"release surface {surface_id} checksum entry {relpath} has invalid sha256")
+        if not isinstance(size, int) or size < 0:
+            code |= error(f"release surface {surface_id} checksum entry {relpath} has invalid size")
+        parsed[relpath] = {"relpath": relpath, "sha256": sha256, "size": size}
+        relpaths.append(relpath)
+    if relpaths != sorted(relpaths):
+        code |= error(f"release surface {surface_id} manifest checksum entries are not sorted")
+    return code, parsed
+
+
+def verify_surface_manifest_checksums(surface_id: str, root: Path, surface: dict) -> int:
+    code, expected = parse_manifest_files(surface_id, surface)
+    if expected is None:
+        return code
+    actual = {entry["relpath"]: entry for entry in collect_release_checksums(root)}
+    expected_paths = set(expected)
+    actual_paths = set(actual)
+    missing = sorted(expected_paths - actual_paths)
+    extra = sorted(actual_paths - expected_paths)
+    if missing:
+        code |= error(f"release surface {surface_id} missing files from manifest: {missing[:10]}")
+    if extra:
+        code |= error(f"release surface {surface_id} has files not in manifest: {extra[:10]}")
+    for relpath in sorted(expected_paths & actual_paths):
+        expected_entry = expected[relpath]
+        actual_entry = actual[relpath]
+        if expected_entry["size"] != actual_entry["size"]:
+            code |= error(
+                f"release surface {surface_id} checksum drift for {relpath}: "
+                f"size {actual_entry['size']} != manifest {expected_entry['size']}"
+            )
+        if expected_entry["sha256"] != actual_entry["sha256"]:
+            code |= error(f"release surface {surface_id} checksum drift for {relpath}: sha256 differs from manifest")
+    return code
+
+
+def git_value(*args: str) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(ROOT), *args],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    value = result.stdout.strip()
+    return value or None
+
+
+def source_revision() -> dict:
+    commit = git_value("rev-parse", "--verify", "HEAD")
+    tree = git_value("rev-parse", "--verify", "HEAD^{tree}")
+    if not commit:
+        return {}
+    revision = {"treeish": "HEAD", "commit": commit}
+    if tree:
+        revision["tree"] = tree
+    return revision
 
 
 def check_capability_parity():
@@ -337,7 +544,6 @@ def check_capability_parity():
 def check_release_package():
     ccfa = load_doc("state/ccfa.yaml")
     manifest = load_doc("release/manifest.yaml")
-    forbidden_names = {".agent", ".claude", ".agents", "state", "lab", "memory", "human", "exemplars"}
     code = 0
     expected_surfaces = set(strings(ccfa.get("release", {}).get("surfaces", [])))
     manifest_surfaces = manifest.get("surfaces", [])
@@ -346,6 +552,9 @@ def check_release_package():
     if expected_surfaces and not manifest_surfaces:
         code |= error("release manifest has no surfaces but state/ccfa.yaml declares release surfaces")
     for surface in manifest.get("surfaces", []):
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
         surface_id = surface.get("id")
         if not surface_id:
             code |= error("release surface missing id")
@@ -357,13 +566,16 @@ def check_release_package():
         for field in ["path", "source", "forbidden_paths"]:
             if field not in surface:
                 code |= error(f"release surface {surface_id or '<missing>'} missing {field}")
-        root = ROOT / surface["path"]
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id or '<missing>'} {path_error}")
+            continue
         if not root.exists():
             code |= error(f"missing release surface {surface['path']}")
             continue
-        for path in root.rglob("*"):
-            if any(part in forbidden_names for part in path.relative_to(root).parts):
-                code |= error(f"release surface leaks harness path: {path.relative_to(ROOT)}")
+        code |= scan_release_surface(str(surface_id or "<missing>"), root, surface)
+        if str(surface.get("status", "")).lower() in RELEASE_SYNC_STATUSES:
+            code |= verify_surface_manifest_checksums(str(surface_id or "<missing>"), root, surface)
     if expected_surfaces and actual_surfaces != expected_surfaces:
         code |= error(
             "release manifest surfaces do not match state/ccfa.yaml: "
@@ -377,12 +589,21 @@ def check_release_freshness():
     manifest = load_doc("release/manifest.yaml")
     code = 0
     for surface in manifest.get("surfaces", []):
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
         surface_id = surface.get("id", "<missing>")
-        if str(surface.get("status", "")).lower() not in {"synced", "fresh", "exported"}:
+        if str(surface.get("status", "")).lower() not in RELEASE_SYNC_STATUSES:
             continue
-        root = ROOT / str(surface.get("path", ""))
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id} {path_error}")
+            continue
         if not root.exists():
+            code |= error(f"missing release surface {surface.get('path', '<missing>')}")
             continue
+        code |= scan_release_surface(str(surface_id), root, surface)
+        code |= verify_surface_manifest_checksums(str(surface_id), root, surface)
         for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
             dest = root / item
@@ -1013,28 +1234,64 @@ def check_writing_harness():
 def export_release():
     manifest_path = ROOT / "release/manifest.yaml"
     manifest = load_doc("release/manifest.yaml")
+    if not isinstance(manifest, dict):
+        manifest = {}
     surfaces = manifest.get("surfaces", [])
     if not surfaces:
         surfaces = [{"id": "arxiv", "path": "release/arxiv"}, {"id": "overleaf", "path": "release/overleaf"}, {"id": "github-tex", "path": "release/github-tex"}]
+    code = 0
+    normalized_surfaces = []
     for surface in surfaces:
-        dest = ROOT / str(surface.get("path", f"release/{surface.get('id', 'unknown')}"))
+        if not isinstance(surface, dict):
+            code |= error("release surface entry must be a mapping")
+            continue
+        surface_id = str(surface.get("id", "unknown"))
+        root, path_error = release_surface_root(surface)
+        if path_error:
+            code |= error(f"release surface {surface_id} {path_error}")
+            continue
+        if root.is_symlink():
+            code |= error(f"release surface {surface_id} is a symlink: {rel_posix(root)}")
+            continue
+        normalized_surfaces.append(surface)
+    for item in RELEASE_ITEMS:
+        for mismatch in validate_release_source_item(ROOT / "paper" / item):
+            code |= error(f"cannot export release source: {mismatch}")
+    if code:
+        return code
+    surfaces = normalized_surfaces
+    manifest["manifest_version"] = "release-manifest-v1"
+    manifest["checksum_algorithm"] = CHECKSUM_ALGORITHM
+    manifest["source_revision"] = source_revision()
+    for surface in surfaces:
+        surface_id = str(surface.get("id", "unknown"))
+        dest, _ = release_surface_root(surface)
+        assert dest is not None
+        if dest.exists():
+            if dest.is_dir():
+                shutil.rmtree(dest)
+            else:
+                dest.unlink()
         dest.mkdir(parents=True, exist_ok=True)
+        (dest / "README.md").write_text(release_surface_readme(surface_id), encoding="utf-8")
         for item in RELEASE_ITEMS:
             src = ROOT / "paper" / item
             out = dest / item
             if not src.exists():
-                if out.is_dir():
-                    shutil.rmtree(out)
-                elif out.exists():
-                    out.unlink()
                 continue
             if src.is_dir():
-                if out.exists():
-                    shutil.rmtree(out)
                 shutil.copytree(src, out)
             else:
                 shutil.copy2(src, out)
+        code |= scan_release_surface(surface_id, dest, surface)
+        surface["path"] = str(surface.get("path", f"release/{surface_id}"))
+        surface["source"] = "paper/"
+        surface["checksum_algorithm"] = CHECKSUM_ALGORITHM
+        surface["files"] = collect_release_checksums(dest)
         surface["status"] = "synced"
+    if code:
+        return code
+    manifest["surfaces"] = surfaces
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return check_release_package()
 

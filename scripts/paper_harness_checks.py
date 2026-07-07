@@ -68,6 +68,8 @@ INSUFFICIENT_EVIDENCE_QUALITY = {
 CITATION_FITNESS_STATUSES = {"strong", "adequate", "weak", "missing-better-source", "needs-review"}
 WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review"}
 CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
+CITATION_BULK_CONTEXT_THRESHOLD = 3
+CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
 NUMERIC_LITERAL_RE = re.compile(
     r"(?<![A-Za-z0-9_\\])"
@@ -228,6 +230,49 @@ def citation_bibkeys(citation: dict) -> list[str]:
     for field in ["bibkey", "bibkeys"]:
         keys.extend(key_strings(citation.get(field)))
     return list(dict.fromkeys(keys))
+
+
+def citation_context_signature(citation: dict) -> tuple[str, ...]:
+    values = []
+    for field in CITATION_CONTEXT_FIELDS:
+        value = citation.get(field)
+        if missingish(value):
+            values.append("")
+        elif isinstance(value, (dict, list, tuple)):
+            values.append(json.dumps(value, sort_keys=True))
+        else:
+            values.append(re.sub(r"\s+", " ", str(value).strip()).lower())
+    return tuple(values)
+
+
+def check_citation_bulk_import_state(citation_ledger: dict, citations: list[dict]) -> int:
+    repeated_contexts: dict[tuple[str, ...], list[str]] = {}
+    for citation in citations:
+        if not isinstance(citation, dict) or not active_now(citation):
+            continue
+        fitness_status = str(citation.get("fitness_status", "")).strip().lower()
+        if fitness_status not in WEAK_CITATION_FITNESS_STATUSES:
+            continue
+        signature = citation_context_signature(citation)
+        if not any(signature):
+            continue
+        citation_id = item_id(citation, "citation_id", "id", "bibkey")
+        repeated_contexts.setdefault(signature, []).append(citation_id)
+
+    bulk_groups = [ids for ids in repeated_contexts.values() if len(ids) >= CITATION_BULK_CONTEXT_THRESHOLD]
+    if not bulk_groups:
+        return 0
+    missing_fields = [field for field in CITATION_BULK_IMPORT_REQUIRED_FIELDS if not meaningful(citation_ledger.get(field))]
+    if not missing_fields:
+        return 0
+    sample = ", ".join(bulk_groups[0][:3])
+    missing = ", ".join(missing_fields)
+    required = ", ".join(CITATION_BULK_IMPORT_REQUIRED_FIELDS)
+    return error(
+        "citation-ledger has repeated weak citation contexts "
+        f"({sample}); add top-level bulk migration state fields: {missing} "
+        f"(required: {required})"
+    )
 
 
 def reference_bibkeys(ref: dict) -> list[str]:
@@ -1823,7 +1868,10 @@ def check_reference_existence():
     bib_text = (ROOT / "paper/refs.bib").read_text(encoding="utf-8")
     bib_keys = extract_bibkeys(bib_text)
     references = doc_items("lab/research/reference-ledger.yaml", "references")
-    citations = doc_items("lab/research/citation-ledger.yaml", "citations")
+    citation_ledger = load_doc("lab/research/citation-ledger.yaml")
+    citations = citation_ledger.get("citations", [])
+    if not isinstance(citations, list):
+        citations = []
     code |= collect_ids(references, ["reference_id", "id", "bibkey"], "references", required=False)[0]
     code |= collect_ids(citations, ["citation_id", "id", "bibkey"], "citations", required=False)[0]
 
@@ -1868,7 +1916,10 @@ def check_citation_fitness():
         return code
     bib_keys = extract_bibkeys((ROOT / "paper/refs.bib").read_text(encoding="utf-8"))
     references = doc_items("lab/research/reference-ledger.yaml", "references")
-    citations = doc_items("lab/research/citation-ledger.yaml", "citations")
+    citation_ledger = load_doc("lab/research/citation-ledger.yaml")
+    citations = citation_ledger.get("citations", [])
+    if not isinstance(citations, list):
+        citations = []
     areas = doc_items("lab/research/related-work-map.yaml", "areas")
     paper_keys = extract_cite_keys(read_paper_content_tex())
     reference_keys = set()
@@ -1909,6 +1960,8 @@ def check_citation_fitness():
                     code |= error(f"active citation {citation_id} key not cited in paper content: {key}")
         if fitness_status in WEAK_CITATION_FITNESS_STATUSES and not has_any_field(citation, ["notes", "replacement_candidates"]):
             code |= error(f"citation {citation_id} has {fitness_status} fitness without notes or replacement_candidates")
+
+    code |= check_citation_bulk_import_state(citation_ledger, citations)
 
     for area in areas:
         area_id = item_id(area, "area_id", "id")

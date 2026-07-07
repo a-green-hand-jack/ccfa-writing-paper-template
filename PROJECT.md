@@ -1,18 +1,20 @@
 # Project
 
-- Paper slug: `ccfa-paper-template`
-- Title: TODO Paper Title
-- Short title: TODO Paper
-- Owner: TODO
-- Venue: ICLR 2027
-- Track: TODO
+- Paper slug: `darwin-godel-machine-arxiv-2505-22954`
+- Title: Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents
+- Short title: Darwin Gödel Machine
+- Owner: Jenny Zhang et al.
+- Venue: ICLR 2026
+- Track: conference
 - Paper type: method
-- Deadline: TODO
+- Deadline: already submitted
 - Repo mode: standalone
 
 ## Goal
 
-Prepare a paper with evidence-first controls: claims, numbers, references, figures, tables, and release files are registered before prose promotion.
+Use a real arXiv paper source package to test whether the evidence-first paper
+template can carry a nontrivial LaTeX project, register claims/numbers/references/
+figures/tables, and export tex-only release surfaces.
 
 ## Non-Goals
 

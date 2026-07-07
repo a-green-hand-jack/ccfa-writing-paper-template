@@ -1,3 +1,92 @@
 {
-  "figures": []
+  "figures": [
+    {
+      "figure_id": "fig-conceptual",
+      "label": "fig:conceptual",
+      "path": "paper/figures/conceptual.pdf",
+      "asset_path": "paper/figures/conceptual.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-archive",
+      "label": "fig:dgm-archive",
+      "path": "paper/figures/dgm_archive.pdf",
+      "asset_path": "paper/figures/dgm_archive.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-comparisons",
+      "label": "fig:dgm-comparisons",
+      "path": "paper/figures/dgm_comparisons.pdf",
+      "asset_path": "paper/figures/dgm_comparisons.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-comparisons-polyglot",
+      "label": "fig:dgm-comparisons-polyglot",
+      "path": "paper/figures/dgm_comparisons_polyglot.pdf",
+      "asset_path": "paper/figures/dgm_comparisons_polyglot.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-comparisons-swe",
+      "label": "fig:dgm-comparisons-swe",
+      "path": "paper/figures/dgm_comparisons.pdf",
+      "asset_path": "paper/figures/dgm_comparisons.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-halluc",
+      "label": "fig:dgm-halluc",
+      "path": "paper/supplementary/solve_halluc/dgm_halluc.pdf",
+      "asset_path": "paper/supplementary/solve_halluc/dgm_halluc.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-no-openended",
+      "label": "fig:dgm-no-openended",
+      "path": "paper/figures/dgm_wo_openended.pdf",
+      "asset_path": "paper/figures/dgm_wo_openended.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-no-selfimprove",
+      "label": "fig:dgm-no-selfimprove",
+      "path": "paper/figures/dgm_wo_selfimprove.pdf",
+      "asset_path": "paper/figures/dgm_wo_selfimprove.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-dgm-progress",
+      "label": "fig:dgm-progress",
+      "path": "paper/figures/dgm_progress.pdf",
+      "asset_path": "paper/figures/dgm_progress.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-transfer-model-polyglot",
+      "label": "fig:transfer-model-polyglot",
+      "path": "paper/figures/transfer_model_polyglot.pdf",
+      "asset_path": "paper/figures/transfer_model_polyglot.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "figure_id": "fig-transfer-overview",
+      "label": "fig:transfer-overview",
+      "path": "paper/figures/transfer_model_task.pdf",
+      "asset_path": "paper/figures/transfer_model_task.pdf",
+      "source": "paper/main.tex",
+      "status": "verified"
+    }
+  ]
 }

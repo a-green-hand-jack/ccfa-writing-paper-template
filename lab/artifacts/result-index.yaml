@@ -1,3 +1,48 @@
 {
-  "results": []
+  "results": [
+    {
+      "result_id": "R-SWEBENCH-20-TO-50",
+      "status": "verified",
+      "source": "paper/main.tex",
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "claims_supported": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ]
+    },
+    {
+      "result_id": "R-POLYGLOT-14-TO-30",
+      "status": "verified",
+      "source": "paper/main.tex",
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "claims_supported": [
+        "C-DGM-POLYGLOT-IMPROVEMENT"
+      ]
+    },
+    {
+      "result_id": "R-WO-SELFIMPROVE",
+      "status": "verified",
+      "source": "paper/figures/dgm_wo_selfimprove.pdf",
+      "evidence_ids": [
+        "E-FIG-WO-SELFIMPROVE"
+      ],
+      "claims_supported": [
+        "C-SELF-IMPROVEMENT-HELPS"
+      ]
+    },
+    {
+      "result_id": "R-WO-OPENENDED",
+      "status": "verified",
+      "source": "paper/figures/dgm_wo_openended.pdf",
+      "evidence_ids": [
+        "E-FIG-WO-OPENENDED"
+      ],
+      "claims_supported": [
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ]
+    }
+  ]
 }

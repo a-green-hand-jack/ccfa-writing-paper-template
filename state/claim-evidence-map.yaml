@@ -1,3 +1,42 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "C-DGM-SWEBENCH-IMPROVEMENT",
+      "claim": "The Darwin Gödel Machine improves SWE-bench performance from 20.0% to 50.0%.",
+      "claim_strength": "core",
+      "status": "verified",
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS",
+        "E-FIG-DGM-COMPARISONS"
+      ]
+    },
+    {
+      "claim_id": "C-DGM-POLYGLOT-IMPROVEMENT",
+      "claim": "The Darwin Gödel Machine improves Polyglot performance from 14.2% to 30.7%.",
+      "claim_strength": "core",
+      "status": "verified",
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS",
+        "E-FIG-DGM-COMPARISONS"
+      ]
+    },
+    {
+      "claim_id": "C-SELF-IMPROVEMENT-HELPS",
+      "claim": "Self-improvement is necessary for sustained progress over the non-self-improving baseline.",
+      "claim_strength": "strong",
+      "status": "verified",
+      "evidence_ids": [
+        "E-FIG-WO-SELFIMPROVE"
+      ]
+    },
+    {
+      "claim_id": "C-OPEN-ENDED-ARCHIVE-HELPS",
+      "claim": "Open-ended archive exploration outperforms evolving only the latest agent.",
+      "claim_strength": "strong",
+      "status": "verified",
+      "evidence_ids": [
+        "E-FIG-WO-OPENENDED"
+      ]
+    }
+  ]
 }

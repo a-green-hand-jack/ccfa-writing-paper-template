@@ -1,1 +1,7 @@
 claim_id,evidence_id,relationship,status,notes
+C-DGM-SWEBENCH-IMPROVEMENT,E-ABSTRACT-MAIN-RESULTS,supports,verified,Abstract reports SWE-bench 20.0% to 50.0% and Polyglot 14.2% to 30.7%.
+C-DGM-POLYGLOT-IMPROVEMENT,E-ABSTRACT-MAIN-RESULTS,supports,verified,Abstract reports SWE-bench 20.0% to 50.0% and Polyglot 14.2% to 30.7%.
+C-DGM-SWEBENCH-IMPROVEMENT,E-FIG-DGM-COMPARISONS,supports,verified,Main comparison figure registered in the migrated source.
+C-DGM-POLYGLOT-IMPROVEMENT,E-FIG-DGM-COMPARISONS,supports,verified,Main comparison figure registered in the migrated source.
+C-SELF-IMPROVEMENT-HELPS,E-FIG-WO-SELFIMPROVE,supports,verified,
+C-OPEN-ENDED-ARCHIVE-HELPS,E-FIG-WO-OPENENDED,supports,verified,

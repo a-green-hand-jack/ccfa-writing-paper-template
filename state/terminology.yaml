@@ -1,3 +1,33 @@
 {
-  "terms": []
+  "terms": [
+    {
+      "term": "Darwin Gödel Machine",
+      "aliases": [
+        "DGM",
+        "Darwin Godel Machine"
+      ],
+      "definition": "Self-improving coding-agent system that iteratively modifies its own code and empirically validates changes.",
+      "status": "active"
+    },
+    {
+      "term": "open-ended exploration",
+      "definition": "Archive-based generation of diverse future stepping stones rather than a single hill-climbing path.",
+      "status": "active"
+    },
+    {
+      "term": "self-improvement",
+      "definition": "A coding agent modifying its own implementation to improve benchmark performance.",
+      "status": "active"
+    },
+    {
+      "term": "SWE-bench",
+      "definition": "Coding benchmark used as a main DGM evaluation target.",
+      "status": "active"
+    },
+    {
+      "term": "Polyglot",
+      "definition": "Multi-language coding benchmark used as a second DGM evaluation target.",
+      "status": "active"
+    }
+  ]
 }

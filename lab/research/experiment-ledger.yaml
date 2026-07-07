@@ -1,3 +1,28 @@
 {
-  "experiments": []
+  "experiments": [
+    {
+      "experiment_id": "EXP-SWEBENCH",
+      "benchmark": "SWE-bench Verified subset",
+      "status": "reported",
+      "source": "paper/main.tex"
+    },
+    {
+      "experiment_id": "EXP-POLYGLOT",
+      "benchmark": "Polyglot benchmark subset",
+      "status": "reported",
+      "source": "paper/main.tex"
+    },
+    {
+      "experiment_id": "EXP-ABLATION-SELFIMPROVE",
+      "benchmark": "DGM ablation without self-improvement",
+      "status": "reported",
+      "source": "paper/main.tex"
+    },
+    {
+      "experiment_id": "EXP-ABLATION-OPENENDED",
+      "benchmark": "DGM ablation without open-ended exploration",
+      "status": "reported",
+      "source": "paper/main.tex"
+    }
+  ]
 }

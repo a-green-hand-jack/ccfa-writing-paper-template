@@ -9,5 +9,5 @@
     "state/numbers/groups/hyperparameters.yaml"
   ],
   "macros": "state/numbers/macros.yaml",
-  "status": "empty"
+  "status": "active"
 }

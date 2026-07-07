@@ -1,3 +1,32 @@
 {
-  "macros": []
+  "macros": [
+    {
+      "numeric_id": "N-SWEBENCH-INITIAL",
+      "latex_macro": "\\DgmSweBenchInitial"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-FINAL",
+      "latex_macro": "\\DgmSweBenchFinal"
+    },
+    {
+      "numeric_id": "N-POLYGLOT-INITIAL",
+      "latex_macro": "\\DgmPolyglotInitial"
+    },
+    {
+      "numeric_id": "N-POLYGLOT-FINAL",
+      "latex_macro": "\\DgmPolyglotFinal"
+    },
+    {
+      "numeric_id": "N-DGM-ITERATIONS",
+      "latex_macro": "\\DgmMainIterations"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-TASKS-STAGE",
+      "latex_macro": "\\DgmSweBenchStageTasks"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-COST",
+      "latex_macro": "\\DgmSweBenchCostEstimate"
+    }
+  ]
 }

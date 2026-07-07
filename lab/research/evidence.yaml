@@ -1,3 +1,44 @@
 {
-  "evidence": []
+  "evidence": [
+    {
+      "evidence_id": "E-ABSTRACT-MAIN-RESULTS",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT",
+        "C-DGM-POLYGLOT-IMPROVEMENT"
+      ],
+      "kind": "paper-text",
+      "source": "paper/main.tex:60",
+      "status": "verified",
+      "notes": "Abstract reports SWE-bench 20.0% to 50.0% and Polyglot 14.2% to 30.7%."
+    },
+    {
+      "evidence_id": "E-FIG-DGM-COMPARISONS",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT",
+        "C-DGM-POLYGLOT-IMPROVEMENT"
+      ],
+      "kind": "figure",
+      "source": "paper/figures/dgm_comparisons.pdf",
+      "status": "verified",
+      "notes": "Main comparison figure registered in the migrated source."
+    },
+    {
+      "evidence_id": "E-FIG-WO-SELFIMPROVE",
+      "claim_ids": [
+        "C-SELF-IMPROVEMENT-HELPS"
+      ],
+      "kind": "figure",
+      "source": "paper/figures/dgm_wo_selfimprove.pdf",
+      "status": "verified"
+    },
+    {
+      "evidence_id": "E-FIG-WO-OPENENDED",
+      "claim_ids": [
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ],
+      "kind": "figure",
+      "source": "paper/figures/dgm_wo_openended.pdf",
+      "status": "verified"
+    }
+  ]
 }

@@ -1,3 +1,23 @@
 {
-  "areas": []
+  "areas": [
+    {
+      "area_id": "area-open-endedness",
+      "name": "Open-endedness and self-improving agents",
+      "required_citation_types": [
+        "prior-work",
+        "benchmark",
+        "method-context"
+      ],
+      "cited_keys": [
+        "clune2019ai",
+        "gauthier2024polyglot",
+        "hu2025automated",
+        "jimenez2024swebench",
+        "schmidhuber2007godel",
+        "stanley2017open"
+      ],
+      "missing_candidates": [],
+      "status": "registered-from-source"
+    }
+  ]
 }

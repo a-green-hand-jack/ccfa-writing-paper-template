@@ -1,3 +1,1369 @@
 {
-  "references": []
+  "references": [
+    {
+      "reference_id": "REF-googledeepmind2025geminithinking",
+      "bibkey": "GoogleDeepMind2025GeminiThinking",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-novikov2025alphaevolve",
+      "bibkey": "Novikov2025AlphaEvolve",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-aider2024",
+      "bibkey": "aider2024",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-aki2024llm",
+      "bibkey": "aki2024llm",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-alur2018search",
+      "bibkey": "alur2018search",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-amari1972learning",
+      "bibkey": "amari1972learning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-andrychowicz2017hindsight",
+      "bibkey": "andrychowicz2017hindsight",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-anthropic2024claude35sonnet",
+      "bibkey": "anthropic2024claude35sonnet",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-anthropic2025claude37",
+      "bibkey": "anthropic2025claude37",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-anthropic-tool-use-2024",
+      "bibkey": "anthropic_tool_use_2024",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-anwar2024foundational",
+      "bibkey": "anwar2024foundational",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bahdanau2015neural",
+      "bibkey": "bahdanau2015neural",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bai2022constitutional",
+      "bibkey": "bai2022constitutional",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-baranes2013active",
+      "bibkey": "baranes2013active",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-barke2024hysynth",
+      "bibkey": "barke2024hysynth",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bengio2024managing",
+      "bibkey": "bengio2024managing",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bostrom2002a",
+      "bibkey": "bostrom2002a",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bostrom2020ethical",
+      "bibkey": "bostrom2020ethical",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bradley2023quality",
+      "bibkey": "bradley2023quality",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-brown2020language",
+      "bibkey": "brown2020language",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-bruce2024genie",
+      "bibkey": "bruce2024genie",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-buchi1990solving",
+      "bibkey": "buchi1990solving",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-cao2024spider2",
+      "bibkey": "cao2024spider2",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-chatzilygeroudis2021quality",
+      "bibkey": "chatzilygeroudis2021quality",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-chen2023unleashing",
+      "bibkey": "chen2023unleashing",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-cheng2025trace",
+      "bibkey": "cheng2025trace",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-clune2019ai",
+      "bibkey": "clune2019ai",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-colas2019curious",
+      "bibkey": "colas2019curious",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-colas2022autotelic",
+      "bibkey": "colas2022autotelic",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-colas2022language",
+      "bibkey": "colas2022language",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-colas2023augmenting",
+      "bibkey": "colas2023augmenting",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-coulom2006efficient",
+      "bibkey": "coulom2006efficient",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-darwin2023origin",
+      "bibkey": "darwin2023origin",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-dawkins2019evolution",
+      "bibkey": "dawkins2019evolution",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-dennis2020emergent",
+      "bibkey": "dennis2020emergent",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-dharna2024quality",
+      "bibkey": "dharna2024quality",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ding2023quality",
+      "bibkey": "ding2023quality",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-dobzhansky1970genetics",
+      "bibkey": "dobzhansky1970genetics",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ecoffet2019go",
+      "bibkey": "ecoffet2019go",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ecoffet2020open",
+      "bibkey": "ecoffet2020open",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ecoffet2021first",
+      "bibkey": "ecoffet2021first",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-edwards2000genetical",
+      "bibkey": "edwards2000genetical",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ellis2021dreamcoder",
+      "bibkey": "ellis2021dreamcoder",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-eysenbach2018diversity",
+      "bibkey": "eysenbach2018diversity",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-faldor2025omni",
+      "bibkey": "faldor2025omni",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-fernandopromptbreeder",
+      "bibkey": "fernandopromptbreeder",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gallouedec2023cell",
+      "bibkey": "gallouedec2023cell",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ganguli2022red",
+      "bibkey": "ganguli2022red",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gao2025flowreasoner",
+      "bibkey": "gao2025flowreasoner",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gauthier2024polyglot",
+      "bibkey": "gauthier2024polyglot",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gaven2025magellan",
+      "bibkey": "gaven2025magellan",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gerhart2007theory",
+      "bibkey": "gerhart2007theory",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-good1966speculations",
+      "bibkey": "good1966speculations",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-greenblatt2024alignment",
+      "bibkey": "greenblatt2024alignment",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-gulwani2011automating",
+      "bibkey": "gulwani2011automating",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-guo2025deepseek",
+      "bibkey": "guo2025deepseek",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hall2007self",
+      "bibkey": "hall2007self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-havrilla2024glore",
+      "bibkey": "havrilla2024glore",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-havrilla2024surveying",
+      "bibkey": "havrilla2024surveying",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hendrikse2007evolvability",
+      "bibkey": "hendrikse2007evolvability",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-herr2025llm",
+      "bibkey": "herr2025llm",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hobbhahn2025swebenchmini",
+      "bibkey": "hobbhahn2025swebenchmini",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hopfield1982neural",
+      "bibkey": "hopfield1982neural",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hu2023thoughtcloning",
+      "bibkey": "hu2023ThoughtCloning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hu2024self",
+      "bibkey": "hu2024self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hu2025automated",
+      "bibkey": "hu2025automated",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-huang2022large",
+      "bibkey": "huang2022large",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-hughes2024open",
+      "bibkey": "hughes2024open",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-irie2022modern",
+      "bibkey": "irie2022modern",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-irie2025metalearning",
+      "bibkey": "irie2025metalearning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-jaderberg2017population",
+      "bibkey": "jaderberg2017population",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-jiang2021prioritized",
+      "bibkey": "jiang2021prioritized",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-jiang2023general",
+      "bibkey": "jiang2023general",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-jimenez2024swebench",
+      "bibkey": "jimenez2024swebench",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-kanitscheider2021multi",
+      "bibkey": "kanitscheider2021multi",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-khan2024debating",
+      "bibkey": "khan2024debating",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-khattab2023dspy",
+      "bibkey": "khattab2023dspy",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-kim2017structured",
+      "bibkey": "kim2017structured",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-kimura1979neutral",
+      "bibkey": "kimura1979neutral",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-kirsch2022self",
+      "bibkey": "kirsch2022self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-klironomos2013epigenetic",
+      "bibkey": "klironomos2013epigenetic",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-klissarov2023motif",
+      "bibkey": "klissarov2023motif",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-klissarov2024maestromotif",
+      "bibkey": "klissarov2024maestromotif",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-kompella2017continual",
+      "bibkey": "kompella2017continual",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lange2023discovering",
+      "bibkey": "lange2023discovering",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lange2024large",
+      "bibkey": "lange2024large",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lee2020learning",
+      "bibkey": "lee2020learning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lehman2011novelty",
+      "bibkey": "lehman2011novelty",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lehman2023evolution",
+      "bibkey": "lehman2023evolution",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lehman2023machine",
+      "bibkey": "lehman2023machine",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lehman2025evolution",
+      "bibkey": "lehman2025evolution",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lewis2020retrieval",
+      "bibkey": "lewis2020retrieval",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-li2014encouraging",
+      "bibkey": "li2014encouraging",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-li2024guiding",
+      "bibkey": "li2024guiding",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-liang2023encouraging",
+      "bibkey": "liang2023encouraging",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lightman2023let",
+      "bibkey": "lightman2023let",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lim2024large",
+      "bibkey": "lim2024large",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-linnainmaa1970representation",
+      "bibkey": "linnainmaa1970representation",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-liu2023think",
+      "bibkey": "liu2023think",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-liu2024evolution",
+      "bibkey": "liu2024evolution",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lu2023arbitrary",
+      "bibkey": "lu2023arbitrary",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lu2024ai",
+      "bibkey": "lu2024ai",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lu2024discovering",
+      "bibkey": "lu2024discovering",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lu2024intelligent",
+      "bibkey": "lu2024intelligent",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-lu2025automated",
+      "bibkey": "lu2025automated",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ma2023eureka",
+      "bibkey": "ma2023eureka",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-madaan2303self",
+      "bibkey": "madaan2303self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-markoff2016machines",
+      "bibkey": "markoff2016machines",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-mayr1982growth",
+      "bibkey": "mayr1982growth",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-meta2022human",
+      "bibkey": "meta2022human",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-metz2021training",
+      "bibkey": "metz2021training",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-modarressi2023ret",
+      "bibkey": "modarressi2023ret",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-mouret2015illuminating",
+      "bibkey": "mouret2015illuminating",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-muennighoff2025s1",
+      "bibkey": "muennighoff2025s1",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-nasir2023practical",
+      "bibkey": "nasir2023practical",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-nasir2024word2world",
+      "bibkey": "nasir2024word2world",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-nguyen2015innovation",
+      "bibkey": "nguyen2015innovation",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-nie2025weak",
+      "bibkey": "nie2025weak",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-niu2025flow",
+      "bibkey": "niu2025flow",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-openai2024o1",
+      "bibkey": "openai2024o1",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-openai2024sweverified",
+      "bibkey": "openai2024sweverified",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-openai2025o3mini",
+      "bibkey": "openai2025o3mini",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-oudeyer2007intrinsic",
+      "bibkey": "oudeyer2007intrinsic",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ouyang2022training",
+      "bibkey": "ouyang2022training",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-parikh2016decomposable",
+      "bibkey": "parikh2016decomposable",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-parkerholder2024genie2",
+      "bibkey": "parkerholder2024genie2",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-pathak2017curiosity",
+      "bibkey": "pathak2017curiosity",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-polozov2015flashmeta",
+      "bibkey": "polozov2015flashmeta",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-pugh2016quality",
+      "bibkey": "pugh2016quality",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-radford2019language",
+      "bibkey": "radford2019language",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-robeyns2025self",
+      "bibkey": "robeyns2025self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-romera2024mathematical",
+      "bibkey": "romera2024mathematical",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-rosser2025agentbreeder",
+      "bibkey": "rosser2025agentbreeder",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-rumelhart1985learning",
+      "bibkey": "rumelhart1985learning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-samvelyan2024rainbow",
+      "bibkey": "samvelyan2024rainbow",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-sancaktar2025sensei",
+      "bibkey": "sancaktar2025sensei",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schaul2015universal",
+      "bibkey": "schaul2015universal",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schick2023toolformer",
+      "bibkey": "schick2023toolformer",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber1987evolutionary",
+      "bibkey": "schmidhuber1987evolutionary",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber1990learning",
+      "bibkey": "schmidhuber1990learning",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber1993self",
+      "bibkey": "schmidhuber1993self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber2007godel",
+      "bibkey": "schmidhuber2007godel",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber2008driven",
+      "bibkey": "schmidhuber2008driven",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber2010formal",
+      "bibkey": "schmidhuber2010formal",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schmidhuber2013powerplay",
+      "bibkey": "schmidhuber2013powerplay",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-schulhoff2024prompt",
+      "bibkey": "schulhoff2024prompt",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-sheth2025safety",
+      "bibkey": "sheth2025safety",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-shi2023lambdabeam",
+      "bibkey": "shi2023lambdabeam",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-silver2016mastering",
+      "bibkey": "silver2016mastering",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-silver2017mastering",
+      "bibkey": "silver2017mastering",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-singh2023beyond",
+      "bibkey": "singh2023beyond",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-skalse2022defining",
+      "bibkey": "skalse2022defining",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-solar2009sketching",
+      "bibkey": "solar2009sketching",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-stanley2015greatness",
+      "bibkey": "stanley2015greatness",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-stanley2017open",
+      "bibkey": "stanley2017open",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-stanley2019open",
+      "bibkey": "stanley2019open",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-steunebrink2012towards",
+      "bibkey": "steunebrink2012towards",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-strathern1997improving",
+      "bibkey": "strathern1997improving",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-su2025debflow",
+      "bibkey": "su2025debflow",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-sudhakaran2023mariogpt",
+      "bibkey": "sudhakaran2023mariogpt",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-vaswani2017attention",
+      "bibkey": "vaswani2017attention",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wang2019paired",
+      "bibkey": "wang2019paired",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wang2023diversity",
+      "bibkey": "wang2023diversity",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wang2023robogen",
+      "bibkey": "wang2023robogen",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wang2023voyager",
+      "bibkey": "wang2023voyager",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wang2024openhands",
+      "bibkey": "wang2024openhands",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wei2022chain",
+      "bibkey": "wei2022chain",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wiering1997hq",
+      "bibkey": "wiering1997hq",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-wright1932roles",
+      "bibkey": "wright1932roles",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-xia2024agentless",
+      "bibkey": "xia2024agentless",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yamada2025ai",
+      "bibkey": "yamada2025ai",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yao2023beyond",
+      "bibkey": "yao2023beyond",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yao2023react",
+      "bibkey": "yao2023react",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-ye2025mas",
+      "bibkey": "ye2025mas",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yin2024g",
+      "bibkey": "yin2024g",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yu2022generate",
+      "bibkey": "yu2022generate",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yuan2024evoagent",
+      "bibkey": "yuan2024evoagent",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yudkowsky2008artificial",
+      "bibkey": "yudkowsky2008artificial",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-yuksekgonul2024textgrad",
+      "bibkey": "yuksekgonul2024textgrad",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zelikman2024quiet",
+      "bibkey": "zelikman2024quiet",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zelikman2024self",
+      "bibkey": "zelikman2024self",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2024aflow",
+      "bibkey": "zhang2024aflow",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2024autocoderover",
+      "bibkey": "zhang2024autocoderover",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2024omni",
+      "bibkey": "zhang2024omni",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2024rest",
+      "bibkey": "zhang2024rest",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2025gnns",
+      "bibkey": "zhang2025gnns",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhang2025multi",
+      "bibkey": "zhang2025multi",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhong2024memorybank",
+      "bibkey": "zhong2024memorybank",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhou2024symbolic",
+      "bibkey": "zhou2024symbolic",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhou2025autoredteamer",
+      "bibkey": "zhou2025autoredteamer",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhu2024hot",
+      "bibkey": "zhu2024hot",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhuge2023mindstorms",
+      "bibkey": "zhuge2023mindstorms",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    },
+    {
+      "reference_id": "REF-zhugegptswarm",
+      "bibkey": "zhugegptswarm",
+      "status": "registered",
+      "source": "paper/refs.bib",
+      "notes": "Imported from arXiv:2505.22954v3 BibTeX source."
+    }
+  ]
 }

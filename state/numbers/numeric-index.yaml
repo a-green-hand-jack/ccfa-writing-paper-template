@@ -1,3 +1,123 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "N-SWEBENCH-INITIAL",
+      "value": "20.0",
+      "display": {
+        "latex": "20.0\\%",
+        "latex_macro": "\\DgmSweBenchInitial"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmSweBenchInitial"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-FINAL",
+      "value": "50.0",
+      "display": {
+        "latex": "50.0\\%",
+        "latex_macro": "\\DgmSweBenchFinal"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmSweBenchFinal"
+    },
+    {
+      "numeric_id": "N-POLYGLOT-INITIAL",
+      "value": "14.2",
+      "display": {
+        "latex": "14.2\\%",
+        "latex_macro": "\\DgmPolyglotInitial"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-POLYGLOT-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmPolyglotInitial"
+    },
+    {
+      "numeric_id": "N-POLYGLOT-FINAL",
+      "value": "30.7",
+      "display": {
+        "latex": "30.7\\%",
+        "latex_macro": "\\DgmPolyglotFinal"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-POLYGLOT-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmPolyglotFinal"
+    },
+    {
+      "numeric_id": "N-DGM-ITERATIONS",
+      "value": "80",
+      "display": {
+        "latex": "80",
+        "latex_macro": "\\DgmMainIterations"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmMainIterations"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-TASKS-STAGE",
+      "value": "60",
+      "display": {
+        "latex": "60",
+        "latex_macro": "\\DgmSweBenchStageTasks"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmSweBenchStageTasks"
+    },
+    {
+      "numeric_id": "N-SWEBENCH-COST",
+      "value": "22000",
+      "display": {
+        "latex": "\\$22{,}000",
+        "latex_macro": "\\DgmSweBenchCostEstimate"
+      },
+      "status": "verified",
+      "source": "paper/main.tex",
+      "claim_ids": [
+        "C-DGM-SWEBENCH-IMPROVEMENT"
+      ],
+      "evidence_ids": [
+        "E-ABSTRACT-MAIN-RESULTS"
+      ],
+      "latex_macro": "\\DgmSweBenchCostEstimate"
+    }
+  ]
 }

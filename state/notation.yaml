@@ -1,3 +1,34 @@
 {
-  "symbols": []
+  "symbols": [
+    {
+      "symbol": "DGM",
+      "meaning": "Darwin Gödel Machine",
+      "first_defined": "paper/main.tex",
+      "status": "active"
+    },
+    {
+      "symbol": "$\\mathcal{A}$",
+      "meaning": "archive of generated coding agents",
+      "first_defined": "paper/main.tex",
+      "status": "active"
+    },
+    {
+      "symbol": "$g_0$",
+      "meaning": "initial coding agent",
+      "first_defined": "paper/main.tex",
+      "status": "active"
+    },
+    {
+      "symbol": "$B$",
+      "meaning": "benchmark suite",
+      "first_defined": "paper/main.tex",
+      "status": "active"
+    },
+    {
+      "symbol": "$T$",
+      "meaning": "maximum number of DGM iterations",
+      "first_defined": "paper/main.tex",
+      "status": "active"
+    }
+  ]
 }

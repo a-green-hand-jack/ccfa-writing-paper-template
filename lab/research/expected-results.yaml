@@ -1,3 +1,16 @@
 {
-  "expected_results": []
+  "expected_results": [
+    {
+      "claim_id": "C-DGM-SWEBENCH-IMPROVEMENT",
+      "experiment_id": "EXP-SWEBENCH",
+      "expected": "DGM reaches 50.0% after starting at 20.0%.",
+      "status": "reported"
+    },
+    {
+      "claim_id": "C-DGM-POLYGLOT-IMPROVEMENT",
+      "experiment_id": "EXP-POLYGLOT",
+      "expected": "DGM reaches 30.7% after starting at 14.2%.",
+      "status": "reported"
+    }
+  ]
 }

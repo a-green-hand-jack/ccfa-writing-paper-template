@@ -1,13 +1,13 @@
 {
   "paper": {
-    "slug": "ccfa-paper-template",
-    "title": "TODO Paper Title",
-    "short_title": "TODO Paper",
-    "owner": "TODO"
+    "slug": "darwin-godel-machine-arxiv-2505-22954",
+    "title": "Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents",
+    "short_title": "Darwin Gödel Machine",
+    "owner": "Jenny Zhang et al."
   },
   "venue": {
     "id": "iclr",
-    "year": 2027,
+    "year": 2026,
     "must_verify_current_year_rules": true
   },
   "paper_type": {
@@ -17,19 +17,25 @@
     "repo_mode": "standalone"
   },
   "team": {
-    "authors": [],
-    "anonymous_mode": "TODO"
+    "authors": [
+      "Jenny Zhang",
+      "Shengran Hu",
+      "Cong Lu",
+      "Robert Lange",
+      "Jeff Clune"
+    ],
+    "anonymous_mode": false
   },
   "submission": {
-    "track": "TODO",
-    "deadline": "TODO",
-    "page_limit": "TODO",
-    "supplementary_policy": "TODO"
+    "track": "conference",
+    "deadline": "already-submitted",
+    "page_limit": "ICLR 2026 conference format; migrated from arXiv v3 source",
+    "supplementary_policy": "appendix and source snippets included under paper/supplementary"
   },
   "template": {
-    "source": "official",
-    "raw_path_or_url": "TODO",
-    "normalized_profile": "TODO"
+    "source": "arXiv TeX source for arXiv:2505.22954v3",
+    "raw_path_or_url": "https://arxiv.org/e-print/2505.22954",
+    "normalized_profile": "paper/ with style/, figures/, supplementary/, refs.bib"
   },
   "release": {
     "surfaces": [

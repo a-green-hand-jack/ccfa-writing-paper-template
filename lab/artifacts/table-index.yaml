@@ -1,3 +1,22 @@
 {
-  "tables": []
+  "tables": [
+    {
+      "table_id": "tab-DGM-greedy",
+      "label": "tab:DGM-greedy",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "table_id": "tab-code_editing",
+      "label": "tab:code_editing",
+      "source": "paper/main.tex",
+      "status": "verified"
+    },
+    {
+      "table_id": "tab-fm-hyperparam",
+      "label": "tab:fm-hyperparam",
+      "source": "paper/main.tex",
+      "status": "verified"
+    }
+  ]
 }

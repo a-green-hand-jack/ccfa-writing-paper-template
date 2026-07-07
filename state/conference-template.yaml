@@ -1,12 +1,12 @@
 {
   "venue": "iclr",
-  "year": 2027,
-  "track": "TODO",
-  "raw_template": "TODO",
+  "year": 2026,
+  "track": "conference",
+  "raw_template": "paper/style/iclr2026_conference.sty",
   "normalized_template": "paper/",
-  "delta": "TODO",
-  "hash": "TODO",
-  "source": "official",
-  "downloaded_at": "TODO",
+  "delta": "paper source normalized from arXiv package into template directories; no official-rule revalidation performed",
+  "hash": "not-recorded; official template hash was not reverified for this migration test",
+  "source": "arXiv TeX source and bundled ICLR 2026 style file",
+  "downloaded_at": "2026-07-07",
   "human_verified_at": null
 }

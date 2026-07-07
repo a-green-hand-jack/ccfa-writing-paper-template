@@ -1,3 +1,127 @@
 {
-  "floats": []
+  "floats": [
+    {
+      "float_id": "fig-conceptual",
+      "label": "fig:conceptual",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/conceptual.pdf"
+    },
+    {
+      "float_id": "fig-dgm-archive",
+      "label": "fig:dgm-archive",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_archive.pdf"
+    },
+    {
+      "float_id": "fig-dgm-comparisons",
+      "label": "fig:dgm-comparisons",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_comparisons.pdf"
+    },
+    {
+      "float_id": "fig-dgm-comparisons-polyglot",
+      "label": "fig:dgm-comparisons-polyglot",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_comparisons_polyglot.pdf"
+    },
+    {
+      "float_id": "fig-dgm-comparisons-swe",
+      "label": "fig:dgm-comparisons-swe",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_comparisons.pdf"
+    },
+    {
+      "float_id": "fig-dgm-halluc",
+      "label": "fig:dgm-halluc",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/supplementary/solve_halluc/dgm_halluc.pdf"
+    },
+    {
+      "float_id": "fig-dgm-no-openended",
+      "label": "fig:dgm-no-openended",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_wo_openended.pdf"
+    },
+    {
+      "float_id": "fig-dgm-no-selfimprove",
+      "label": "fig:dgm-no-selfimprove",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_wo_selfimprove.pdf"
+    },
+    {
+      "float_id": "fig-dgm-progress",
+      "label": "fig:dgm-progress",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/dgm_progress.pdf"
+    },
+    {
+      "float_id": "fig-transfer-model-polyglot",
+      "label": "fig:transfer-model-polyglot",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/transfer_model_polyglot.pdf"
+    },
+    {
+      "float_id": "fig-transfer-overview",
+      "label": "fig:transfer-overview",
+      "kind": "figure",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex",
+      "asset_path": "paper/figures/transfer_model_task.pdf"
+    },
+    {
+      "float_id": "tab-DGM-greedy",
+      "label": "tab:DGM-greedy",
+      "kind": "table",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex"
+    },
+    {
+      "float_id": "tab-code_editing",
+      "label": "tab:code_editing",
+      "kind": "table",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex"
+    },
+    {
+      "float_id": "tab-fm-hyperparam",
+      "label": "tab:fm-hyperparam",
+      "kind": "table",
+      "status": "verified",
+      "tex_source": "paper/main.tex",
+      "caption_source": "paper/main.tex"
+    }
+  ]
 }

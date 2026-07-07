@@ -1,3 +1,1292 @@
 {
-  "citations": []
+  "citations": [
+    {
+      "citation_id": "CITE-googledeepmind2025geminithinking",
+      "bibkey": "GoogleDeepMind2025GeminiThinking",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-novikov2025alphaevolve",
+      "bibkey": "Novikov2025AlphaEvolve",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-aider2024",
+      "bibkey": "aider2024",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-aki2024llm",
+      "bibkey": "aki2024llm",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-alur2018search",
+      "bibkey": "alur2018search",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-amari1972learning",
+      "bibkey": "amari1972learning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-andrychowicz2017hindsight",
+      "bibkey": "andrychowicz2017hindsight",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-anthropic2024claude35sonnet",
+      "bibkey": "anthropic2024claude35sonnet",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-anthropic2025claude37",
+      "bibkey": "anthropic2025claude37",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-anthropic-tool-use-2024",
+      "bibkey": "anthropic_tool_use_2024",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-anwar2024foundational",
+      "bibkey": "anwar2024foundational",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bahdanau2015neural",
+      "bibkey": "bahdanau2015neural",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bai2022constitutional",
+      "bibkey": "bai2022constitutional",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-baranes2013active",
+      "bibkey": "baranes2013active",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-barke2024hysynth",
+      "bibkey": "barke2024hysynth",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bengio2024managing",
+      "bibkey": "bengio2024managing",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bostrom2002a",
+      "bibkey": "bostrom2002a",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bostrom2020ethical",
+      "bibkey": "bostrom2020ethical",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bradley2023quality",
+      "bibkey": "bradley2023quality",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-brown2020language",
+      "bibkey": "brown2020language",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-bruce2024genie",
+      "bibkey": "bruce2024genie",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-buchi1990solving",
+      "bibkey": "buchi1990solving",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-cao2024spider2",
+      "bibkey": "cao2024spider2",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-chatzilygeroudis2021quality",
+      "bibkey": "chatzilygeroudis2021quality",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-chen2023unleashing",
+      "bibkey": "chen2023unleashing",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-cheng2025trace",
+      "bibkey": "cheng2025trace",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-clune2019ai",
+      "bibkey": "clune2019ai",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-colas2019curious",
+      "bibkey": "colas2019curious",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-colas2022autotelic",
+      "bibkey": "colas2022autotelic",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-colas2022language",
+      "bibkey": "colas2022language",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-colas2023augmenting",
+      "bibkey": "colas2023augmenting",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-coulom2006efficient",
+      "bibkey": "coulom2006efficient",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-darwin2023origin",
+      "bibkey": "darwin2023origin",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-dawkins2019evolution",
+      "bibkey": "dawkins2019evolution",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-dennis2020emergent",
+      "bibkey": "dennis2020emergent",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-dharna2024quality",
+      "bibkey": "dharna2024quality",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ding2023quality",
+      "bibkey": "ding2023quality",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-dobzhansky1970genetics",
+      "bibkey": "dobzhansky1970genetics",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ecoffet2019go",
+      "bibkey": "ecoffet2019go",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ecoffet2020open",
+      "bibkey": "ecoffet2020open",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ecoffet2021first",
+      "bibkey": "ecoffet2021first",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-edwards2000genetical",
+      "bibkey": "edwards2000genetical",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ellis2021dreamcoder",
+      "bibkey": "ellis2021dreamcoder",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-eysenbach2018diversity",
+      "bibkey": "eysenbach2018diversity",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-faldor2025omni",
+      "bibkey": "faldor2025omni",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-fernandopromptbreeder",
+      "bibkey": "fernandopromptbreeder",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ganguli2022red",
+      "bibkey": "ganguli2022red",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-gao2025flowreasoner",
+      "bibkey": "gao2025flowreasoner",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-gauthier2024polyglot",
+      "bibkey": "gauthier2024polyglot",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-gaven2025magellan",
+      "bibkey": "gaven2025magellan",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-gerhart2007theory",
+      "bibkey": "gerhart2007theory",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-good1966speculations",
+      "bibkey": "good1966speculations",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-greenblatt2024alignment",
+      "bibkey": "greenblatt2024alignment",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-gulwani2011automating",
+      "bibkey": "gulwani2011automating",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-guo2025deepseek",
+      "bibkey": "guo2025deepseek",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hall2007self",
+      "bibkey": "hall2007self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-havrilla2024glore",
+      "bibkey": "havrilla2024glore",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-havrilla2024surveying",
+      "bibkey": "havrilla2024surveying",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hendrikse2007evolvability",
+      "bibkey": "hendrikse2007evolvability",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-herr2025llm",
+      "bibkey": "herr2025llm",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hobbhahn2025swebenchmini",
+      "bibkey": "hobbhahn2025swebenchmini",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hopfield1982neural",
+      "bibkey": "hopfield1982neural",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hu2023thoughtcloning",
+      "bibkey": "hu2023ThoughtCloning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hu2024self",
+      "bibkey": "hu2024self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hu2025automated",
+      "bibkey": "hu2025automated",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-huang2022large",
+      "bibkey": "huang2022large",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-hughes2024open",
+      "bibkey": "hughes2024open",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-irie2022modern",
+      "bibkey": "irie2022modern",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-irie2025metalearning",
+      "bibkey": "irie2025metalearning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-jaderberg2017population",
+      "bibkey": "jaderberg2017population",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-jiang2021prioritized",
+      "bibkey": "jiang2021prioritized",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-jiang2023general",
+      "bibkey": "jiang2023general",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-jimenez2024swebench",
+      "bibkey": "jimenez2024swebench",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-kanitscheider2021multi",
+      "bibkey": "kanitscheider2021multi",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-khan2024debating",
+      "bibkey": "khan2024debating",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-khattab2023dspy",
+      "bibkey": "khattab2023dspy",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-kim2017structured",
+      "bibkey": "kim2017structured",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-kimura1979neutral",
+      "bibkey": "kimura1979neutral",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-kirsch2022self",
+      "bibkey": "kirsch2022self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-klissarov2023motif",
+      "bibkey": "klissarov2023motif",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-klissarov2024maestromotif",
+      "bibkey": "klissarov2024maestromotif",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-kompella2017continual",
+      "bibkey": "kompella2017continual",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lange2023discovering",
+      "bibkey": "lange2023discovering",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lange2024large",
+      "bibkey": "lange2024large",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lee2020learning",
+      "bibkey": "lee2020learning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lehman2011novelty",
+      "bibkey": "lehman2011novelty",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lehman2023evolution",
+      "bibkey": "lehman2023evolution",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lehman2023machine",
+      "bibkey": "lehman2023machine",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lewis2020retrieval",
+      "bibkey": "lewis2020retrieval",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-li2014encouraging",
+      "bibkey": "li2014encouraging",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-li2024guiding",
+      "bibkey": "li2024guiding",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-liang2023encouraging",
+      "bibkey": "liang2023encouraging",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lightman2023let",
+      "bibkey": "lightman2023let",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lim2024large",
+      "bibkey": "lim2024large",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-linnainmaa1970representation",
+      "bibkey": "linnainmaa1970representation",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-liu2023think",
+      "bibkey": "liu2023think",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-liu2024evolution",
+      "bibkey": "liu2024evolution",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lu2023arbitrary",
+      "bibkey": "lu2023arbitrary",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lu2024ai",
+      "bibkey": "lu2024ai",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lu2024intelligent",
+      "bibkey": "lu2024intelligent",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-lu2025automated",
+      "bibkey": "lu2025automated",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ma2023eureka",
+      "bibkey": "ma2023eureka",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-madaan2303self",
+      "bibkey": "madaan2303self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-markoff2016machines",
+      "bibkey": "markoff2016machines",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-mayr1982growth",
+      "bibkey": "mayr1982growth",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-meta2022human",
+      "bibkey": "meta2022human",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-metz2021training",
+      "bibkey": "metz2021training",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-modarressi2023ret",
+      "bibkey": "modarressi2023ret",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-mouret2015illuminating",
+      "bibkey": "mouret2015illuminating",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-muennighoff2025s1",
+      "bibkey": "muennighoff2025s1",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-nasir2023practical",
+      "bibkey": "nasir2023practical",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-nasir2024word2world",
+      "bibkey": "nasir2024word2world",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-nguyen2015innovation",
+      "bibkey": "nguyen2015innovation",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-nie2025weak",
+      "bibkey": "nie2025weak",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-niu2025flow",
+      "bibkey": "niu2025flow",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-openai2024o1",
+      "bibkey": "openai2024o1",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-openai2024sweverified",
+      "bibkey": "openai2024sweverified",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-openai2025o3mini",
+      "bibkey": "openai2025o3mini",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-oudeyer2007intrinsic",
+      "bibkey": "oudeyer2007intrinsic",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ouyang2022training",
+      "bibkey": "ouyang2022training",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-parikh2016decomposable",
+      "bibkey": "parikh2016decomposable",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-parkerholder2024genie2",
+      "bibkey": "parkerholder2024genie2",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-pathak2017curiosity",
+      "bibkey": "pathak2017curiosity",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-polozov2015flashmeta",
+      "bibkey": "polozov2015flashmeta",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-pugh2016quality",
+      "bibkey": "pugh2016quality",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-radford2019language",
+      "bibkey": "radford2019language",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-robeyns2025self",
+      "bibkey": "robeyns2025self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-romera2024mathematical",
+      "bibkey": "romera2024mathematical",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-rosser2025agentbreeder",
+      "bibkey": "rosser2025agentbreeder",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-rumelhart1985learning",
+      "bibkey": "rumelhart1985learning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-samvelyan2024rainbow",
+      "bibkey": "samvelyan2024rainbow",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-sancaktar2025sensei",
+      "bibkey": "sancaktar2025sensei",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schaul2015universal",
+      "bibkey": "schaul2015universal",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schick2023toolformer",
+      "bibkey": "schick2023toolformer",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber1987evolutionary",
+      "bibkey": "schmidhuber1987evolutionary",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber1990learning",
+      "bibkey": "schmidhuber1990learning",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber1993self",
+      "bibkey": "schmidhuber1993self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber2007godel",
+      "bibkey": "schmidhuber2007godel",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber2008driven",
+      "bibkey": "schmidhuber2008driven",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schmidhuber2013powerplay",
+      "bibkey": "schmidhuber2013powerplay",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-schulhoff2024prompt",
+      "bibkey": "schulhoff2024prompt",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-sheth2025safety",
+      "bibkey": "sheth2025safety",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-shi2023lambdabeam",
+      "bibkey": "shi2023lambdabeam",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-silver2016mastering",
+      "bibkey": "silver2016mastering",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-silver2017mastering",
+      "bibkey": "silver2017mastering",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-singh2023beyond",
+      "bibkey": "singh2023beyond",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-skalse2022defining",
+      "bibkey": "skalse2022defining",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-stanley2015greatness",
+      "bibkey": "stanley2015greatness",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-stanley2017open",
+      "bibkey": "stanley2017open",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-strathern1997improving",
+      "bibkey": "strathern1997improving",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-su2025debflow",
+      "bibkey": "su2025debflow",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-sudhakaran2023mariogpt",
+      "bibkey": "sudhakaran2023mariogpt",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-vaswani2017attention",
+      "bibkey": "vaswani2017attention",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wang2019paired",
+      "bibkey": "wang2019paired",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wang2023diversity",
+      "bibkey": "wang2023diversity",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wang2023robogen",
+      "bibkey": "wang2023robogen",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wang2023voyager",
+      "bibkey": "wang2023voyager",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wang2024openhands",
+      "bibkey": "wang2024openhands",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wei2022chain",
+      "bibkey": "wei2022chain",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wiering1997hq",
+      "bibkey": "wiering1997hq",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-wright1932roles",
+      "bibkey": "wright1932roles",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-xia2024agentless",
+      "bibkey": "xia2024agentless",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yao2023react",
+      "bibkey": "yao2023react",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-ye2025mas",
+      "bibkey": "ye2025mas",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yin2024g",
+      "bibkey": "yin2024g",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yuan2024evoagent",
+      "bibkey": "yuan2024evoagent",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yudkowsky2008artificial",
+      "bibkey": "yudkowsky2008artificial",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-yuksekgonul2024textgrad",
+      "bibkey": "yuksekgonul2024textgrad",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zelikman2024quiet",
+      "bibkey": "zelikman2024quiet",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zelikman2024self",
+      "bibkey": "zelikman2024self",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2024aflow",
+      "bibkey": "zhang2024aflow",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2024autocoderover",
+      "bibkey": "zhang2024autocoderover",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2024omni",
+      "bibkey": "zhang2024omni",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2024rest",
+      "bibkey": "zhang2024rest",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2025gnns",
+      "bibkey": "zhang2025gnns",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhang2025multi",
+      "bibkey": "zhang2025multi",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhong2024memorybank",
+      "bibkey": "zhong2024memorybank",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhou2024symbolic",
+      "bibkey": "zhou2024symbolic",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhou2025autoredteamer",
+      "bibkey": "zhou2025autoredteamer",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhu2024hot",
+      "bibkey": "zhu2024hot",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhuge2023mindstorms",
+      "bibkey": "zhuge2023mindstorms",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    },
+    {
+      "citation_id": "CITE-zhugegptswarm",
+      "bibkey": "zhugegptswarm",
+      "purpose": "citation present in migrated arXiv source",
+      "fitness_status": "accepted",
+      "source": "paper/main.tex"
+    }
+  ]
 }

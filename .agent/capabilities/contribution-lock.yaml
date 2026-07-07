@@ -5,7 +5,11 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/confirmed-contribution.md",
+    "state/contribution-map.yaml",
+    "DECISIONS.md"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/contribution-lock/"
   },

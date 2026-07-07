@@ -5,7 +5,11 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/float-placement-map.yaml",
+    "lab/artifacts/figure-index.yaml",
+    "lab/artifacts/table-index.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/float-placement-map/"
   },

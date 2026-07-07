@@ -5,7 +5,13 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/numeric-registry.yaml",
+    "state/numbers/numeric-index.yaml",
+    "state/numbers/macros.yaml",
+    "paper/generated/results-macros.tex",
+    "lab/artifacts/result-index.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/numeric-registry/"
   },

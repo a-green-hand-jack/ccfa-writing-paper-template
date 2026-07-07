@@ -5,7 +5,11 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "release/reports/",
+    "release/manifest.yaml",
+    "memory/current-status.md"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/camera-ready-check/"
   },

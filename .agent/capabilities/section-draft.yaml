@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "paper/sections/",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "lab/research/citation-ledger.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/section-draft/"
   },

@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/claim-evidence-map.yaml",
+    "state/evidence-matrix.csv",
+    "lab/research/evidence.yaml",
+    "lab/research/evidence-gap-register.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/claim-evidence-map/"
   },

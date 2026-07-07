@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "README.md",
+    "ANATOMY.md",
+    "state/ccfa.yaml",
+    "memory/current-status.md"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/paper-init/"
   },

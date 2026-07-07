@@ -9,7 +9,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "README.md",
+        "ANATOMY.md",
+        "state/ccfa.yaml",
+        "memory/current-status.md"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/paper-init/"
       },
@@ -29,7 +34,11 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/confirmed-contribution.md",
+        "state/contribution-map.yaml",
+        "DECISIONS.md"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/contribution-lock/"
       },
@@ -49,7 +58,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/claim-evidence-map.yaml",
+        "state/evidence-matrix.csv",
+        "lab/research/evidence.yaml",
+        "lab/research/evidence-gap-register.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/claim-evidence-map/"
       },
@@ -69,7 +83,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "lab/research/claim-experiment-plan.yaml",
+        "lab/research/expected-results.yaml",
+        "lab/research/experiment-ledger.yaml",
+        "lab/research/evidence-gap-register.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/claim-experiment-plan/"
       },
@@ -89,7 +108,13 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/numeric-registry.yaml",
+        "state/numbers/numeric-index.yaml",
+        "state/numbers/macros.yaml",
+        "paper/generated/results-macros.tex",
+        "lab/artifacts/result-index.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/numeric-registry/"
       },
@@ -109,7 +134,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "lab/research/reference-ledger.yaml",
+        "lab/research/citation-ledger.yaml",
+        "lab/research/related-work-map.yaml",
+        "paper/refs.bib"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/reference-audit/"
       },
@@ -129,7 +159,10 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/outline-contract.md",
+        "state/paper-story.md"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/outline-contract/"
       },
@@ -149,7 +182,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "paper/sections/",
+        "state/claim-evidence-map.yaml",
+        "state/numeric-registry.yaml",
+        "lab/research/citation-ledger.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/section-draft/"
       },
@@ -169,7 +207,11 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/float-placement-map.yaml",
+        "lab/artifacts/figure-index.yaml",
+        "lab/artifacts/table-index.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/float-placement-map/"
       },
@@ -189,7 +231,10 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "release/reports/",
+        "paper/main.tex"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/latex-compile-review/"
       },
@@ -209,7 +254,11 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "state/venue-profile.yaml",
+        "state/conference-template.yaml",
+        "state/ccfa.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/venue-adapt/"
       },
@@ -229,7 +278,11 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "human/reviews/",
+        "human/decisions/",
+        "memory/current-status.md"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/rebuttal-plan/"
       },
@@ -249,7 +302,11 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "release/reports/",
+        "release/manifest.yaml",
+        "memory/current-status.md"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/camera-ready-check/"
       },
@@ -269,7 +326,12 @@
       "inputs": [
         "state/ccfa.yaml"
       ],
-      "outputs": [],
+      "outputs": [
+        "release/arxiv/",
+        "release/overleaf/",
+        "release/github-tex/",
+        "release/manifest.yaml"
+      ],
       "claude_adapter": {
         "skill": ".claude/skills/tex-release-export/"
       },

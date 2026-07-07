@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "lab/research/reference-ledger.yaml",
+    "lab/research/citation-ledger.yaml",
+    "lab/research/related-work-map.yaml",
+    "paper/refs.bib"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/reference-audit/"
   },

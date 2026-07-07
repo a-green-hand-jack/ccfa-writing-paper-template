@@ -5,7 +5,11 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/venue-profile.yaml",
+    "state/conference-template.yaml",
+    "state/ccfa.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/venue-adapt/"
   },

@@ -5,7 +5,10 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "state/outline-contract.md",
+    "state/paper-story.md"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/outline-contract/"
   },

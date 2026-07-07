@@ -5,7 +5,11 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "human/reviews/",
+    "human/decisions/",
+    "memory/current-status.md"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/rebuttal-plan/"
   },

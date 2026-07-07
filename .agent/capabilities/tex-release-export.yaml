@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "release/arxiv/",
+    "release/overleaf/",
+    "release/github-tex/",
+    "release/manifest.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/tex-release-export/"
   },

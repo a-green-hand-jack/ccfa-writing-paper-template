@@ -5,7 +5,10 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "release/reports/",
+    "paper/main.tex"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/latex-compile-review/"
   },

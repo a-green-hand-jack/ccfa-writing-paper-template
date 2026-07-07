@@ -5,7 +5,12 @@
   "inputs": [
     "state/ccfa.yaml"
   ],
-  "outputs": [],
+  "outputs": [
+    "lab/research/claim-experiment-plan.yaml",
+    "lab/research/expected-results.yaml",
+    "lab/research/experiment-ledger.yaml",
+    "lab/research/evidence-gap-register.yaml"
+  ],
   "claude_adapter": {
     "skill": ".claude/skills/claim-experiment-plan/"
   },

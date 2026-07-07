@@ -18,6 +18,53 @@ ROOT = Path(os.environ.get("PAPER_HARNESS_ROOT", Path(__file__).resolve().parent
 INACTIVE_STATUSES = {"removed", "dropped", "superseded", "inactive", "archived"}
 VERIFIED_STATUSES = {"verified", "complete", "accepted"}
 PLANNED_STATUSES = {"planned", "todo", "draft", "placeholder"}
+SUPPORT_RELATIONSHIPS = {"supports", "qualifies"}
+CONTRADICT_RELATIONSHIPS = {"contradicts"}
+ALLOWED_EVIDENCE_RELATIONSHIPS = SUPPORT_RELATIONSHIPS | CONTRADICT_RELATIONSHIPS | {
+    "motivates",
+    "background",
+}
+CLAIM_STATEMENT_FIELDS = ("statement", "text", "claim", "summary")
+EVIDENCE_SUPPORT_FIELDS = ("claim_ids", "supports_claims", "supported_claims", "claims_supported")
+EVIDENCE_PROVENANCE_FIELDS = (
+    "source",
+    "provenance",
+    "artifact",
+    "artifact_path",
+    "artifacts",
+    "external_source",
+    "run_id",
+    "url",
+    "uri",
+    "doi",
+)
+EVIDENCE_QUALITY_FIELDS = (
+    "strength",
+    "evidence_strength",
+    "support_strength",
+    "fitness",
+    "evidence_fitness",
+    "fitness_status",
+    "source_status",
+    "status",
+    "verification_state",
+)
+INSUFFICIENT_EVIDENCE_QUALITY = {
+    "bare",
+    "draft",
+    "fail",
+    "failed",
+    "insufficient",
+    "low",
+    "missing",
+    "placeholder",
+    "planned",
+    "todo",
+    "unknown",
+    "unverified",
+    "unsupported",
+    "weak",
+}
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
 REQUIRED_PAPER_SURFACE = [
     "paper/main.tex",
@@ -134,6 +181,84 @@ def is_verified(item: dict) -> bool:
 
 def is_planned(item: dict) -> bool:
     return str(item.get("status", "")).lower() in PLANNED_STATUSES
+
+
+def has_meaningful_value(value) -> bool:
+    if missingish(value):
+        return False
+    if isinstance(value, dict):
+        return any(has_meaningful_value(item) for item in value.values())
+    if isinstance(value, (list, tuple, set)):
+        return any(has_meaningful_value(item) for item in value)
+    return True
+
+
+def normalized_text(value) -> str:
+    return str(value).strip().lower()
+
+
+def claim_strength(claim: dict) -> str:
+    return normalized_text(claim.get("claim_strength", claim.get("strength", "")))
+
+
+def has_claim_statement(claim: dict) -> bool:
+    return any(has_meaningful_value(claim.get(field)) for field in CLAIM_STATEMENT_FIELDS)
+
+
+def evidence_support_claim_ids(evidence_item: dict) -> list[str]:
+    claim_ids = []
+    for field in EVIDENCE_SUPPORT_FIELDS:
+        claim_ids.extend(strings(evidence_item.get(field)))
+    return claim_ids
+
+
+def has_evidence_provenance(evidence_item: dict) -> bool:
+    return any(has_meaningful_value(evidence_item.get(field)) for field in EVIDENCE_PROVENANCE_FIELDS)
+
+
+def evidence_quality_values(evidence_item: dict) -> list[str]:
+    values = []
+    for field in EVIDENCE_QUALITY_FIELDS:
+        value = evidence_item.get(field)
+        if has_meaningful_value(value):
+            values.extend(strings(value))
+    return values
+
+
+def evidence_quality_is_sufficient(evidence_item: dict) -> bool:
+    values = evidence_quality_values(evidence_item)
+    if not values:
+        return False
+    for value in values:
+        tokens = set(re.split(r"[^a-z0-9]+", normalized_text(value)))
+        if tokens & INSUFFICIENT_EVIDENCE_QUALITY:
+            return False
+    return True
+
+
+def evidence_can_support_strong_claim(evidence_item: dict) -> bool:
+    return (
+        is_active(evidence_item)
+        and is_verified(evidence_item)
+        and has_evidence_provenance(evidence_item)
+        and evidence_quality_is_sufficient(evidence_item)
+    )
+
+
+def matrix_row_active(row: dict) -> bool:
+    return is_active(row) and not is_planned(row)
+
+
+def active_evidence_gap_claim_ids(gaps: list[dict]) -> set[str]:
+    closed_statuses = INACTIVE_STATUSES | {"closed", "filled", "resolved"}
+    return {
+        claim_id
+        for gap in gaps
+        if (claim_id := item_id(gap, "claim_id", "id"))
+        and is_active(gap)
+        and not is_planned(gap)
+        and normalized_text(gap.get("status", "")) not in closed_statuses
+    }
 
 
 def doc_items(path: str, key: str):
@@ -669,6 +794,14 @@ def paper_looks_populated() -> bool:
     ])
 
 
+def has_active_core_or_strong_claims() -> bool:
+    return any(
+        is_active(claim) and claim_strength(claim) in {"core", "strong"}
+        for claim in doc_items("state/claim-evidence-map.yaml", "claims")
+        if isinstance(claim, dict)
+    )
+
+
 def check_anatomy_drift():
     return require([
         "ANATOMY.md",
@@ -769,8 +902,43 @@ def check_claim_evidence():
     experiment_code, experiment_ids = collect_ids(experiments, ["experiment_id", "id"], "experiments", required=False)
     code |= claim_code | evidence_code | experiment_code
 
-    gap_claim_ids = {item_id(item, "claim_id", "id") for item in gaps if item_id(item, "claim_id", "id")}
+    claim_by_id = {claim_id: item for item in claims if (claim_id := item_id(item, "claim_id", "id"))}
+    evidence_by_id = {evidence_id: item for item in evidence if (evidence_id := item_id(item, "evidence_id", "id"))}
+    claim_refs_by_id = {
+        claim_id: set(strings(claim.get("evidence_ids")))
+        for claim_id, claim in claim_by_id.items()
+    }
+    evidence_supports_by_id = {
+        evidence_id: set(evidence_support_claim_ids(item))
+        for evidence_id, item in evidence_by_id.items()
+    }
+    gap_claim_ids = active_evidence_gap_claim_ids(gaps)
     plan_claim_ids = {item_id(item, "claim_id", "id") for item in plans if item_id(item, "claim_id", "id")}
+
+    matrix_declared_relationships: dict[tuple[str, str], set[str]] = {}
+    matrix_relationships: dict[tuple[str, str], set[str]] = {}
+    for row_number, row in enumerate(read_csv_rows("state/evidence-matrix.csv"), start=2):
+        claim_id = str(row.get("claim_id", "")).strip()
+        evidence_id = str(row.get("evidence_id", "")).strip()
+        relationship = normalized_text(row.get("relationship", ""))
+        if missingish(claim_id) or missingish(evidence_id):
+            code |= error(f"evidence-matrix row {row_number} missing claim_id or evidence_id")
+            continue
+        if claim_id not in claim_ids:
+            code |= error(f"evidence-matrix row {row_number} references unknown claim {claim_id}")
+        if evidence_id not in evidence_ids:
+            code |= error(f"evidence-matrix row {row_number} references unknown evidence {evidence_id}")
+        if missingish(relationship):
+            code |= error(f"evidence-matrix row {row_number} missing relationship")
+            continue
+        if relationship not in ALLOWED_EVIDENCE_RELATIONSHIPS:
+            code |= error(f"evidence-matrix row {row_number} has invalid relationship {relationship}")
+            continue
+        if is_active(row):
+            matrix_declared_relationships.setdefault((claim_id, evidence_id), set()).add(relationship)
+        if matrix_row_active(row):
+            matrix_relationships.setdefault((claim_id, evidence_id), set()).add(relationship)
+
     for plan in plans:
         plan_claim_id = item_id(plan, "claim_id", "id")
         if claim_ids and plan_claim_id not in claim_ids:
@@ -785,21 +953,96 @@ def check_claim_evidence():
         claim_id = item_id(claim, "claim_id", "id")
         if not claim_id:
             continue
-        refs = strings(claim.get("evidence_ids"))
+        refs = sorted(claim_refs_by_id.get(claim_id, set()))
         for evidence_id in refs:
             if evidence_id not in evidence_ids:
                 code |= error(f"claim {claim_id} references unknown evidence {evidence_id}")
-        strength = str(claim.get("claim_strength", claim.get("strength", ""))).lower()
-        if is_active(claim) and strength in {"core", "strong"} and not refs and claim_id not in gap_claim_ids:
-            code |= error(f"{strength} claim lacks evidence and no evidence gap is registered: {claim_id}")
+                continue
+            relationships = matrix_declared_relationships.get((claim_id, evidence_id), set())
+            if relationships & CONTRADICT_RELATIONSHIPS:
+                code |= error(
+                    f"claim {claim_id} lists evidence {evidence_id} as support but evidence-matrix relationship is contradicts"
+                )
+            evidence_item = evidence_by_id.get(evidence_id)
+            if (
+                is_active(claim)
+                and evidence_item
+                and is_active(evidence_item)
+                and claim_id not in evidence_supports_by_id.get(evidence_id, set())
+                and (claim_id, evidence_id) not in matrix_relationships
+            ):
+                code |= error(
+                    f"active claim {claim_id} references evidence {evidence_id} without reciprocal evidence support or evidence-matrix row"
+                )
+        strength = claim_strength(claim)
+        if is_active(claim) and strength in {"core", "strong"}:
+            if not has_claim_statement(claim):
+                code |= error(f"{strength} claim missing statement/text/claim/summary: {claim_id}")
+            if claim_id not in gap_claim_ids:
+                candidate_evidence_ids = set(refs)
+                candidate_evidence_ids.update(
+                    evidence_id
+                    for (matrix_claim_id, evidence_id), relationships in matrix_relationships.items()
+                    if matrix_claim_id == claim_id and relationships & SUPPORT_RELATIONSHIPS
+                )
+                candidate_evidence_ids.update(
+                    evidence_id
+                    for evidence_id, supported_claims in evidence_supports_by_id.items()
+                    if claim_id in supported_claims
+                )
+                verified_supports = []
+                for evidence_id in candidate_evidence_ids:
+                    evidence_item = evidence_by_id.get(evidence_id)
+                    if not evidence_item:
+                        continue
+                    relationships = matrix_relationships.get((claim_id, evidence_id), set())
+                    reciprocal_support = (
+                        evidence_id in claim_refs_by_id.get(claim_id, set())
+                        and claim_id in evidence_supports_by_id.get(evidence_id, set())
+                    )
+                    if relationships:
+                        pair_supports_claim = bool(relationships & SUPPORT_RELATIONSHIPS) and not (
+                            relationships & CONTRADICT_RELATIONSHIPS
+                        )
+                    else:
+                        pair_supports_claim = reciprocal_support
+                    if pair_supports_claim and evidence_can_support_strong_claim(evidence_item):
+                        verified_supports.append(evidence_id)
+                if not verified_supports:
+                    code |= error(
+                        f"{strength} claim lacks verified supporting evidence and no active evidence gap is registered: {claim_id}"
+                    )
         if strength == "core" and claim_id not in plan_claim_ids:
             code |= error(f"core claim lacks experiment plan: {claim_id}")
 
     for item in evidence:
         evidence_id = item_id(item, "evidence_id", "id")
-        for claim_id in strings(item.get("claim_ids") or item.get("supports_claims")):
+        if is_verified(item):
+            if not has_evidence_provenance(item):
+                code |= error(f"verified evidence lacks source/provenance/artifact/external_source: {evidence_id}")
+            if not evidence_quality_is_sufficient(item):
+                code |= error(f"verified evidence lacks sufficient strength/fitness/status: {evidence_id}")
+        for claim_id in evidence_support_claim_ids(item):
             if claim_id not in claim_ids:
                 code |= error(f"evidence {evidence_id} references unknown claim {claim_id}")
+                continue
+            relationships = matrix_declared_relationships.get((claim_id, evidence_id), set())
+            if relationships & CONTRADICT_RELATIONSHIPS:
+                code |= error(
+                    f"evidence {evidence_id} claims support for {claim_id} but evidence-matrix relationship is contradicts"
+                )
+            claim = claim_by_id.get(claim_id)
+            if (
+                evidence_id
+                and is_active(item)
+                and claim
+                and is_active(claim)
+                and evidence_id not in claim_refs_by_id.get(claim_id, set())
+                and (claim_id, evidence_id) not in matrix_relationships
+            ):
+                code |= error(
+                    f"active evidence {evidence_id} supports claim {claim_id} without reciprocal claim evidence_ids or evidence-matrix row"
+                )
 
     for gap in gaps:
         claim_id = item_id(gap, "claim_id", "id")
@@ -813,21 +1056,6 @@ def check_claim_evidence():
             code |= error(f"expected result references unknown claim: {claim_id}")
         if experiment_id and experiment_ids and experiment_id not in experiment_ids:
             code |= error(f"expected result references unknown experiment: {experiment_id}")
-
-    allowed_relationships = {"supports", "contradicts", "qualifies", "motivates", "background"}
-    for row_number, row in enumerate(read_csv_rows("state/evidence-matrix.csv"), start=2):
-        claim_id = row.get("claim_id")
-        evidence_id = row.get("evidence_id")
-        relationship = row.get("relationship")
-        if missingish(claim_id) or missingish(evidence_id):
-            code |= error(f"evidence-matrix row {row_number} missing claim_id or evidence_id")
-            continue
-        if claim_id not in claim_ids:
-            code |= error(f"evidence-matrix row {row_number} references unknown claim {claim_id}")
-        if evidence_id not in evidence_ids:
-            code |= error(f"evidence-matrix row {row_number} references unknown evidence {evidence_id}")
-        if relationship and relationship not in allowed_relationships:
-            code |= error(f"evidence-matrix row {row_number} has invalid relationship {relationship}")
     return code
 
 
@@ -1226,6 +1454,8 @@ def check_writing_harness():
     code |= check_anonymity()
     if paper_looks_populated():
         code |= check_paper_populated()
+    elif has_active_core_or_strong_claims():
+        code |= check_claim_evidence()
     code |= check_lab_lightweight()
     code |= check_human_gate_assets()
     return code

@@ -2029,13 +2029,13 @@ def evidence_supports_result_claim(
     claim_id: str,
     evidence_id: str,
     claim_refs_by_id: dict[str, set[str]],
-    evidence_supports_by_id: dict[str, set[str]],
+    _evidence_supports_by_id: dict[str, set[str]],
     matrix_relationships: dict[tuple[str, str], set[str]],
 ) -> bool:
     relationships = matrix_relationships.get((claim_id, evidence_id), set())
     if relationships:
         return bool(relationships & SUPPORT_RELATIONSHIPS) and not bool(relationships & CONTRADICT_RELATIONSHIPS)
-    return claim_id in evidence_supports_by_id.get(evidence_id, set()) or evidence_id in claim_refs_by_id.get(claim_id, set())
+    return evidence_id in claim_refs_by_id.get(claim_id, set())
 
 
 def result_refs(item: dict) -> list[str]:
@@ -3047,10 +3047,18 @@ def export_release():
             code |= error(f"cannot export release source: {mismatch}")
     if code:
         return code
+    previous_revision = manifest.get("source_revision", {}) if isinstance(manifest.get("source_revision"), dict) else {}
     surfaces = normalized_surfaces
     manifest["manifest_version"] = "release-manifest-v1"
     manifest["checksum_algorithm"] = CHECKSUM_ALGORITHM
     manifest["source_revision"] = source_revision()
+    if meaningful(manifest["source_revision"]):
+        previous_commit = previous_revision.get("commit")
+        current_commit = manifest["source_revision"].get("commit")
+        if previous_commit and current_commit and previous_commit != current_commit:
+            print(f"INFO release manifest source_revision updated: {previous_commit[:12]} -> {current_commit[:12]}")
+        elif not previous_commit and current_commit:
+            print(f"INFO release manifest source_revision recorded: {current_commit[:12]}")
     for surface in surfaces:
         surface_id = str(surface.get("id", "unknown"))
         dest, _ = release_surface_root(surface)

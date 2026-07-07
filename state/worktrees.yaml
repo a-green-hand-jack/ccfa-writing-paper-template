@@ -28,7 +28,9 @@
         "scripts/check-latex.sh",
         "scripts/check-release-package.py"
       ],
-      "status": "planned"
+      "status": "planned",
+      "activation_command": "bash scripts/create-main-dev-worktrees.sh ../ccfa-paper-template-main",
+      "activation_notes": "Planned worktrees are declarations only; physical path and branch checks start after status is active."
     },
     {
       "id": "dev",

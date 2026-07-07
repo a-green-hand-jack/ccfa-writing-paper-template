@@ -3,12 +3,58 @@
   "status": "active",
   "purpose": "gate final metadata, claims, numbers, references, and release files",
   "inputs": [
-    "state/ccfa.yaml"
+    "state/ccfa.yaml",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "paper/main.tex",
+    "release/manifest.yaml"
   ],
   "outputs": [
     "release/reports/",
     "release/manifest.yaml",
     "memory/current-status.md"
+  ],
+  "validators": [
+    "scripts/check-capability-parity.py",
+    "scripts/check-writing-harness.py",
+    "scripts/check-release-package.py",
+    "scripts/check-release-freshness.py"
+  ],
+  "human_gates": [
+    {
+      "id": "final-submission",
+      "required_when": "Declaring the camera-ready or submission package ready to send.",
+      "record": "human/decisions/README.md"
+    },
+    {
+      "id": "scope-change",
+      "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+      "record": "human/decisions/README.md"
+    }
+  ],
+  "allowed_paths": [
+    "release/reports/",
+    "release/manifest.yaml",
+    "memory/current-status.md",
+    "human/inbox/README.md"
+  ],
+  "read_only_paths": [
+    ".agent/capabilities/camera-ready-check.yaml",
+    "state/ccfa.yaml",
+    "state/claim-evidence-map.yaml",
+    "state/numeric-registry.yaml",
+    "paper/main.tex",
+    "release/manifest.yaml",
+    "scripts/check-capability-parity.py",
+    "scripts/check-writing-harness.py",
+    "scripts/check-release-package.py",
+    "scripts/check-release-freshness.py"
+  ],
+  "forbidden_paths": [
+    ".git/**",
+    ".venv/**",
+    "__pycache__/**",
+    ".pytest_cache/**"
   ],
   "claude_adapter": {
     "skill": ".claude/skills/camera-ready-check/"
@@ -16,9 +62,28 @@
   "codex_adapter": {
     "workflow": ".agents/workflows/camera-ready-check.md"
   },
-  "validators": [
-    "scripts/check-capability-parity.py"
-  ],
   "parity": "required",
+  "completion_contract": {
+    "success_requires": [
+      "Read the source capability spec before editing.",
+      "Changed files are limited to declared outputs.",
+      "Every factual paper change is backed by repository evidence, not chat context.",
+      "Declared validators pass, or the unresolved blocker is recorded."
+    ],
+    "required_outputs": [
+      "release/reports/",
+      "release/manifest.yaml",
+      "memory/current-status.md"
+    ],
+    "required_validators": [
+      "scripts/check-capability-parity.py",
+      "scripts/check-writing-harness.py",
+      "scripts/check-release-package.py",
+      "scripts/check-release-freshness.py"
+    ],
+    "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+    "blocker_record": "memory/current-status.md",
+    "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+  },
   "exceptions": []
 }

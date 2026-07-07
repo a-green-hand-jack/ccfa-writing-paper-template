@@ -1,11 +1,129 @@
 {
+  "manifest_version": "release-manifest-v1",
+  "checksum_algorithm": "sha256",
+  "source_revision": {},
   "surfaces": [
     {
       "id": "arxiv",
       "path": "release/arxiv",
       "source": "paper/",
       "status": "synced",
+      "checksum_algorithm": "sha256",
+      "files": [
+        {
+          "relpath": "README.md",
+          "sha256": "fddda056571ad74866f5b2bff17dfa35edd9219d1e4c55a344939f21c2690177",
+          "size": 141
+        },
+        {
+          "relpath": "figures/README.md",
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
+        },
+        {
+          "relpath": "generated/numbers/README.md",
+          "sha256": "8db1931e428ef17aa5faa6f1bc874640e8691f8217aeb294557b1e580d827090",
+          "size": 66
+        },
+        {
+          "relpath": "generated/results-macros.tex",
+          "sha256": "4aa695413b7bf61d5e3fe372d6826222a96836ca845f65793eff67c5dca384d5",
+          "size": 67
+        },
+        {
+          "relpath": "generated/tables/README.md",
+          "sha256": "cabdd631919ac354cd92178a6874647f0c03703df02cf121cba38a0e0f7ab03a",
+          "size": 51
+        },
+        {
+          "relpath": "macros.tex",
+          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
+          "size": 105
+        },
+        {
+          "relpath": "main.tex",
+          "sha256": "b995f4cd9d3d8aa08e3d65616de428f2186845590c3179cc45d11635502a623d",
+          "size": 414
+        },
+        {
+          "relpath": "refs.bib",
+          "sha256": "49a8676e2cc62a316d991ea868e4657466619ac5169b04da65790898f0a37bd5",
+          "size": 84
+        },
+        {
+          "relpath": "sections/abstract.tex",
+          "sha256": "bcb7240278605cc03dfa8920d2612757465c1e016f882bf9de139226479204b6",
+          "size": 107
+        },
+        {
+          "relpath": "sections/acknowledgement.tex",
+          "sha256": "b3df109780a5ae872593c43111787ffbf21becc41bb0f30fb51a769f918ea74a",
+          "size": 33
+        },
+        {
+          "relpath": "sections/appendix.tex",
+          "sha256": "cf35b8ae510c0f00ecc8d839216b5f181c698a721b0c6f186e6ea64928d10dd2",
+          "size": 24
+        },
+        {
+          "relpath": "sections/conclusion.tex",
+          "sha256": "845f61f2426af33750cbc4155653e362b6d5e927f97fb4a6a2f6f094e9e402d3",
+          "size": 26
+        },
+        {
+          "relpath": "sections/exp.tex",
+          "sha256": "e858aa820416292a73b82ef8b2b2bdb858b4733549f7d453e0bd13daea52f08c",
+          "size": 27
+        },
+        {
+          "relpath": "sections/intro.tex",
+          "sha256": "86b1d21e00cf368945168d3c4e322e5bb6f54ce294e0ab3366ab71ca8a0cf0c6",
+          "size": 28
+        },
+        {
+          "relpath": "sections/limitations.tex",
+          "sha256": "e17c448a9348b96f5457be8756525044021f2842cd33d8336391ef948279a23f",
+          "size": 27
+        },
+        {
+          "relpath": "sections/method.tex",
+          "sha256": "a63e424359d17d781c7ba7db0af1216f1bdf6038a323ac99672547bd04d9b191",
+          "size": 22
+        },
+        {
+          "relpath": "sections/related.tex",
+          "sha256": "02314d6c15fce3615e09226c52a2a7fe84efe6d38409625bfa29236a5efec664",
+          "size": 28
+        },
+        {
+          "relpath": "sections/title.tex",
+          "sha256": "f42e6024c896bc8629e24ac3479874e4e9b61f2d0f23ac5407ae509cc428889f",
+          "size": 11
+        },
+        {
+          "relpath": "style/README.md",
+          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
+          "size": 107
+        },
+        {
+          "relpath": "supplementary/README.md",
+          "sha256": "bceab752a4e05ccdf1210ccd881d18d0c285acb32e45075783debb73f6383ecf",
+          "size": 95
+        },
+        {
+          "relpath": "tables/README.md",
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
+        },
+        {
+          "relpath": "venue_preamble.tex",
+          "sha256": "6fd58196f457149c628e5671b959c7e251e23a0645d87660f568bd03752c24ec",
+          "size": 94
+        }
+      ],
       "forbidden_paths": [
+        ".git",
+        ".github",
         ".agent",
         ".claude",
         ".agents",
@@ -21,7 +139,122 @@
       "path": "release/overleaf",
       "source": "paper/",
       "status": "synced",
+      "checksum_algorithm": "sha256",
+      "files": [
+        {
+          "relpath": "README.md",
+          "sha256": "bfe34907bb0daaef1c130459cb5da2be9de8afaec90b4bd7ef0bed04b054fdef",
+          "size": 144
+        },
+        {
+          "relpath": "figures/README.md",
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
+        },
+        {
+          "relpath": "generated/numbers/README.md",
+          "sha256": "8db1931e428ef17aa5faa6f1bc874640e8691f8217aeb294557b1e580d827090",
+          "size": 66
+        },
+        {
+          "relpath": "generated/results-macros.tex",
+          "sha256": "4aa695413b7bf61d5e3fe372d6826222a96836ca845f65793eff67c5dca384d5",
+          "size": 67
+        },
+        {
+          "relpath": "generated/tables/README.md",
+          "sha256": "cabdd631919ac354cd92178a6874647f0c03703df02cf121cba38a0e0f7ab03a",
+          "size": 51
+        },
+        {
+          "relpath": "macros.tex",
+          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
+          "size": 105
+        },
+        {
+          "relpath": "main.tex",
+          "sha256": "b995f4cd9d3d8aa08e3d65616de428f2186845590c3179cc45d11635502a623d",
+          "size": 414
+        },
+        {
+          "relpath": "refs.bib",
+          "sha256": "49a8676e2cc62a316d991ea868e4657466619ac5169b04da65790898f0a37bd5",
+          "size": 84
+        },
+        {
+          "relpath": "sections/abstract.tex",
+          "sha256": "bcb7240278605cc03dfa8920d2612757465c1e016f882bf9de139226479204b6",
+          "size": 107
+        },
+        {
+          "relpath": "sections/acknowledgement.tex",
+          "sha256": "b3df109780a5ae872593c43111787ffbf21becc41bb0f30fb51a769f918ea74a",
+          "size": 33
+        },
+        {
+          "relpath": "sections/appendix.tex",
+          "sha256": "cf35b8ae510c0f00ecc8d839216b5f181c698a721b0c6f186e6ea64928d10dd2",
+          "size": 24
+        },
+        {
+          "relpath": "sections/conclusion.tex",
+          "sha256": "845f61f2426af33750cbc4155653e362b6d5e927f97fb4a6a2f6f094e9e402d3",
+          "size": 26
+        },
+        {
+          "relpath": "sections/exp.tex",
+          "sha256": "e858aa820416292a73b82ef8b2b2bdb858b4733549f7d453e0bd13daea52f08c",
+          "size": 27
+        },
+        {
+          "relpath": "sections/intro.tex",
+          "sha256": "86b1d21e00cf368945168d3c4e322e5bb6f54ce294e0ab3366ab71ca8a0cf0c6",
+          "size": 28
+        },
+        {
+          "relpath": "sections/limitations.tex",
+          "sha256": "e17c448a9348b96f5457be8756525044021f2842cd33d8336391ef948279a23f",
+          "size": 27
+        },
+        {
+          "relpath": "sections/method.tex",
+          "sha256": "a63e424359d17d781c7ba7db0af1216f1bdf6038a323ac99672547bd04d9b191",
+          "size": 22
+        },
+        {
+          "relpath": "sections/related.tex",
+          "sha256": "02314d6c15fce3615e09226c52a2a7fe84efe6d38409625bfa29236a5efec664",
+          "size": 28
+        },
+        {
+          "relpath": "sections/title.tex",
+          "sha256": "f42e6024c896bc8629e24ac3479874e4e9b61f2d0f23ac5407ae509cc428889f",
+          "size": 11
+        },
+        {
+          "relpath": "style/README.md",
+          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
+          "size": 107
+        },
+        {
+          "relpath": "supplementary/README.md",
+          "sha256": "bceab752a4e05ccdf1210ccd881d18d0c285acb32e45075783debb73f6383ecf",
+          "size": 95
+        },
+        {
+          "relpath": "tables/README.md",
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
+        },
+        {
+          "relpath": "venue_preamble.tex",
+          "sha256": "6fd58196f457149c628e5671b959c7e251e23a0645d87660f568bd03752c24ec",
+          "size": 94
+        }
+      ],
       "forbidden_paths": [
+        ".git",
+        ".github",
         ".agent",
         ".claude",
         ".agents",
@@ -37,7 +270,122 @@
       "path": "release/github-tex",
       "source": "paper/",
       "status": "synced",
+      "checksum_algorithm": "sha256",
+      "files": [
+        {
+          "relpath": "README.md",
+          "sha256": "582a143e3f5515c8dfa0c7dc79fde90fd664b5edaf180c09e16eb800cb4ea7aa",
+          "size": 146
+        },
+        {
+          "relpath": "figures/README.md",
+          "sha256": "b84c31d71c37ce06d953d78dcab30523db1a925ba21962ffb8e14eb18502cc29",
+          "size": 169
+        },
+        {
+          "relpath": "generated/numbers/README.md",
+          "sha256": "8db1931e428ef17aa5faa6f1bc874640e8691f8217aeb294557b1e580d827090",
+          "size": 66
+        },
+        {
+          "relpath": "generated/results-macros.tex",
+          "sha256": "4aa695413b7bf61d5e3fe372d6826222a96836ca845f65793eff67c5dca384d5",
+          "size": 67
+        },
+        {
+          "relpath": "generated/tables/README.md",
+          "sha256": "cabdd631919ac354cd92178a6874647f0c03703df02cf121cba38a0e0f7ab03a",
+          "size": 51
+        },
+        {
+          "relpath": "macros.tex",
+          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
+          "size": 105
+        },
+        {
+          "relpath": "main.tex",
+          "sha256": "b995f4cd9d3d8aa08e3d65616de428f2186845590c3179cc45d11635502a623d",
+          "size": 414
+        },
+        {
+          "relpath": "refs.bib",
+          "sha256": "49a8676e2cc62a316d991ea868e4657466619ac5169b04da65790898f0a37bd5",
+          "size": 84
+        },
+        {
+          "relpath": "sections/abstract.tex",
+          "sha256": "bcb7240278605cc03dfa8920d2612757465c1e016f882bf9de139226479204b6",
+          "size": 107
+        },
+        {
+          "relpath": "sections/acknowledgement.tex",
+          "sha256": "b3df109780a5ae872593c43111787ffbf21becc41bb0f30fb51a769f918ea74a",
+          "size": 33
+        },
+        {
+          "relpath": "sections/appendix.tex",
+          "sha256": "cf35b8ae510c0f00ecc8d839216b5f181c698a721b0c6f186e6ea64928d10dd2",
+          "size": 24
+        },
+        {
+          "relpath": "sections/conclusion.tex",
+          "sha256": "845f61f2426af33750cbc4155653e362b6d5e927f97fb4a6a2f6f094e9e402d3",
+          "size": 26
+        },
+        {
+          "relpath": "sections/exp.tex",
+          "sha256": "e858aa820416292a73b82ef8b2b2bdb858b4733549f7d453e0bd13daea52f08c",
+          "size": 27
+        },
+        {
+          "relpath": "sections/intro.tex",
+          "sha256": "86b1d21e00cf368945168d3c4e322e5bb6f54ce294e0ab3366ab71ca8a0cf0c6",
+          "size": 28
+        },
+        {
+          "relpath": "sections/limitations.tex",
+          "sha256": "e17c448a9348b96f5457be8756525044021f2842cd33d8336391ef948279a23f",
+          "size": 27
+        },
+        {
+          "relpath": "sections/method.tex",
+          "sha256": "a63e424359d17d781c7ba7db0af1216f1bdf6038a323ac99672547bd04d9b191",
+          "size": 22
+        },
+        {
+          "relpath": "sections/related.tex",
+          "sha256": "02314d6c15fce3615e09226c52a2a7fe84efe6d38409625bfa29236a5efec664",
+          "size": 28
+        },
+        {
+          "relpath": "sections/title.tex",
+          "sha256": "f42e6024c896bc8629e24ac3479874e4e9b61f2d0f23ac5407ae509cc428889f",
+          "size": 11
+        },
+        {
+          "relpath": "style/README.md",
+          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
+          "size": 107
+        },
+        {
+          "relpath": "supplementary/README.md",
+          "sha256": "bceab752a4e05ccdf1210ccd881d18d0c285acb32e45075783debb73f6383ecf",
+          "size": 95
+        },
+        {
+          "relpath": "tables/README.md",
+          "sha256": "c1e908e84ea9aa4149c82a5c15d5084c5c5308275521336af672bddc1674eaee",
+          "size": 242
+        },
+        {
+          "relpath": "venue_preamble.tex",
+          "sha256": "6fd58196f457149c628e5671b959c7e251e23a0645d87660f568bd03752c24ec",
+          "size": 94
+        }
+      ],
       "forbidden_paths": [
+        ".git",
+        ".github",
         ".agent",
         ".claude",
         ".agents",

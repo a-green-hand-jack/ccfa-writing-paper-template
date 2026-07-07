@@ -3,11 +3,53 @@
   "status": "active",
   "purpose": "bind section outline to claims, evidence, and venue fit",
   "inputs": [
-    "state/ccfa.yaml"
+    "state/confirmed-contribution.md",
+    "state/claim-evidence-map.yaml",
+    "state/venue-profile.yaml",
+    "state/paper-story.md"
   ],
   "outputs": [
     "state/outline-contract.md",
     "state/paper-story.md"
+  ],
+  "validators": [
+    "scripts/check-capability-parity.py",
+    "scripts/check-writing-harness.py",
+    "scripts/check-claim-evidence.py"
+  ],
+  "human_gates": [
+    {
+      "id": "approve-outline",
+      "required_when": "Binding sections to accepted claims or venue-sensitive positioning.",
+      "record": "human/decisions/README.md"
+    },
+    {
+      "id": "scope-change",
+      "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+      "record": "human/decisions/README.md"
+    }
+  ],
+  "allowed_paths": [
+    "state/outline-contract.md",
+    "state/paper-story.md",
+    "memory/current-status.md",
+    "human/inbox/README.md"
+  ],
+  "read_only_paths": [
+    ".agent/capabilities/outline-contract.yaml",
+    "state/confirmed-contribution.md",
+    "state/claim-evidence-map.yaml",
+    "state/venue-profile.yaml",
+    "state/paper-story.md",
+    "scripts/check-capability-parity.py",
+    "scripts/check-writing-harness.py",
+    "scripts/check-claim-evidence.py"
+  ],
+  "forbidden_paths": [
+    ".git/**",
+    ".venv/**",
+    "__pycache__/**",
+    ".pytest_cache/**"
   ],
   "claude_adapter": {
     "skill": ".claude/skills/outline-contract/"
@@ -15,9 +57,26 @@
   "codex_adapter": {
     "workflow": ".agents/workflows/outline-contract.md"
   },
-  "validators": [
-    "scripts/check-capability-parity.py"
-  ],
   "parity": "required",
+  "completion_contract": {
+    "success_requires": [
+      "Read the source capability spec before editing.",
+      "Changed files are limited to declared outputs.",
+      "Every factual paper change is backed by repository evidence, not chat context.",
+      "Declared validators pass, or the unresolved blocker is recorded."
+    ],
+    "required_outputs": [
+      "state/outline-contract.md",
+      "state/paper-story.md"
+    ],
+    "required_validators": [
+      "scripts/check-capability-parity.py",
+      "scripts/check-writing-harness.py",
+      "scripts/check-claim-evidence.py"
+    ],
+    "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
+    "blocker_record": "memory/current-status.md",
+    "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+  },
   "exceptions": []
 }

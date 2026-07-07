@@ -1430,12 +1430,14 @@ def table_requires_numeric_binding(item: dict) -> bool:
     return is_verified(item) or status == "final"
 
 
+FIGURE_ENVIRONMENTS = {"figure", "figure*", "sidewaysfigure", "sidewaysfigure*", "wrapfigure"}
 TABLE_ENVIRONMENTS = {"table", "table*", "sidewaystable", "sidewaystable*", "longtable"}
 
 
-def latex_block_for_label(text: str, label: str) -> str:
+def latex_block_for_label(text: str, label: str, environments=None) -> str:
     if missingish(label):
         return ""
+    environments = environments or TABLE_ENVIRONMENTS
     label_pattern = re.compile(rf"\\label\{{\s*{re.escape(str(label))}\s*\}}")
     label_match = label_pattern.search(text)
     if not label_match:
@@ -1443,7 +1445,7 @@ def latex_block_for_label(text: str, label: str) -> str:
 
     begin_match = None
     for match in re.finditer(r"\\begin\{([^}]+)\}", text[: label_match.start()]):
-        if match.group(1) in TABLE_ENVIRONMENTS:
+        if match.group(1) in environments:
             begin_match = match
     if begin_match is None:
         start = max(0, label_match.start() - 1000)
@@ -1456,6 +1458,76 @@ def latex_block_for_label(text: str, label: str) -> str:
     if end_match is None:
         return text[begin_match.start() : min(len(text), label_match.end() + 1000)]
     return text[begin_match.start() : end_match.end()]
+
+
+def includegraphics_paths(text: str) -> list[str]:
+    scan_text = "\n".join(strip_tex_comment(line) for line in text.splitlines())
+    pattern = re.compile(r"\\includegraphics(?:\s*\[[^\]]*\])*\s*\{([^{}]+)\}")
+    return [match.group(1).strip() for match in pattern.finditer(scan_text) if match.group(1).strip()]
+
+
+def asset_path_variants(value) -> set[str]:
+    if missingish(value) or external_reference(value):
+        return set()
+    text = local_path_part(str(value)).strip().strip("{}").strip("\"'")
+    if not text or "\\" in text:
+        return set()
+    text = re.sub(r"/+", "/", text.replace("\\", "/"))
+    while text.startswith("./"):
+        text = text[2:]
+    variants = {text}
+    if text.startswith("paper/"):
+        variants.add(text[len("paper/") :])
+    elif not text.startswith(("/", "../", "~")):
+        variants.add(f"paper/{text}")
+    for candidate in list(variants):
+        suffix = Path(candidate).suffix
+        if suffix:
+            variants.add(candidate[: -len(suffix)])
+    return {variant for variant in variants if variant}
+
+
+def declared_asset_paths(*items: dict | None) -> list[tuple[str, str, set[str]]]:
+    declared = []
+    seen = set()
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        for field in ["asset_path", "artifact_path", "path"]:
+            for value in leaf_values(item.get(field)):
+                variants = asset_path_variants(value)
+                if not variants:
+                    continue
+                key = tuple(sorted(variants))
+                if key in seen:
+                    continue
+                seen.add(key)
+                declared.append((field, str(value), variants))
+    return declared
+
+
+def check_figure_asset_binding(item: dict, mapped_float: dict | None, label: str, ident: str, text: str) -> int:
+    if missingish(label):
+        return 0
+    block = latex_block_for_label(text, str(label), FIGURE_ENVIRONMENTS)
+    actual_paths = includegraphics_paths(block)
+    if not actual_paths:
+        return 0
+    actual_variants = set()
+    for path in actual_paths:
+        actual_variants |= asset_path_variants(path)
+    if not actual_variants:
+        return 0
+
+    code = 0
+    for field, value, variants in declared_asset_paths(item, mapped_float):
+        if not variants & actual_variants:
+            sample = ", ".join(actual_paths[:5])
+            code |= error(
+                f"figure {ident} includegraphics asset mismatch for {field}: "
+                f"expected {value}; found {sample}"
+            )
+    return code
 
 
 def numeric_literals_in_latex(text: str) -> list[str]:
@@ -2226,6 +2298,9 @@ def check_figures_tables():
 
                 if not is_planned(item) and not has_float_provenance(item):
                     code |= error(f"{kind} {ident} missing provenance")
+
+                if kind == "figure" and not missingish(mapped_label):
+                    code |= check_figure_asset_binding(item, mapped_float, str(mapped_label), ident, text)
 
             if kind == "table" and table_requires_numeric_binding(item):
                 has_numeric_binding = strings(item.get("numeric_ids")) or strings(item.get("result_ids"))

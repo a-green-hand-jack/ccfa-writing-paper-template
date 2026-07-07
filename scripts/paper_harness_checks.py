@@ -818,6 +818,88 @@ def git_value(*args: str) -> str | None:
     return value or None
 
 
+def git_branch_names() -> set[str] | None:
+    output = git_value("branch", "--format=%(refname:short)")
+    if output is None:
+        return None
+    return {line.strip() for line in output.splitlines() if line.strip()}
+
+
+def git_worktree_entries() -> dict[Path, str | None] | None:
+    output = git_value("worktree", "list", "--porcelain")
+    if output is None:
+        return None
+    entries: dict[Path, str | None] = {}
+    current_path: Path | None = None
+    current_branch: str | None = None
+    for line in output.splitlines() + [""]:
+        if not line.strip():
+            if current_path is not None:
+                entries[current_path] = current_branch
+            current_path = None
+            current_branch = None
+            continue
+        key, _, value = line.partition(" ")
+        if key == "worktree":
+            current_path = Path(value).expanduser().resolve()
+        elif key == "branch":
+            current_branch = value.removeprefix("refs/heads/")
+    return entries
+
+
+def worktree_physical_validation_options(doc: dict) -> tuple[bool, bool]:
+    value = doc.get("physical_validation", doc.get("physical_validation_enabled", False))
+    if isinstance(value, dict):
+        enabled = bool(value.get("enabled", value.get("branches", False)))
+        require_paths = bool(value.get("require_paths", value.get("paths", False)))
+        return enabled, require_paths
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"required", "strict", "true", "yes", "branches"}:
+            return True, False
+        if normalized in {"paths", "full"}:
+            return True, True
+        return False, False
+    return bool(value), False
+
+
+def resolve_worktree_path(value) -> Path:
+    text = str(value).strip()
+    path = Path(text).expanduser()
+    if not path.is_absolute():
+        path = ROOT / path
+    return path.resolve()
+
+
+def check_worktree_physical_state(item: dict, branches: set[str], worktree_entries: dict[Path, str | None], *, require_paths: bool) -> int:
+    code = 0
+    ident = item.get("id", "<missing>")
+    branch = str(item.get("branch", "")).strip()
+    if branch and branch not in branches:
+        code |= error(f"active worktree {ident} branch does not exist: {branch}")
+
+    path_value = None
+    for field in ["path", "worktree_path", "root", "cwd"]:
+        if not missingish(item.get(field)):
+            path_value = item.get(field)
+            break
+    if missingish(path_value):
+        if require_paths:
+            code |= error(f"active worktree {ident} missing physical path")
+        return code
+
+    path = resolve_worktree_path(path_value)
+    if not path.exists():
+        code |= error(f"active worktree {ident} physical path does not exist: {path_value}")
+        return code
+    actual_branch = worktree_entries.get(path)
+    if path not in worktree_entries:
+        code |= error(f"active worktree {ident} physical path is not in git worktree list: {path_value}")
+    elif branch and actual_branch and actual_branch != branch:
+        code |= error(f"active worktree {ident} path branch mismatch: expected {branch}, found {actual_branch}")
+    return code
+
+
 def source_revision() -> dict:
     commit = git_value("rev-parse", "--verify", "HEAD")
     tree = git_value("rev-parse", "--verify", "HEAD^{tree}")
@@ -987,6 +1069,14 @@ def check_worktrees():
     worktrees = doc.get("worktrees", [])
     ids = {item.get("id") for item in worktrees}
     code = 0
+    physical_enabled, require_physical_paths = worktree_physical_validation_options(doc)
+    branches = None
+    worktree_entries = None
+    if physical_enabled:
+        branches = git_branch_names()
+        worktree_entries = git_worktree_entries()
+        if branches is None or worktree_entries is None:
+            code |= error("state/worktrees.yaml physical_validation requires a git repository")
     for required in {"main", "dev"}:
         if required not in ids:
             code |= error(f"missing worktree registry entry {required}")
@@ -1003,6 +1093,18 @@ def check_worktrees():
                     code |= error(f"main worktree forbidden_paths missing {required}")
         if item.get("id") == "dev" and item.get("visibility") != "private":
             code |= error("dev worktree must be private")
+        if (
+            physical_enabled
+            and str(item.get("status", "")).strip().lower() == "active"
+            and branches is not None
+            and worktree_entries is not None
+        ):
+            code |= check_worktree_physical_state(
+                item,
+                branches,
+                worktree_entries,
+                require_paths=require_physical_paths,
+            )
     return code
 
 

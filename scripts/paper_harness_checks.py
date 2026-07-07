@@ -2002,6 +2002,33 @@ def evidence_refs(item: dict) -> list[str]:
     return refs
 
 
+def collect_evidence_matrix_relationships() -> dict[tuple[str, str], set[str]]:
+    relationships: dict[tuple[str, str], set[str]] = {}
+    for row in read_csv_rows("state/evidence-matrix.csv"):
+        claim_id = str(row.get("claim_id", "")).strip()
+        evidence_id = str(row.get("evidence_id", "")).strip()
+        relationship = normalized_text(row.get("relationship", ""))
+        if missingish(claim_id) or missingish(evidence_id) or missingish(relationship):
+            continue
+        if relationship not in ALLOWED_EVIDENCE_RELATIONSHIPS or not matrix_row_active(row):
+            continue
+        relationships.setdefault((claim_id, evidence_id), set()).add(relationship)
+    return relationships
+
+
+def evidence_supports_result_claim(
+    claim_id: str,
+    evidence_id: str,
+    claim_refs_by_id: dict[str, set[str]],
+    evidence_supports_by_id: dict[str, set[str]],
+    matrix_relationships: dict[tuple[str, str], set[str]],
+) -> bool:
+    relationships = matrix_relationships.get((claim_id, evidence_id), set())
+    if relationships:
+        return bool(relationships & SUPPORT_RELATIONSHIPS) and not bool(relationships & CONTRADICT_RELATIONSHIPS)
+    return claim_id in evidence_supports_by_id.get(evidence_id, set()) or evidence_id in claim_refs_by_id.get(claim_id, set())
+
+
 def result_refs(item: dict) -> list[str]:
     refs = []
     for field in ["result_ids", "result_id"]:
@@ -2080,8 +2107,66 @@ def validate_result_claim_numeric_alignment(result: dict, number_by_id: dict[str
         if number_claim_ids and result_claim_ids.isdisjoint(number_claim_ids):
             code |= error(f"result {result_id} claim bindings do not match numeric {numeric_id} claim_ids")
         number_result_ids = set(result_refs(number))
-        if number_result_ids and result_id not in number_result_ids:
+        if result_id not in number_result_ids:
             code |= error(f"result {result_id} numeric {numeric_id} is not reciprocated by number result_id")
+    return code
+
+
+def validate_result_evidence_claim_alignment(
+    result: dict,
+    claim_ids: set[str],
+    evidence_by_id: dict[str, dict],
+    claim_refs_by_id: dict[str, set[str]],
+    evidence_supports_by_id: dict[str, set[str]],
+    matrix_relationships: dict[tuple[str, str], set[str]],
+    *,
+    verified: bool | None = None,
+    reported: set[tuple[str, str, tuple[str, ...]]] | None = None,
+) -> int:
+    result_id = item_id(result, "result_id", "id")
+    if not result_id:
+        return 0
+    if verified is None:
+        verified = is_verified(result)
+    if not verified:
+        return 0
+    result_claim_ids = set(strings(result.get("claims_supported")))
+    result_evidence_ids = set(evidence_refs(result))
+    if not result_claim_ids or not result_evidence_ids:
+        return 0
+
+    code = 0
+    known_evidence_ids = []
+    for evidence_id in sorted(result_evidence_ids):
+        if evidence_id not in evidence_by_id:
+            code |= error(f"result {result_id} references unknown evidence {evidence_id}")
+        else:
+            known_evidence_ids.append(evidence_id)
+    if not known_evidence_ids:
+        return code
+
+    for claim_id in sorted(result_claim_ids):
+        if claim_ids and claim_id not in claim_ids:
+            continue
+        if any(
+            evidence_supports_result_claim(
+                claim_id,
+                evidence_id,
+                claim_refs_by_id,
+                evidence_supports_by_id,
+                matrix_relationships,
+            )
+            for evidence_id in known_evidence_ids
+        ):
+            continue
+        report_key = (result_id, claim_id, tuple(known_evidence_ids))
+        if reported is not None:
+            if report_key in reported:
+                continue
+            reported.add(report_key)
+        code |= error(
+            f"result {result_id} claim {claim_id} is not supported by result evidence_ids: {known_evidence_ids}"
+        )
     return code
 
 
@@ -2200,21 +2285,46 @@ def check_unregistered_numeric_literals(verified_values: set[str]) -> int:
 
 
 def check_result_status():
-    code = require(["state/result-status.yaml", "lab/artifacts/result-index.yaml", "state/claim-evidence-map.yaml"])
+    code = require([
+        "state/result-status.yaml",
+        "lab/artifacts/result-index.yaml",
+        "state/claim-evidence-map.yaml",
+        "lab/research/evidence.yaml",
+        "state/evidence-matrix.csv",
+    ])
     if code:
         return code
     status_results = doc_items("state/result-status.yaml", "results")
     index_results = doc_items("lab/artifacts/result-index.yaml", "results")
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    evidence = doc_items("lab/research/evidence.yaml", "evidence")
     numbers = load_numeric_numbers()
 
     code |= collect_ids(status_results, ["result_id", "id"], "state/result-status.yaml results", required=False)[0]
     index_code, index_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
     code |= index_code
     claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)[1]
+    evidence_code, evidence_ids = collect_ids(evidence, ["evidence_id", "id"], "evidence", required=False)
+    code |= evidence_code
     number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)[1]
     number_by_id = {item_id(number, "numeric_id", "id"): number for number in numbers if item_id(number, "numeric_id", "id")}
     index_result_by_id = {item_id(result, "result_id", "id"): result for result in index_results if item_id(result, "result_id", "id")}
+    claim_refs_by_id = {
+        claim_id: set(strings(claim.get("evidence_ids")))
+        for claim_id, claim in ((item_id(item, "claim_id", "id"), item) for item in claims)
+        if claim_id
+    }
+    evidence_by_id = {
+        evidence_id: item
+        for evidence_id, item in ((item_id(item, "evidence_id", "id"), item) for item in evidence)
+        if evidence_id
+    }
+    evidence_supports_by_id = {
+        evidence_id: set(evidence_support_claim_ids(item))
+        for evidence_id, item in evidence_by_id.items()
+    }
+    matrix_relationships = collect_evidence_matrix_relationships()
+    reported_result_evidence_alignment: set[tuple[str, str, tuple[str, ...]]] = set()
     verified_result_ids = {
         result_id
         for result in status_results + index_results
@@ -2236,6 +2346,15 @@ def check_result_status():
             if numeric_id not in number_ids:
                 code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
         code |= validate_result_claim_numeric_alignment(result, number_by_id)
+        code |= validate_result_evidence_claim_alignment(
+            result,
+            claim_ids,
+            evidence_by_id,
+            claim_refs_by_id,
+            evidence_supports_by_id,
+            matrix_relationships,
+            reported=reported_result_evidence_alignment,
+        )
     for result in index_results:
         result_id = item_id(result, "result_id", "id")
         verified = is_verified(result) or result_id in verified_result_ids
@@ -2256,6 +2375,16 @@ def check_result_status():
             if numeric_id not in number_ids:
                 code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
         code |= validate_result_claim_numeric_alignment(result, number_by_id)
+        code |= validate_result_evidence_claim_alignment(
+            result,
+            claim_ids,
+            evidence_by_id,
+            claim_refs_by_id,
+            evidence_supports_by_id,
+            matrix_relationships,
+            verified=verified,
+            reported=reported_result_evidence_alignment,
+        )
     return code
 
 

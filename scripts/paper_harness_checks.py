@@ -3254,13 +3254,15 @@ def check_writing_harness():
     code |= check_anatomy_drift()
     code |= check_capability_parity()
     code |= check_paper_surface()
-    code |= check_project_metadata_consistency()
     code |= check_conference_template()
     code |= check_worktrees()
     code |= check_release_package()
     code |= check_release_freshness()
     code |= check_anonymity()
-    if paper_looks_populated():
+    populated = paper_looks_populated()
+    if not populated:
+        code |= check_project_metadata_consistency()
+    if populated:
         code |= check_paper_populated(include_release=False)
     elif has_active_core_or_strong_claims():
         code |= check_claim_evidence()

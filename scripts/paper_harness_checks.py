@@ -1543,12 +1543,26 @@ def result_numeric_refs(result: dict):
     return refs, field_present, missing_entry_id
 
 
-def exception_matches(pattern: str, literal: str, context: str) -> bool:
-    try:
-        compiled = re.compile(pattern)
-    except re.error:
+VALID_EXCEPTION_MATCH_SCOPES = {"literal", "context", "literal_or_context"}
+
+
+def normalize_exception_match_scope(scope) -> str:
+    return str(scope or "literal").strip().lower().replace("-", "_")
+
+
+def exception_matches(exception: dict, path: Path, literal: str, context: str) -> bool:
+    path_pattern = exception.get("path_pattern")
+    if path_pattern is not None and not path_pattern.search(rel(path)):
         return False
-    return bool(compiled.fullmatch(literal) or compiled.search(context))
+    pattern = exception["pattern"]
+    scope = exception["match_scope"]
+    literal_match = bool(pattern.fullmatch(literal))
+    if scope == "literal":
+        return literal_match
+    context_match = bool(pattern.search(context))
+    if scope == "context":
+        return context_match
+    return literal_match or context_match
 
 
 def strip_tex_comment(line: str) -> str:
@@ -1601,17 +1615,40 @@ def check_unregistered_numeric_literals(verified_values: set[str]) -> int:
             code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] missing pattern/reason")
             continue
         try:
-            re.compile(str(pattern))
+            compiled_pattern = re.compile(str(pattern))
         except re.error as exc:
             code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] invalid regex: {exc}")
             continue
-        valid_exceptions.append((str(pattern), str(reason)))
+        match_scope = normalize_exception_match_scope(item.get("match_scope"))
+        if match_scope not in VALID_EXCEPTION_MATCH_SCOPES:
+            code |= error(
+                "state/numbers/exceptions.yaml "
+                f"exceptions[{index}] invalid match_scope {item.get('match_scope')}; "
+                "expected literal, context, or literal_or_context"
+            )
+            continue
+        path_pattern = item.get("path_pattern")
+        compiled_path_pattern = None
+        if not missingish(path_pattern):
+            try:
+                compiled_path_pattern = re.compile(str(path_pattern))
+            except re.error as exc:
+                code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] invalid path_pattern regex: {exc}")
+                continue
+        valid_exceptions.append(
+            {
+                "pattern": compiled_pattern,
+                "reason": str(reason),
+                "match_scope": match_scope,
+                "path_pattern": compiled_path_pattern,
+            }
+        )
 
     for path, line_no, literal, context in iter_paper_numeric_literals():
         normalized = normalize_numeric_value(literal)
         if normalized in verified_values:
             continue
-        if any(exception_matches(pattern, literal, context) for pattern, _reason in valid_exceptions):
+        if any(exception_matches(exception, path, literal, context) for exception in valid_exceptions):
             continue
         code |= error(
             "unregistered numeric literal in populated paper content: "
@@ -1726,6 +1763,8 @@ def check_numeric_consistency():
     verified_literal_values = set()
     for number in numbers:
         numeric_id = item_id(number, "numeric_id", "id")
+        if is_verified(number):
+            verified_literal_values.update(normalize_numeric_value(value) for value in registered_number_values(number))
         for evidence_id in evidence_refs(number):
             if evidence_id not in evidence_ids:
                 code |= error(f"number {numeric_id} references unknown evidence {evidence_id}")

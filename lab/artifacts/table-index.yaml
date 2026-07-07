@@ -4,19 +4,28 @@
       "table_id": "tab-DGM-greedy",
       "label": "tab:DGM-greedy",
       "source": "paper/main.tex",
-      "status": "verified"
+      "status": "verified",
+      "result_ids": [
+        "R-DGM-GREEDY-TABLE"
+      ]
     },
     {
       "table_id": "tab-code_editing",
       "label": "tab:code_editing",
       "source": "paper/main.tex",
-      "status": "verified"
+      "status": "verified",
+      "result_ids": [
+        "R-CODE-EDITING-TABLE"
+      ]
     },
     {
       "table_id": "tab-fm-hyperparam",
       "label": "tab:fm-hyperparam",
       "source": "paper/main.tex",
-      "status": "verified"
+      "status": "verified",
+      "result_ids": [
+        "R-FM-HYPERPARAM-TABLE"
+      ]
     }
   ]
 }

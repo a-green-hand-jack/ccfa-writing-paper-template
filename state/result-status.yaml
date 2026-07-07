@@ -43,6 +43,40 @@
       "claims_supported": [
         "C-OPEN-ENDED-ARCHIVE-HELPS"
       ]
+    },
+    {
+      "result_id": "R-DGM-GREEDY-TABLE",
+      "status": "verified",
+      "source": "paper/sections/appendix.tex",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ],
+      "claims_supported": [
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ],
+      "notes": "Ablation table comparing DGM, greedy parent selection, and no-open-ended/no-self-improve baselines."
+    },
+    {
+      "result_id": "R-CODE-EDITING-TABLE",
+      "status": "verified",
+      "source": "paper/sections/appendix.tex",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ],
+      "claims_supported": [
+        "C-SELF-IMPROVEMENT-HELPS",
+        "C-OPEN-ENDED-ARCHIVE-HELPS"
+      ],
+      "notes": "Appendix table reporting percentages of generated agents with basic code-editing functionality."
+    },
+    {
+      "result_id": "R-FM-HYPERPARAM-TABLE",
+      "status": "verified",
+      "source": "paper/sections/appendix.tex",
+      "evidence_ids": [
+        "E-ARXIV-APPENDIX-REPORTED-NUMBERS"
+      ],
+      "notes": "Appendix table recording the foundation model choices for self-modification and evaluation."
     }
   ]
 }

@@ -664,6 +664,16 @@ def extract_tex_command_values(text: str, command: str) -> list[str]:
     return values
 
 
+def extract_tex_command_items(text: str, command: str) -> list[str]:
+    items = []
+    for value in extract_tex_command_values(text, command):
+        for item in value.split(","):
+            item = item.strip()
+            if item:
+                items.append(item)
+    return items
+
+
 def normalize_metadata_text(value) -> str:
     text = str(value or "")
     text = tex_without_comments(text)
@@ -1279,6 +1289,78 @@ def local_existing_path(value) -> Path | None:
     return None
 
 
+def normalize_template_use(value) -> str:
+    text = str(value or "").strip().strip("{}").strip().replace("\\", "/")
+    while text.startswith("./"):
+        text = text[2:]
+    for suffix in [".sty", ".cls", ".bst", ".tex"]:
+        if text.endswith(suffix):
+            text = text[: -len(suffix)]
+    if text.startswith("paper/"):
+        text = text[len("paper/"):]
+    return text.strip("/")
+
+
+def resolve_local_template_use(value, suffix: str) -> Path | None:
+    normalized = normalize_template_use(value)
+    if not normalized:
+        return None
+    path = Path(normalized)
+    if path.is_absolute() or ".." in path.parts:
+        return None
+    if path.suffix and path.suffix.lower() != suffix:
+        return None
+    if not path.suffix:
+        path = path.with_suffix(suffix)
+    paper = (ROOT / "paper").resolve()
+    target = (paper / path).resolve()
+    try:
+        target.relative_to(paper)
+    except ValueError:
+        return None
+    if target.exists() and target.is_file():
+        return target
+    return None
+
+
+def local_template_dependencies() -> set[Path]:
+    dependencies: set[Path] = set()
+    pending_text = [read_paper_tex()]
+    command_suffixes = [
+        (["usepackage", "RequirePackage"], ".sty"),
+        (["documentclass", "LoadClass"], ".cls"),
+        (["bibliographystyle"], ".bst"),
+    ]
+    while pending_text:
+        text = pending_text.pop()
+        for commands, suffix in command_suffixes:
+            for command in commands:
+                for item in extract_tex_command_items(text, command):
+                    path = resolve_local_template_use(item, suffix)
+                    if path is None or path in dependencies:
+                        continue
+                    dependencies.add(path)
+                    if suffix in {".sty", ".cls"}:
+                        try:
+                            pending_text.append(path.read_text(encoding="utf-8", errors="ignore"))
+                        except OSError:
+                            continue
+    return dependencies
+
+
+def active_tex_uses_raw_template(raw_path: Path) -> bool:
+    suffix = raw_path.suffix.lower()
+    if suffix in {".sty", ".cls", ".bst", ".tex"}:
+        try:
+            raw_resolved = raw_path.resolve()
+        except OSError:
+            return False
+        if suffix == ".tex":
+            return raw_resolved in {path.resolve() for path in active_paper_tex_files()}
+        return raw_resolved in local_template_dependencies()
+    return True
+
+
 def check_conference_template_binding(template: dict, venue_id, venue_year) -> int:
     raw_path = local_existing_path(template.get("raw_template"))
     if raw_path is None or not raw_path.is_file():
@@ -1299,6 +1381,8 @@ def check_conference_template_binding(template: dict, venue_id, venue_year) -> i
     path_years = set(re.findall(r"(?:19|20)\d{2}", raw_path.name))
     if year and path_years and year not in path_years:
         code |= error(f"conference template raw_template filename year does not match declared year: {venue_year}")
+    if not active_tex_uses_raw_template(raw_path):
+        code |= error(f"conference template raw_template is not used by active paper tex: {raw_rel}")
     return code
 
 

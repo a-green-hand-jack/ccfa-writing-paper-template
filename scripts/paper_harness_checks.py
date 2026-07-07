@@ -66,6 +66,42 @@ INSUFFICIENT_EVIDENCE_QUALITY = {
     "weak",
 }
 FLOAT_LABEL_PREFIXES = ("fig:", "figure:", "tab:", "table:")
+NUMERIC_LITERAL_RE = re.compile(
+    r"(?<![A-Za-z0-9_\\])"
+    r"[-+]?"
+    r"(?:"
+    r"\d+(?:\.\d+)?\s*(?:\\%|%)"
+    r"|\d{1,3}(?:,\d{3})+(?:\.\d+)?"
+    r"|\d+\.\d+(?:[eE][-+]?\d+)?"
+    r"|\d+(?:\.\d+)?[eE][-+]?\d+"
+    r"|\d{4,}"
+    r")"
+    r"(?![A-Za-z0-9_])"
+)
+MASKED_NUMERIC_CONTEXT_COMMANDS = (
+    "cite",
+    "citep",
+    "citet",
+    "citealp",
+    "parencite",
+    "textcite",
+    "ref",
+    "eqref",
+    "autoref",
+    "cref",
+    "Cref",
+    "label",
+    "url",
+    "href",
+    "include",
+    "input",
+    "includegraphics",
+    "bibliography",
+    "bibliographystyle",
+    "vspace",
+    "hspace",
+    "setlength",
+)
 REQUIRED_PAPER_SURFACE = [
     "paper/main.tex",
     "paper/macros.tex",
@@ -1068,6 +1104,313 @@ def load_number_groups(registry: dict):
     return numbers
 
 
+def scalar_strings(value):
+    if missingish(value):
+        return []
+    if isinstance(value, dict):
+        return []
+    if isinstance(value, (list, tuple, set)):
+        values = []
+        for item in value:
+            values.extend(scalar_strings(item))
+        return values
+    return [str(value)]
+
+
+def nested_field_strings(value, fields):
+    values = []
+    if missingish(value):
+        return values
+    if isinstance(value, dict):
+        for field in fields:
+            values.extend(nested_field_strings(value.get(field), fields))
+        return values
+    if isinstance(value, (list, tuple, set)):
+        for item in value:
+            values.extend(nested_field_strings(item, fields))
+        return values
+    values.append(str(value))
+    return values
+
+
+def load_numeric_numbers():
+    registry = load_doc("state/numeric-registry.yaml") if (ROOT / "state/numeric-registry.yaml").exists() else {}
+    index = load_doc("state/numbers/numeric-index.yaml") if (ROOT / "state/numbers/numeric-index.yaml").exists() else {}
+    numbers = []
+    numbers.extend(as_list(registry.get("numbers")))
+    numbers.extend(as_list(index.get("numbers")))
+    numbers.extend(load_number_groups(registry))
+    return [item for item in numbers if isinstance(item, dict)]
+
+
+def normalize_macro_name(macro) -> str:
+    if missingish(macro):
+        return ""
+    text = str(macro).strip()
+    return text if text.startswith("\\") else "\\" + text
+
+
+def read_balanced_braces(text: str, start: int):
+    if start >= len(text) or text[start] != "{":
+        return None, start
+    depth = 0
+    escaped = False
+    chars = []
+    for index in range(start, len(text)):
+        char = text[index]
+        if escaped:
+            if depth > 0:
+                chars.append(char)
+            escaped = False
+            continue
+        if char == "\\":
+            if depth > 0:
+                chars.append(char)
+            escaped = True
+            continue
+        if char == "{":
+            depth += 1
+            if depth > 1:
+                chars.append(char)
+            continue
+        if char == "}":
+            depth -= 1
+            if depth == 0:
+                return "".join(chars), index + 1
+            chars.append(char)
+            continue
+        if depth > 0:
+            chars.append(char)
+    return None, start
+
+
+def skip_ws(text: str, index: int) -> int:
+    while index < len(text) and text[index].isspace():
+        index += 1
+    return index
+
+
+def skip_optional_args(text: str, index: int) -> int:
+    index = skip_ws(text, index)
+    while index < len(text) and text[index] == "[":
+        end = text.find("]", index + 1)
+        if end == -1:
+            return index
+        index = skip_ws(text, end + 1)
+    return index
+
+
+def extract_macro_values(text: str) -> dict[str, str]:
+    values = {}
+    command_pattern = re.compile(r"\\(?:newcommand|renewcommand|providecommand)\*?")
+    for match in command_pattern.finditer(text):
+        index = skip_ws(text, match.end())
+        macro = None
+        if index < len(text) and text[index] == "{":
+            macro, index = read_balanced_braces(text, index)
+            macro = normalize_macro_name(macro)
+        elif index < len(text) and text[index] == "\\":
+            name_match = re.match(r"\\[A-Za-z@]+", text[index:])
+            if name_match:
+                macro = normalize_macro_name(name_match.group(0))
+                index += len(name_match.group(0))
+        if not macro:
+            continue
+        index = skip_optional_args(text, index)
+        value, end = read_balanced_braces(text, index)
+        if value is not None:
+            values[macro] = value
+            index = end
+
+    def_pattern = re.compile(r"\\def\s*(\\[A-Za-z@]+)")
+    for match in def_pattern.finditer(text):
+        macro = normalize_macro_name(match.group(1))
+        index = skip_ws(text, match.end())
+        value, _ = read_balanced_braces(text, index)
+        if macro and value is not None:
+            values[macro] = value
+    return values
+
+
+def normalize_numeric_value(value) -> str:
+    text = str(value).strip()
+    text = re.sub(r"\\(?:text|mathrm|mathbf|mathit)\{([^{}]*)\}", r"\1", text)
+    text = re.sub(r"\\([%&_#$])", r"\1", text)
+    text = text.replace("\\,", "")
+    text = text.replace("\\ ", " ")
+    text = text.replace("~", " ")
+    text = text.replace("{", "")
+    text = text.replace("}", "")
+    text = text.replace(",", "")
+    text = re.sub(r"\bpercent\b", "%", text, flags=re.I)
+    text = re.sub(r"\s+", "", text)
+    return text.lower()
+
+
+def registered_number_values(number: dict) -> list[str]:
+    direct_values = []
+    for field in ["value", "display_value", "reported_value", "latex_value", "macro_value"]:
+        direct_values.extend(scalar_strings(number.get(field)))
+    display_values = []
+    display = number.get("display")
+    if isinstance(display, dict):
+        for field in ["value", "display_value", "reported_value", "latex_value", "macro_value", "text", "latex"]:
+            display_values.extend(scalar_strings(display.get(field)))
+    elif not missingish(display):
+        display_values.extend(scalar_strings(display))
+    return display_values or direct_values
+
+
+def evidence_refs(item: dict) -> list[str]:
+    refs = []
+    for field in ["evidence_ids", "evidence_id"]:
+        refs.extend(scalar_strings(item.get(field)))
+    for entry in as_list(item.get("evidence")):
+        if isinstance(entry, dict):
+            ident = item_id(entry, "evidence_id", "id")
+            if ident:
+                refs.append(ident)
+        elif not missingish(entry):
+            refs.append(str(entry))
+    return refs
+
+
+def result_refs(item: dict) -> list[str]:
+    refs = []
+    for field in ["result_ids", "result_id"]:
+        refs.extend(scalar_strings(item.get(field)))
+    return refs
+
+
+def path_anchor_values(item: dict) -> list[str]:
+    values = []
+    nested_fields = ["path", "artifact_path", "source", "uri", "url", "snapshot_path"]
+    for field in ["artifact_path", "artifact_paths", "source", "sources", "snapshot_path", "snapshot_paths"]:
+        values.extend(nested_field_strings(item.get(field), nested_fields))
+    for field in ["artifacts", "snapshots"]:
+        values.extend(nested_field_strings(item.get(field), nested_fields))
+    provenance = item.get("provenance")
+    if isinstance(provenance, (dict, list, tuple, set)):
+        values.extend(nested_field_strings(provenance, nested_fields))
+    return values
+
+
+def has_scalar_anchor(item: dict) -> bool:
+    for field in ["run_id", "run_ids", "snapshot", "checksum", "checksums", "sha256", "digest"]:
+        if scalar_strings(item.get(field)):
+            return True
+    provenance = item.get("provenance")
+    if isinstance(provenance, dict):
+        for field in ["run_id", "run_ids", "snapshot", "checksum", "checksums", "sha256", "digest"]:
+            if scalar_strings(provenance.get(field)):
+                return True
+    return False
+
+
+def result_numeric_refs(result: dict):
+    refs = []
+    missing_entry_id = False
+    field_present = any(field in result for field in ["numeric_id", "numeric_ids", "numbers"])
+    refs.extend(scalar_strings(result.get("numeric_id")))
+    refs.extend(scalar_strings(result.get("numeric_ids")))
+    if "numbers" in result:
+        numbers = result.get("numbers")
+        if isinstance(numbers, dict):
+            for key, value in numbers.items():
+                if isinstance(value, dict):
+                    refs.append(item_id(value, "numeric_id", "id") or str(key))
+                else:
+                    refs.append(str(key))
+        else:
+            for entry in as_list(numbers):
+                if isinstance(entry, dict):
+                    ident = item_id(entry, "numeric_id", "id")
+                    if ident:
+                        refs.append(ident)
+                    else:
+                        missing_entry_id = True
+                elif not missingish(entry):
+                    refs.append(str(entry))
+    return refs, field_present, missing_entry_id
+
+
+def exception_matches(pattern: str, literal: str, context: str) -> bool:
+    try:
+        compiled = re.compile(pattern)
+    except re.error:
+        return False
+    return bool(compiled.fullmatch(literal) or compiled.search(context))
+
+
+def strip_tex_comment(line: str) -> str:
+    for index, char in enumerate(line):
+        if char != "%":
+            continue
+        slash_count = 0
+        cursor = index - 1
+        while cursor >= 0 and line[cursor] == "\\":
+            slash_count += 1
+            cursor -= 1
+        if slash_count % 2 == 0:
+            return line[:index]
+    return line
+
+
+def mask_latex_numeric_contexts(text: str) -> str:
+    command_names = "|".join(re.escape(name) for name in MASKED_NUMERIC_CONTEXT_COMMANDS)
+    pattern = re.compile(rf"\\(?:{command_names})(?:\s*\[[^\]]*\])*(?:\s*\{{[^{{}}]*\}})+")
+    return pattern.sub(" ", text)
+
+
+def iter_paper_numeric_literals():
+    for path in paper_content_tex_files():
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            scan_line = mask_latex_numeric_contexts(strip_tex_comment(line))
+            for match in NUMERIC_LITERAL_RE.finditer(scan_line):
+                literal = match.group(0).strip()
+                if literal:
+                    yield path, line_no, literal, line.strip()
+
+
+def check_unregistered_numeric_literals(verified_values: set[str]) -> int:
+    if not paper_looks_populated():
+        return 0
+    code = 0
+    exceptions = doc_items("state/numbers/exceptions.yaml", "exceptions")
+    valid_exceptions = []
+    for index, item in enumerate(exceptions, start=1):
+        if not isinstance(item, dict):
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] must be a mapping")
+            continue
+        pattern = item.get("pattern")
+        reason = item.get("reason")
+        if missingish(pattern) or missingish(reason):
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] missing pattern/reason")
+            continue
+        try:
+            re.compile(str(pattern))
+        except re.error as exc:
+            code |= error(f"state/numbers/exceptions.yaml exceptions[{index}] invalid regex: {exc}")
+            continue
+        valid_exceptions.append((str(pattern), str(reason)))
+
+    for path, line_no, literal, context in iter_paper_numeric_literals():
+        normalized = normalize_numeric_value(literal)
+        if normalized in verified_values:
+            continue
+        if any(exception_matches(pattern, literal, context) for pattern, _reason in valid_exceptions):
+            continue
+        code |= error(
+            "unregistered numeric literal in populated paper content: "
+            f"{literal} at {rel(path)}:{line_no}"
+        )
+    return code
+
+
 def check_result_status():
     code = require(["state/result-status.yaml", "lab/artifacts/result-index.yaml", "state/claim-evidence-map.yaml"])
     if code:
@@ -1075,11 +1418,18 @@ def check_result_status():
     status_results = doc_items("state/result-status.yaml", "results")
     index_results = doc_items("lab/artifacts/result-index.yaml", "results")
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    numbers = load_numeric_numbers()
 
     code |= collect_ids(status_results, ["result_id", "id"], "state/result-status.yaml results", required=False)[0]
     index_code, index_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
     code |= index_code
     claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)[1]
+    number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)[1]
+    verified_result_ids = {
+        result_id
+        for result in status_results + index_results
+        if is_verified(result) and (result_id := item_id(result, "result_id", "id"))
+    }
 
     for result in status_results:
         result_id = item_id(result, "result_id", "id")
@@ -1087,12 +1437,23 @@ def check_result_status():
             code |= error(f"verified result missing from result-index: {result_id}")
     for result in index_results:
         result_id = item_id(result, "result_id", "id")
-        if is_verified(result):
-            if not (result.get("source") or result.get("artifacts") or result.get("evidence_ids")):
+        verified = is_verified(result) or result_id in verified_result_ids
+        if verified:
+            source_artifact_values = path_anchor_values(result)
+            if not (source_artifact_values or evidence_refs(result)):
                 code |= error(f"verified result lacks source/artifacts/evidence: {result_id}")
+            for value in source_artifact_values:
+                if not path_exists_or_external(value):
+                    code |= error(f"verified result has missing artifact/source: {result_id} {value}")
         for claim_id in strings(result.get("claims_supported")):
             if claim_ids and claim_id not in claim_ids:
                 code |= error(f"result {result_id} supports unknown claim {claim_id}")
+        refs, field_present, missing_entry_id = result_numeric_refs(result)
+        if field_present and missing_entry_id:
+            code |= error(f"result {result_id} numbers entries must include numeric_id/id")
+        for numeric_id in refs:
+            if numeric_id not in number_ids:
+                code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
     return code
 
 
@@ -1101,6 +1462,7 @@ def check_numeric_consistency():
         "state/numeric-registry.yaml",
         "state/numbers/numeric-index.yaml",
         "state/numbers/macros.yaml",
+        "state/numbers/exceptions.yaml",
         "state/result-status.yaml",
         "paper/generated/results-macros.tex",
         "lab/artifacts/result-index.yaml",
@@ -1109,17 +1471,14 @@ def check_numeric_consistency():
     if code:
         return code
 
-    registry = load_doc("state/numeric-registry.yaml")
-    index = load_doc("state/numbers/numeric-index.yaml")
     macro_doc = load_doc("state/numbers/macros.yaml")
     content_text = read_paper_content_tex()
     evidence_ids = collect_ids(doc_items("lab/research/evidence.yaml", "evidence"), ["evidence_id", "id"], "evidence", required=False)[1]
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
-    numbers = []
-    numbers.extend(as_list(registry.get("numbers")))
-    numbers.extend(as_list(index.get("numbers")))
-    numbers.extend(load_number_groups(registry))
-    numbers = [item for item in numbers if isinstance(item, dict)]
+    numbers = load_numeric_numbers()
+    index_results = doc_items("lab/artifacts/result-index.yaml", "results")
+    result_map = {item_id(result, "result_id", "id"): result for result in index_results if item_id(result, "result_id", "id")}
+    result_ids = set(result_map)
 
     number_code, number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)
     code |= number_code
@@ -1146,34 +1505,65 @@ def check_numeric_consistency():
                 macro_map[numeric_id] = str(macro)
     macro_text = (ROOT / "paper/generated/results-macros.tex").read_text(encoding="utf-8")
     generated_macros = extract_macro_names(macro_text)
+    generated_macro_values = extract_macro_values(macro_text)
 
     for numeric_id, macro in macro_map.items():
         if number_ids and numeric_id not in number_ids:
             code |= error(f"macro map references unknown numeric id {numeric_id}")
-        normalized = macro if macro.startswith("\\") else "\\" + macro
+        normalized = normalize_macro_name(macro)
         if normalized not in generated_macros:
             code |= error(f"macro map for {numeric_id} missing generated macro {normalized}")
 
+    verified_literal_values = set()
     for number in numbers:
         numeric_id = item_id(number, "numeric_id", "id")
-        for evidence_id in strings(number.get("evidence_ids")):
-            if evidence_ids and evidence_id not in evidence_ids:
+        for evidence_id in evidence_refs(number):
+            if evidence_id not in evidence_ids:
                 code |= error(f"number {numeric_id} references unknown evidence {evidence_id}")
         display = number.get("display", {}) if isinstance(number.get("display"), dict) else {}
         macro = number.get("latex_macro") or display.get("latex_macro") or macro_map.get(numeric_id)
         if not missingish(macro):
-            normalized = str(macro) if str(macro).startswith("\\") else "\\" + str(macro)
+            normalized = normalize_macro_name(macro)
             if normalized not in generated_macros:
                 code |= error(f"number {numeric_id} expects missing generated macro {normalized}")
             if is_verified(number) and normalized not in content_text:
                 code |= error(f"verified number macro is not used in paper content: {numeric_id} {normalized}")
-        if is_verified(number) and not (number.get("source") or number.get("artifact_path") or number.get("run_id") or number.get("evidence_ids")):
-            code |= error(f"verified number lacks source/artifact/evidence: {numeric_id}")
+            if normalized in generated_macro_values:
+                expected_values = {normalize_numeric_value(value) for value in registered_number_values(number)}
+                generated_value = normalize_numeric_value(generated_macro_values[normalized])
+                if expected_values and generated_value not in expected_values:
+                    code |= error(f"generated macro value drifts from registered value: {numeric_id} {normalized}")
+                if is_verified(number):
+                    verified_literal_values.add(generated_value)
+                    verified_literal_values.update(expected_values)
+        if is_verified(number):
+            number_evidence = evidence_refs(number)
+            if not number_evidence:
+                code |= error(f"verified number lacks evidence: {numeric_id}")
+            valid_path_anchors = []
+            for value in path_anchor_values(number):
+                if path_exists_or_external(value):
+                    valid_path_anchors.append(value)
+                else:
+                    code |= error(f"verified number has missing artifact/source: {numeric_id} {value}")
+            resolved_results = []
+            for result_id in result_refs(number):
+                if result_id in result_ids:
+                    resolved_results.append(result_id)
+                    result = result_map[result_id]
+                    refs, field_present, _missing_entry_id = result_numeric_refs(result)
+                    if field_present and numeric_id not in refs:
+                        code |= error(f"result-index entry {result_id} does not link back to numeric id {numeric_id}")
+                else:
+                    code |= error(f"number {numeric_id} references missing result-index result_id {result_id}")
+            if not (valid_path_anchors or has_scalar_anchor(number) or resolved_results):
+                code |= error(f"verified number lacks reproducibility anchor: {numeric_id}")
         derived = number.get("derived", {}) if isinstance(number.get("derived"), dict) else {}
         for dep_id in strings(derived.get("depends_on")):
             if number_ids and dep_id not in number_ids:
                 code |= error(f"derived number {numeric_id} depends on unknown number {dep_id}")
 
+    code |= check_unregistered_numeric_literals(verified_literal_values)
     code |= check_result_status()
     return code
 

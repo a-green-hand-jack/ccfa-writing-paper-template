@@ -9,6 +9,7 @@ import re
 import shutil
 import subprocess
 import sys
+import unicodedata
 from pathlib import Path
 
 
@@ -648,6 +649,33 @@ def extract_refs(text: str) -> set[str]:
             if ref:
                 refs.add(ref)
     return refs
+
+
+def extract_tex_command_values(text: str, command: str) -> list[str]:
+    values = []
+    text = tex_without_comments(text)
+    pattern = re.compile(rf"\\{re.escape(command)}\*?")
+    for match in pattern.finditer(text):
+        index = skip_optional_args(text, match.end())
+        index = skip_ws(text, index)
+        value, _ = read_balanced_braces(text, index)
+        if value is not None:
+            values.append(value)
+    return values
+
+
+def normalize_metadata_text(value) -> str:
+    text = str(value or "")
+    text = tex_without_comments(text)
+    text = re.sub(r"\\['`\"^~=.uvHtcbd]\{?([A-Za-z])\}?", r"\1", text)
+    text = re.sub(r"\\[A-Za-z]+\*?(?:\s*\[[^\]]*\])?", " ", text)
+    text = text.replace("\\&", "&")
+    text = text.replace("\\_", "_")
+    text = text.replace("\\%", "%")
+    text = unicodedata.normalize("NFKD", text)
+    text = "".join(char for char in text if not unicodedata.combining(char))
+    text = re.sub(r"[^A-Za-z0-9]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip().lower()
 
 
 def float_label(label: str) -> bool:
@@ -3067,8 +3095,7 @@ def check_anonymity():
         return code
     ccfa = load_doc("state/ccfa.yaml")
     team = ccfa.get("team", {}) if isinstance(ccfa.get("team"), dict) else {}
-    mode = str(team.get("anonymous_mode", "")).lower()
-    if mode not in {"anonymous", "double-blind", "blind", "anonymized"}:
+    if not anonymous_mode_enabled(team):
         return 0
 
     allowed_author_values = {"", "todo", "anonymous", "anonymous author", "anonymous authors"}
@@ -3104,6 +3131,58 @@ def check_anonymity():
         if missingish(value) or normalized in allowed_author_values or "anonymous" in normalized:
             continue
         code |= error("anonymous-mode paper has non-anonymous \\author content")
+    return code
+
+
+def anonymous_mode_enabled(team: dict) -> bool:
+    mode = team.get("anonymous_mode", "")
+    if mode is True:
+        return True
+    return str(mode).strip().lower() in {"anonymous", "double-blind", "blind", "anonymized"}
+
+
+def declared_team_authors(team: dict) -> list[str]:
+    authors = strings(team.get("authors"))
+    if isinstance(team.get("authors"), str):
+        authors = [part.strip() for part in team.get("authors", "").split(",") if part.strip()]
+    skipped = {"", "todo", "anonymous", "anonymous author", "anonymous authors"}
+    return [
+        str(author).strip()
+        for author in authors
+        if normalize_metadata_text(author) and normalize_metadata_text(author) not in skipped
+    ]
+
+
+def check_project_metadata_consistency():
+    code = require(["state/ccfa.yaml", "paper/main.tex"])
+    if code:
+        return code
+    ccfa = load_doc("state/ccfa.yaml")
+    paper = ccfa.get("paper", {}) if isinstance(ccfa.get("paper"), dict) else {}
+    team = ccfa.get("team", {}) if isinstance(ccfa.get("team"), dict) else {}
+    tex = read_paper_tex()
+
+    declared_title = paper.get("title")
+    if not missingish(declared_title):
+        title_values = extract_tex_command_values(tex, "title")
+        if not title_values:
+            code |= error("state/ccfa.yaml paper.title has no paper \\title command to bind")
+        else:
+            declared = normalize_metadata_text(declared_title)
+            actual_titles = [normalize_metadata_text(value) for value in title_values]
+            if declared not in actual_titles:
+                code |= error("state/ccfa.yaml paper.title does not match paper \\title")
+
+    authors = declared_team_authors(team)
+    if authors and not anonymous_mode_enabled(team):
+        author_values = extract_tex_command_values(tex, "author")
+        if not author_values:
+            code |= error("state/ccfa.yaml team.authors has no paper \\author command to bind")
+        else:
+            author_text = normalize_metadata_text(" ".join(author_values))
+            for author in authors:
+                if normalize_metadata_text(author) not in author_text:
+                    code |= error(f"state/ccfa.yaml team author missing from paper \\author: {author}")
     return code
 
 
@@ -3155,6 +3234,7 @@ def check_paper_populated(include_release: bool = True):
             code |= error(f"verified evidence should not point only to paper prose: {evidence_id}")
 
     code |= check_paper_surface()
+    code |= check_project_metadata_consistency()
     code |= check_claim_evidence()
     code |= check_numeric_consistency()
     code |= check_reference_existence()
@@ -3174,6 +3254,7 @@ def check_writing_harness():
     code |= check_anatomy_drift()
     code |= check_capability_parity()
     code |= check_paper_surface()
+    code |= check_project_metadata_consistency()
     code |= check_conference_template()
     code |= check_worktrees()
     code |= check_release_package()

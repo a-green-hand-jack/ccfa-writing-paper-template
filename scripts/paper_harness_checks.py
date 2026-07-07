@@ -403,6 +403,15 @@ def evidence_can_support_strong_claim(evidence_item: dict) -> bool:
     )
 
 
+def evidence_can_support_verified_result(evidence_item: dict) -> bool:
+    return (
+        is_active(evidence_item)
+        and not is_planned(evidence_item)
+        and is_verified(evidence_item)
+        and evidence_quality_is_sufficient(evidence_item)
+    )
+
+
 def matrix_row_active(row: dict) -> bool:
     return is_active(row) and not is_planned(row)
 
@@ -2209,15 +2218,20 @@ def validate_result_evidence_claim_alignment(
     for claim_id in sorted(result_claim_ids):
         if claim_ids and claim_id not in claim_ids:
             continue
-        if any(
-            evidence_supports_result_claim(
+        supporting_evidence_ids = [
+            evidence_id
+            for evidence_id in known_evidence_ids
+            if evidence_supports_result_claim(
                 claim_id,
                 evidence_id,
                 claim_refs_by_id,
                 evidence_supports_by_id,
                 matrix_relationships,
             )
-            for evidence_id in known_evidence_ids
+        ]
+        if supporting_evidence_ids and any(
+            evidence_can_support_verified_result(evidence_by_id[evidence_id])
+            for evidence_id in supporting_evidence_ids
         ):
             continue
         report_key = (result_id, claim_id, tuple(known_evidence_ids))
@@ -2225,9 +2239,15 @@ def validate_result_evidence_claim_alignment(
             if report_key in reported:
                 continue
             reported.add(report_key)
-        code |= error(
-            f"result {result_id} claim {claim_id} is not supported by result evidence_ids: {known_evidence_ids}"
-        )
+        if supporting_evidence_ids:
+            code |= error(
+                f"result {result_id} claim {claim_id} lacks verified direct evidence among result evidence_ids: "
+                f"{supporting_evidence_ids}"
+            )
+        else:
+            code |= error(
+                f"result {result_id} claim {claim_id} is not supported by result evidence_ids: {known_evidence_ids}"
+            )
     return code
 
 
@@ -2602,8 +2622,12 @@ def check_reference_existence():
 
     paper_keys = extract_cite_keys(read_paper_tex())
     citation_keys = set()
+    active_citation_keys = set()
     for citation in citations:
-        citation_keys.update(citation_bibkeys(citation))
+        keys = citation_bibkeys(citation)
+        citation_keys.update(keys)
+        if active_now(citation):
+            active_citation_keys.update(keys)
     if paper_keys and not reference_keys:
         code |= error("paper has citations but reference-ledger is empty")
     if paper_keys and not citation_keys:
@@ -2615,6 +2639,8 @@ def check_reference_existence():
             code |= error(f"paper cites key not registered in reference-ledger: {key}")
         if key not in citation_keys:
             code |= error(f"paper cites key not registered in citation-ledger: {key}")
+        elif key not in active_citation_keys:
+            code |= error(f"paper cites key registered only in inactive citation-ledger entry: {key}")
     return code
 
 
@@ -2639,8 +2665,12 @@ def check_citation_fitness():
     for ref in references:
         reference_keys.update(reference_bibkeys(ref))
     citation_keys = set()
+    active_citation_keys = set()
     for citation in citations:
-        citation_keys.update(citation_bibkeys(citation))
+        keys = citation_bibkeys(citation)
+        citation_keys.update(keys)
+        if active_now(citation):
+            active_citation_keys.update(keys)
 
     if paper_keys and not citation_keys:
         code |= error("paper has citations but citation-ledger is empty")
@@ -2651,6 +2681,8 @@ def check_citation_fitness():
             code |= error(f"paper cites key not registered in reference-ledger: {key}")
         if key not in citation_keys:
             code |= error(f"paper cites key not registered in citation-ledger: {key}")
+        elif key not in active_citation_keys:
+            code |= error(f"paper cites key registered only in inactive citation-ledger entry: {key}")
 
     for citation in citations:
         citation_id = item_id(citation, "citation_id", "id", "bibkey")

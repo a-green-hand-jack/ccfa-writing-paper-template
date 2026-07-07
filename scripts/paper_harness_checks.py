@@ -1270,14 +1270,50 @@ def check_worktrees():
     return code
 
 
+def local_existing_path(value) -> Path | None:
+    if missingish(value) or external_reference(value):
+        return None
+    path = ROOT / local_path_part(str(value))
+    if path.exists():
+        return path
+    return None
+
+
+def check_conference_template_binding(template: dict, venue_id, venue_year) -> int:
+    raw_path = local_existing_path(template.get("raw_template"))
+    if raw_path is None or not raw_path.is_file():
+        return 0
+
+    code = 0
+    raw_rel = raw_path.relative_to(ROOT).as_posix()
+    try:
+        raw_text = raw_path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        raw_text = ""
+    binding_text = normalize_metadata_text(f"{raw_rel}\n{raw_text}")
+    venue = normalize_metadata_text(venue_id)
+    if venue and venue not in binding_text:
+        code |= error(f"conference template raw_template does not mention declared venue: {venue_id}")
+
+    year = str(venue_year or "").strip()
+    path_years = set(re.findall(r"(?:19|20)\d{2}", raw_path.name))
+    if year and path_years and year not in path_years:
+        code |= error(f"conference template raw_template filename year does not match declared year: {venue_year}")
+    return code
+
+
 def check_conference_template():
     ccfa = load_doc("state/ccfa.yaml")
     template = load_doc("state/conference-template.yaml")
     code = 0
-    if template.get("venue") != ccfa.get("venue", {}).get("id"):
+    venue = ccfa.get("venue", {}) if isinstance(ccfa.get("venue"), dict) else {}
+    venue_id = venue.get("id")
+    venue_year = venue.get("year")
+    if template.get("venue") != venue_id:
         code |= error("conference template venue does not match state/ccfa.yaml")
-    if template.get("year") != ccfa.get("venue", {}).get("year"):
+    if template.get("year") != venue_year:
         code |= error("conference template year does not match state/ccfa.yaml")
+    code |= check_conference_template_binding(template, venue_id, venue_year)
     if str(template.get("status", "")).lower() == "verified":
         for field in ["raw_template", "normalized_template", "delta", "hash", "source", "downloaded_at", "human_verified_at"]:
             if missingish(template.get(field)):

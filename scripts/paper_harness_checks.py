@@ -986,6 +986,21 @@ def git_value(*args: str) -> str | None:
     return value or None
 
 
+def git_bytes(*args: str) -> bytes | None:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(ROOT), *args],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except OSError:
+        return None
+    if result.returncode != 0:
+        return None
+    return result.stdout
+
+
 def git_branch_names() -> set[str] | None:
     output = git_value("branch", "--format=%(refname:short)")
     if output is None:
@@ -1079,6 +1094,73 @@ def source_revision() -> dict:
     return revision
 
 
+def current_release_source_files() -> dict[str, Path]:
+    files = {}
+    for item in RELEASE_ITEMS:
+        src = ROOT / "paper" / item
+        if not src.exists() or src.is_symlink():
+            continue
+        if src.is_file():
+            files[src.relative_to(ROOT).as_posix()] = src
+            continue
+        if src.is_dir():
+            for path in sorted(src.rglob("*"), key=lambda candidate: candidate.relative_to(src).as_posix()):
+                if path.is_file() and not path.is_symlink():
+                    files[path.relative_to(ROOT).as_posix()] = path
+    return files
+
+
+def committed_release_source_files(commit: str) -> set[str]:
+    paths = set()
+    for item in RELEASE_ITEMS:
+        output = git_value("ls-tree", "-r", "--name-only", commit, "--", f"paper/{item}")
+        if not output:
+            continue
+        for line in output.splitlines():
+            path = line.strip()
+            if path:
+                paths.add(path)
+    return paths
+
+
+def check_source_revision_matches_release_source(manifest: dict) -> int:
+    revision = manifest.get("source_revision", {})
+    if not meaningful(revision) or not isinstance(revision, dict):
+        return 0
+    commit = str(revision.get("commit", "")).strip().lower()
+    if not re.fullmatch(r"[0-9a-f]{40}", commit):
+        return 0
+    if git_value("cat-file", "-t", commit) != "commit":
+        return 0
+
+    code = 0
+    current = current_release_source_files()
+    current_paths = set(current)
+    committed_paths = committed_release_source_files(commit)
+    missing = sorted(current_paths - committed_paths)
+    extra = sorted(committed_paths - current_paths)
+    if missing:
+        code |= error(f"release manifest source_revision missing current paper source files: {missing[:10]}")
+    if extra:
+        code |= error(f"release manifest source_revision includes absent current paper source files: {extra[:10]}")
+
+    mismatch_count = 0
+    for path in sorted(current_paths & committed_paths):
+        committed_bytes = git_bytes("show", f"{commit}:{path}")
+        if committed_bytes is None:
+            if mismatch_count < 10:
+                code |= error(f"release manifest source_revision cannot read paper source file: {path}")
+            mismatch_count += 1
+            continue
+        if current[path].read_bytes() != committed_bytes:
+            if mismatch_count < 10:
+                code |= error(f"release manifest source_revision does not match current paper source: {path}")
+            mismatch_count += 1
+    if mismatch_count > 10:
+        code |= error(f"release manifest source_revision has {mismatch_count - 10} additional paper source mismatches")
+    return code
+
+
 def check_source_revision_freshness(manifest: dict) -> int:
     revision = manifest.get("source_revision", {})
     if not meaningful(revision):
@@ -1107,6 +1189,7 @@ def check_source_revision_freshness(manifest: dict) -> int:
         code |= error(f"release manifest source_revision tree is not present: {tree}")
     elif expected_tree and tree != expected_tree:
         code |= error("release manifest source_revision tree does not match commit")
+    code |= check_source_revision_matches_release_source(manifest)
     return code
 
 
@@ -3425,6 +3508,9 @@ def export_release():
     manifest["checksum_algorithm"] = CHECKSUM_ALGORITHM
     manifest["source_revision"] = source_revision()
     if meaningful(manifest["source_revision"]):
+        code |= check_source_revision_matches_release_source(manifest)
+        if code:
+            return code
         previous_commit = previous_revision.get("commit")
         current_commit = manifest["source_revision"].get("commit")
         if previous_commit and current_commit and previous_commit != current_commit:

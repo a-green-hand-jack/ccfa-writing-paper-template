@@ -140,6 +140,7 @@ RELEASE_ITEMS = [
     "generated",
     "supplementary",
 ]
+RELEASE_ROOT_FILES = {"README.md"}
 RELEASE_SYNC_STATUSES = {"synced", "fresh", "exported"}
 RELEASE_MANIFEST_VERSION = "release-manifest-v1"
 CHECKSUM_ALGORITHM = "sha256"
@@ -894,8 +895,14 @@ def scan_release_surface(surface_id: str, root: Path, surface: dict) -> int:
     if not root.exists():
         return code
     forbidden = FORBIDDEN_RELEASE_PARTS - allowed_release_parts(surface)
+    allowed_roots = set(RELEASE_ITEMS) | RELEASE_ROOT_FILES
     for path in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
         rel_parts = path.relative_to(root).parts
+        if rel_parts and rel_parts[0] not in allowed_roots:
+            code |= error(
+                f"release surface {surface_id} contains non-paper export path: "
+                f"{path.relative_to(ROOT).as_posix()}"
+            )
         if path.is_symlink():
             code |= error(f"release surface {surface_id} contains symlink: {path.relative_to(ROOT).as_posix()}")
         if any(part in forbidden for part in rel_parts):

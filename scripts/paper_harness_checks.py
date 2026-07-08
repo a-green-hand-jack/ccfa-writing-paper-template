@@ -76,7 +76,8 @@ CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source"
 CITATION_AUDIT_REPORT_SAMPLE_LIMIT = 5
 GENERIC_UNAUDITED_CITATION_RE = re.compile(
     r"(?:"
-    r"not[-\s]+(?:sentence[-\s]+)?audited"
+    r"unaudited"
+    r"|not[-\s]+(?:sentence[-\s]+)?audited"
     r"|sentence[-\s]+level citation fitness not audited"
     r"|migrated source context"
     r"|citation present in migrated"

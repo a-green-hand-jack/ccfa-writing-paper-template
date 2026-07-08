@@ -72,6 +72,22 @@ WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review
 CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 CITATION_BULK_CONTEXT_THRESHOLD = 3
 CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
+CITE_COMMANDS = (
+    "autocite",
+    "cite",
+    "citealp",
+    "citealt",
+    "citeauthor",
+    "citefullauthor",
+    "citep",
+    "citet",
+    "citeyear",
+    "citeyearpar",
+    "footcite",
+    "parencite",
+    "supercite",
+    "textcite",
+)
 FIGURE_LABEL_PREFIXES = ("fig:", "figure:")
 TABLE_LABEL_PREFIXES = ("tab:", "table:")
 FLOAT_LABEL_PREFIXES = FIGURE_LABEL_PREFIXES + TABLE_LABEL_PREFIXES
@@ -88,12 +104,7 @@ NUMERIC_LITERAL_RE = re.compile(
     r"(?![A-Za-z0-9_])"
 )
 MASKED_NUMERIC_CONTEXT_COMMANDS = (
-    "cite",
-    "citep",
-    "citet",
-    "citealp",
-    "parencite",
-    "textcite",
+    *CITE_COMMANDS,
     "ref",
     "eqref",
     "autoref",
@@ -541,9 +552,17 @@ def tex_input_paths(path: Path) -> list[Path]:
         text = tex_without_comments(path.read_text(encoding="utf-8"))
     except UnicodeDecodeError:
         return []
-    pattern = re.compile(r"\\(?:input|include)\s*\{([^{}]+)\}")
     paths = []
-    for match in pattern.finditer(text):
+    patterns = [
+        re.compile(r"\\(?:input|include)\s*\{([^{}]+)\}"),
+        re.compile(r"\\(?:input|include)\s+(?!\{)([A-Za-z0-9_./:+-]+)"),
+    ]
+    for pattern in patterns:
+        for match in pattern.finditer(text):
+            target = resolve_tex_input(path, match.group(1))
+            if target is not None:
+                paths.append(target)
+    for match in re.finditer(r"\\InputIfFileExists\s*\{([^{}]+)\}", text):
         target = resolve_tex_input(path, match.group(1))
         if target is not None:
             paths.append(target)
@@ -619,7 +638,8 @@ def extract_bibkeys(text: str) -> set[str]:
 def extract_cite_keys(text: str) -> set[str]:
     keys = set()
     text = tex_without_comments(text)
-    pattern = re.compile(r"\\(?:cite|citep|citet|citealp|parencite|textcite)(?:\[[^\]]*\])*\{([^}]*)\}")
+    command_names = "|".join(re.escape(name) for name in sorted(CITE_COMMANDS, key=len, reverse=True))
+    pattern = re.compile(rf"\\(?:{command_names})\*?(?:\[[^\]]*\])*\{{([^}}]*)\}}", flags=re.I)
     for match in pattern.finditer(text):
         for key in match.group(1).split(","):
             key = key.strip()

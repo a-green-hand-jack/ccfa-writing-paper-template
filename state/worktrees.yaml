@@ -30,7 +30,7 @@
       ],
       "status": "planned",
       "activation_command": "bash scripts/create-main-dev-worktrees.sh ../ccfa-paper-template-main",
-      "activation_notes": "Planned worktrees are declarations only; physical path and branch checks start after status is active."
+      "activation_notes": "Planned worktrees are declarations only; physical path and branch checks start after status is active. For a case branch, set this row to a case-scoped tex-only branch before running the activation script."
     },
     {
       "id": "dev",

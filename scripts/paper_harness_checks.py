@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 import os
 import csv
+import fnmatch
 import hashlib
 import re
 import shutil
@@ -717,6 +718,78 @@ def adapter_text_path(path: str) -> Path:
     return target
 
 
+def normalize_path_pattern(value: str) -> str:
+    pattern = str(value).strip().replace("\\", "/")
+    while pattern.startswith("./"):
+        pattern = pattern[2:]
+    if pattern.endswith("/") and not pattern.endswith("/**"):
+        pattern = f"{pattern}**"
+    return pattern
+
+
+def pattern_static_prefix(pattern: str) -> str:
+    pattern = normalize_path_pattern(pattern)
+    first_glob = len(pattern)
+    for char in "*?[":
+        index = pattern.find(char)
+        if index != -1:
+            first_glob = min(first_glob, index)
+    return pattern[:first_glob].rstrip("/")
+
+
+def path_patterns_overlap(candidate: str, forbidden: str) -> bool:
+    candidate_pattern = normalize_path_pattern(candidate)
+    forbidden_pattern = normalize_path_pattern(forbidden)
+    if not candidate_pattern or not forbidden_pattern:
+        return False
+    if candidate_pattern == forbidden_pattern:
+        return True
+    if fnmatch.fnmatch(candidate_pattern, forbidden_pattern) or fnmatch.fnmatch(forbidden_pattern, candidate_pattern):
+        return True
+    candidate_prefix = pattern_static_prefix(candidate_pattern)
+    forbidden_prefix = pattern_static_prefix(forbidden_pattern)
+    if not candidate_prefix or not forbidden_prefix:
+        return False
+    return (
+        candidate_prefix == forbidden_prefix
+        or candidate_prefix.startswith(f"{forbidden_prefix}/")
+        or forbidden_prefix.startswith(f"{candidate_prefix}/")
+    )
+
+
+def check_capability_path_contract(capability: dict, cid: str, source: str) -> int:
+    code = 0
+    forbidden = strings(capability.get("forbidden_paths"))
+    if not forbidden:
+        return code
+    for field in ["outputs", "allowed_paths"]:
+        for path in strings(capability.get(field)):
+            for pattern in forbidden:
+                if path_patterns_overlap(path, pattern):
+                    code |= error(f"capability {source} {field} overlaps forbidden_paths: {cid} {path} vs {pattern}")
+    return code
+
+
+def capability_adapter_contract(capability: dict) -> dict:
+    contract = capability.get("adapter_contract", {})
+    return contract if isinstance(contract, dict) else {}
+
+
+def check_capability_adapter_contract(capability: dict, cid: str, adapter: str, text: str) -> int:
+    code = 0
+    contract = capability_adapter_contract(capability)
+    required_text = strings(contract.get("required_text"))
+    forbidden_text = strings(contract.get("forbidden_text"))
+    lowered = text.lower()
+    for phrase in required_text:
+        if phrase.lower() not in lowered:
+            code |= error(f"capability adapter missing required contract text for {cid}: {adapter}: {phrase}")
+    for phrase in forbidden_text:
+        if phrase.lower() in lowered:
+            code |= error(f"capability adapter contains forbidden contract text for {cid}: {adapter}: {phrase}")
+    return code
+
+
 def compare_tree(source: Path, dest: Path) -> list[str]:
     mismatches = []
     if source.is_symlink():
@@ -1238,11 +1311,14 @@ def check_source_revision_freshness(manifest: dict) -> int:
 def check_capability_parity():
     code = require([".agent/capabilities/registry.yaml", ".claude/ANATOMY.md", ".agents/ANATOMY.md"])
     registry = load_doc(".agent/capabilities/registry.yaml")
+    registered_ids = set()
     for cap in registry.get("capabilities", []):
         cid = cap["id"]
+        registered_ids.add(cid)
         source = f".agent/capabilities/{cid}.yaml"
         outputs = strings(cap.get("outputs"))
         validators = strings(cap.get("validators"))
+        adapter_contract = capability_adapter_contract(cap)
         code |= require([
             source,
             cap["claude_adapter"]["skill"],
@@ -1252,10 +1328,12 @@ def check_capability_parity():
             code |= error(f"active capability has no outputs: {cid}")
         if cap.get("status") == "active" and not validators:
             code |= error(f"active capability has no validators: {cid}")
+        code |= check_capability_path_contract(cap, cid, "registry")
         if (ROOT / source).exists():
             spec = load_doc(source)
             spec_outputs = strings(spec.get("outputs"))
             spec_validators = strings(spec.get("validators"))
+            spec_adapter_contract = capability_adapter_contract(spec)
             if spec.get("id") != cid:
                 code |= error(f"capability spec id mismatch: {cid}")
             if cap.get("status") == "active" and not spec_outputs:
@@ -1266,6 +1344,9 @@ def check_capability_parity():
                 code |= error(f"capability spec outputs differ from registry: {cid}")
             if validators and spec_validators and validators != spec_validators:
                 code |= error(f"capability spec validators differ from registry: {cid}")
+            if adapter_contract != spec_adapter_contract:
+                code |= error(f"capability spec adapter_contract differs from registry: {cid}")
+            code |= check_capability_path_contract(spec, cid, "spec")
         declared_paths = outputs + validators
         for adapter in [cap["claude_adapter"]["skill"], cap["codex_adapter"]["workflow"]]:
             text_path = adapter_text_path(adapter)
@@ -1277,6 +1358,21 @@ def check_capability_parity():
                 code |= error(f"capability adapter does not mention source capability {source}: {rel(text_path)}")
             if declared_paths and not any(path in text for path in declared_paths):
                 code |= error(f"capability adapter does not mention a declared output or validator path: {rel(text_path)}")
+            code |= check_capability_adapter_contract(cap, cid, adapter, text)
+    capability_dir = ROOT / ".agent/capabilities"
+    for spec_path in sorted(capability_dir.glob("*.yaml")):
+        if spec_path.name == "registry.yaml":
+            continue
+        if spec_path.stem not in registered_ids:
+            code |= error(f"capability spec not registered: {rel(spec_path)}")
+    declared_claude = {str(cap.get("claude_adapter", {}).get("skill", "")).rstrip("/") for cap in registry.get("capabilities", []) if isinstance(cap, dict)}
+    declared_codex = {str(cap.get("codex_adapter", {}).get("workflow", "")) for cap in registry.get("capabilities", []) if isinstance(cap, dict)}
+    for skill_dir in sorted((ROOT / ".claude/skills").glob("*")):
+        if skill_dir.is_dir() and rel(skill_dir).rstrip("/") not in declared_claude:
+            code |= error(f"capability claude adapter not registered: {rel(skill_dir)}")
+    for workflow_path in sorted((ROOT / ".agents/workflows").glob("*.md")):
+        if rel(workflow_path) not in declared_codex:
+            code |= error(f"capability codex adapter not registered: {rel(workflow_path)}")
     for role in registry.get("roles", []):
         code |= require([role["claude_agent"], role["codex_role"]])
     return code

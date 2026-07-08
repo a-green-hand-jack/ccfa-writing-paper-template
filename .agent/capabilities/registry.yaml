@@ -1357,7 +1357,24 @@
         "blocker_record": "memory/current-status.md",
         "fact_source": "Use arXiv source files, repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
       },
-      "exceptions": []
+      "exceptions": [],
+      "adapter_contract": {
+        "required_text": [
+          "/tmp",
+          "lab/harness-evals/",
+          "research-project-harness"
+        ],
+        "forbidden_text": [
+          "edit the live case branch for destructive probes",
+          "destructive probes in the live case branch",
+          "directly modify /home/user/Projects/research-project-harness",
+          "directly modify `/home/user/Projects/research-project-harness`",
+          "skip lab/harness-evals/",
+          "skip `lab/harness-evals/`",
+          "do not use /tmp",
+          "do not write reports"
+        ]
+      }
     }
   ],
   "roles": [

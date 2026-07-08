@@ -69,9 +69,20 @@ INSUFFICIENT_EVIDENCE_QUALITY = {
 }
 CITATION_FITNESS_STATUSES = {"strong", "adequate", "weak", "missing-better-source", "needs-review"}
 WEAK_CITATION_FITNESS_STATUSES = {"weak", "missing-better-source", "needs-review"}
+STRONG_CITATION_FITNESS_STATUSES = {"strong", "adequate"}
 CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 CITATION_BULK_CONTEXT_THRESHOLD = 3
 CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
+GENERIC_UNAUDITED_CITATION_RE = re.compile(
+    r"(?:"
+    r"not[-\s]+(?:sentence[-\s]+)?audited"
+    r"|sentence[-\s]+level citation fitness not audited"
+    r"|migrated source context"
+    r"|citation present in migrated"
+    r"|manual citation fitness review remains pending"
+    r")",
+    re.I,
+)
 CITE_COMMANDS = (
     "autocite",
     "cite",
@@ -262,34 +273,62 @@ def citation_context_signature(citation: dict) -> tuple[str, ...]:
     return tuple(values)
 
 
+def generic_unaudited_citation_signature(signature: tuple[str, ...]) -> bool:
+    return any(GENERIC_UNAUDITED_CITATION_RE.search(value) for value in signature if value)
+
+
 def check_citation_bulk_import_state(citation_ledger: dict, citations: list[dict]) -> int:
-    repeated_contexts: dict[tuple[str, ...], list[str]] = {}
+    code = 0
+    repeated_contexts: dict[tuple[str, ...], list[tuple[str, str]]] = {}
     for citation in citations:
         if not isinstance(citation, dict) or not active_now(citation):
             continue
         fitness_status = str(citation.get("fitness_status", "")).strip().lower()
-        if fitness_status not in WEAK_CITATION_FITNESS_STATUSES:
-            continue
         signature = citation_context_signature(citation)
         if not any(signature):
             continue
         citation_id = item_id(citation, "citation_id", "id", "bibkey")
-        repeated_contexts.setdefault(signature, []).append(citation_id)
+        repeated_contexts.setdefault(signature, []).append((citation_id, fitness_status))
 
-    bulk_groups = [ids for ids in repeated_contexts.values() if len(ids) >= CITATION_BULK_CONTEXT_THRESHOLD]
-    if not bulk_groups:
-        return 0
     missing_fields = [field for field in CITATION_BULK_IMPORT_REQUIRED_FIELDS if not meaningful(citation_ledger.get(field))]
-    if not missing_fields:
-        return 0
-    sample = ", ".join(bulk_groups[0][:3])
-    missing = ", ".join(missing_fields)
-    required = ", ".join(CITATION_BULK_IMPORT_REQUIRED_FIELDS)
-    return error(
-        "citation-ledger has repeated weak citation contexts "
-        f"({sample}); add top-level bulk migration state fields: {missing} "
-        f"(required: {required})"
-    )
+    for signature, entries in repeated_contexts.items():
+        if len(entries) < CITATION_BULK_CONTEXT_THRESHOLD:
+            continue
+        sample = ", ".join(citation_id for citation_id, _status in entries[:3])
+        statuses = {status for _citation_id, status in entries if status}
+        weak_only = bool(statuses) and statuses <= WEAK_CITATION_FITNESS_STATUSES
+        if missing_fields:
+            missing = ", ".join(missing_fields)
+            required = ", ".join(CITATION_BULK_IMPORT_REQUIRED_FIELDS)
+            label = "repeated weak citation contexts" if weak_only else "repeated citation contexts"
+            code |= error(
+                f"citation-ledger has {label} "
+                f"({sample}); add top-level bulk migration state fields: {missing} "
+                f"(required: {required})"
+            )
+        if statuses & STRONG_CITATION_FITNESS_STATUSES and generic_unaudited_citation_signature(signature):
+            code |= error(
+                "citation-ledger has repeated strong/adequate citation contexts marked as unaudited: "
+                f"{sample}"
+            )
+    return code
+
+
+DEFINITIONAL_NOTATION_CONTEXT_RE = re.compile(
+    r"\b(?:denote|denotes|denoted|define|defines|defined|let|represent|represents|represented)\b"
+    r"|\bstands?\s+for\b"
+    r"|\bwe\s+use\b"
+    r"|\bas\s+(?:a|an|the)\b",
+    re.I,
+)
+NOTATION_COMMAND_RE = re.compile(
+    r"\\(?:"
+    r"alpha|beta|gamma|delta|epsilon|varepsilon|zeta|eta|theta|vartheta|iota|kappa|lambda|mu|nu|xi|"
+    r"pi|rho|sigma|tau|upsilon|phi|varphi|chi|psi|omega|"
+    r"Gamma|Delta|Theta|Lambda|Xi|Pi|Sigma|Upsilon|Phi|Psi|Omega|"
+    r"mathcal|mathbf|mathbb|mathrm|operatorname"
+    r")\b"
+)
 
 
 def reference_bibkeys(ref: dict) -> list[str]:
@@ -2216,7 +2255,41 @@ def declared_asset_paths(*items: dict | None) -> list[tuple[str, str, set[str]]]
     return declared
 
 
-def check_figure_asset_binding(item: dict, mapped_float: dict | None, label: str, ident: str, text: str) -> int:
+def figure_block_declared_asset_paths(
+    block: str,
+    figures: list[dict],
+    active_by_float_id: dict,
+    active_by_label: dict,
+) -> list[tuple[str, str, set[str]]]:
+    labels = extract_labels(block)
+    declarations = []
+    for label in labels:
+        mapped_float = active_by_label.get(label)
+        if isinstance(mapped_float, dict):
+            declarations.append(mapped_float)
+    for figure in figures:
+        if not isinstance(figure, dict) or not active_now(figure):
+            continue
+        label = label_for_index_item(figure, active_by_float_id, active_by_label)
+        if label not in labels:
+            continue
+        declarations.append(figure)
+        mapped_float = mapped_float_for_index_item(figure, active_by_float_id, active_by_label)
+        if isinstance(mapped_float, dict):
+            declarations.append(mapped_float)
+    return declared_asset_paths(*declarations)
+
+
+def check_figure_asset_binding(
+    item: dict,
+    mapped_float: dict | None,
+    label: str,
+    ident: str,
+    text: str,
+    figures: list[dict] | None = None,
+    active_by_float_id: dict | None = None,
+    active_by_label: dict | None = None,
+) -> int:
     if missingish(label):
         return 0
     block = latex_block_for_label(text, str(label), FIGURE_ENVIRONMENTS)
@@ -2230,13 +2303,24 @@ def check_figure_asset_binding(item: dict, mapped_float: dict | None, label: str
         return 0
 
     code = 0
-    for field, value, variants in declared_asset_paths(item, mapped_float):
+    declared = declared_asset_paths(item, mapped_float)
+    for field, value, variants in declared:
         if not variants & actual_variants:
             sample = ", ".join(actual_paths[:5])
             code |= error(
                 f"figure {ident} includegraphics asset mismatch for {field}: "
                 f"expected {value}; found {sample}"
             )
+    block_declared = declared
+    if figures is not None and active_by_float_id is not None and active_by_label is not None:
+        block_declared = figure_block_declared_asset_paths(block, figures, active_by_float_id, active_by_label)
+    declared_variant_sets = [variants for _field, _value, variants in block_declared]
+    for path in actual_paths:
+        variants = asset_path_variants(path)
+        if not variants:
+            continue
+        if not any(variants & declared_variants for declared_variants in declared_variant_sets):
+            code |= error(f"figure {ident} includegraphics asset not registered: {path}")
     return code
 
 
@@ -2261,6 +2345,109 @@ def notation_symbol_variants(symbol: str) -> list[str]:
 
 def text_contains_notation_symbol(text: str, symbol: str) -> bool:
     return any(variant in text for variant in notation_symbol_variants(symbol))
+
+
+def strip_math_delimiters(value: str) -> str:
+    text = str(value).strip()
+    wrappers = [("$", "$"), ("\\(", "\\)"), ("\\[", "\\]")]
+    for prefix, suffix in wrappers:
+        if text.startswith(prefix) and text.endswith(suffix) and len(text) > len(prefix) + len(suffix):
+            return text[len(prefix) : -len(suffix)].strip()
+    return text
+
+
+def strip_math_scripts(value: str) -> str:
+    text = str(value)
+    output = []
+    index = 0
+    while index < len(text):
+        char = text[index]
+        if char in {"_", "^"}:
+            index += 1
+            if index < len(text) and text[index] == "{":
+                depth = 1
+                index += 1
+                while index < len(text) and depth:
+                    if text[index] == "{":
+                        depth += 1
+                    elif text[index] == "}":
+                        depth -= 1
+                    index += 1
+                continue
+            if index < len(text) and text[index] == "\\":
+                index += 1
+                while index < len(text) and text[index].isalpha():
+                    index += 1
+                continue
+            index += 1
+            continue
+        output.append(char)
+        index += 1
+    return "".join(output)
+
+
+def normalize_math_expression(value: str) -> str:
+    text = strip_math_delimiters(value)
+    text = text.replace("\\left", "").replace("\\right", "")
+    return re.sub(r"\s+", "", text).strip()
+
+
+def notation_symbol_keys(symbol: str) -> set[str]:
+    normalized = normalize_math_expression(symbol)
+    if not normalized:
+        return set()
+    keys = {normalized}
+    without_scripts = strip_math_scripts(normalized)
+    if without_scripts:
+        keys.add(without_scripts)
+    return keys
+
+
+def registered_notation_keys(symbols: list[dict]) -> set[str]:
+    keys = set()
+    for item in symbols:
+        if not isinstance(item, dict) or not active_now(item):
+            continue
+        symbol = item.get("symbol") or item.get("latex")
+        if missingish(symbol):
+            continue
+        for variant in notation_symbol_variants(str(symbol)):
+            keys.update(notation_symbol_keys(variant))
+    return keys
+
+
+def inline_math_spans_with_context(text: str) -> list[tuple[str, str]]:
+    spans = []
+    pattern = re.compile(r"(?<!\\)\$(?!\$)(.+?)(?<!\\)\$|\\\((.+?)\\\)")
+    for line in text.splitlines():
+        stripped = strip_tex_comment(line)
+        if not DEFINITIONAL_NOTATION_CONTEXT_RE.search(stripped):
+            continue
+        for match in pattern.finditer(stripped):
+            expression = next(group for group in match.groups() if group is not None)
+            spans.append((expression.strip(), stripped.strip()))
+    return spans
+
+
+def notation_expression_requires_registration(expression: str) -> bool:
+    normalized = normalize_math_expression(expression)
+    if not normalized:
+        return False
+    if not re.search(r"[A-Za-z\\]", normalized):
+        return False
+    return bool(NOTATION_COMMAND_RE.search(normalized))
+
+
+def check_unregistered_definitional_notation(symbols: list[dict], paper_content: str) -> int:
+    code = 0
+    registered = registered_notation_keys(symbols)
+    for expression, _context in inline_math_spans_with_context(paper_content):
+        if not notation_expression_requires_registration(expression):
+            continue
+        expression_keys = notation_symbol_keys(expression)
+        if expression_keys and not expression_keys & registered:
+            code |= error(f"active notation use is not registered: {expression}")
+    return code
 
 
 def local_path_and_optional_line(value: str) -> tuple[Path, int | None]:
@@ -3479,7 +3666,16 @@ def check_figures_tables():
                     code |= error(f"{kind} {ident} missing provenance")
 
                 if kind == "figure" and not missingish(mapped_label):
-                    code |= check_figure_asset_binding(item, mapped_float, str(mapped_label), ident, text)
+                    code |= check_figure_asset_binding(
+                        item,
+                        mapped_float,
+                        str(mapped_label),
+                        ident,
+                        text,
+                        figures,
+                        active_by_float_id,
+                        active_by_label,
+                    )
 
             if kind == "table" and table_requires_numeric_binding(item):
                 has_numeric_binding = strings(item.get("numeric_ids")) or strings(item.get("result_ids"))
@@ -3530,6 +3726,7 @@ def check_notation():
             target_text = first_defined_text(str(first_defined))
             if target_text is not None and not text_contains_notation_symbol(target_text, symbol):
                 code |= error(f"notation symbol {symbol} not found at first_defined: {first_defined}")
+    code |= check_unregistered_definitional_notation(symbols, paper_content)
 
     seen_terms = {}
     for item in terms:

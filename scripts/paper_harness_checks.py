@@ -73,6 +73,7 @@ STRONG_CITATION_FITNESS_STATUSES = {"strong", "adequate"}
 CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 CITATION_BULK_CONTEXT_THRESHOLD = 3
 CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
+CITATION_AUDIT_REPORT_SAMPLE_LIMIT = 5
 GENERIC_UNAUDITED_CITATION_RE = re.compile(
     r"(?:"
     r"not[-\s]+(?:sentence[-\s]+)?audited"
@@ -685,6 +686,154 @@ def extract_cite_keys(text: str) -> set[str]:
             if key:
                 keys.add(key)
     return keys
+
+
+def iter_paper_citation_occurrences():
+    command_names = "|".join(re.escape(name) for name in sorted(CITE_COMMANDS, key=len, reverse=True))
+    pattern = re.compile(rf"\\({command_names})\*?(?:\s*\[[^\]]*\])*\s*\{{([^}}]*)\}}", flags=re.I)
+    for path in paper_content_tex_files():
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+        for line_no, line in enumerate(lines, start=1):
+            scan_line = strip_tex_comment(line)
+            for match in pattern.finditer(scan_line):
+                keys = [key.strip() for key in match.group(2).split(",") if key.strip()]
+                if not keys:
+                    continue
+                yield {
+                    "path": path,
+                    "line": line_no,
+                    "path_line": f"{rel_posix(path)}:{line_no}",
+                    "command": "\\" + match.group(1),
+                    "keys": keys,
+                    "context": line.strip(),
+                }
+
+
+def citation_occurrences_by_key() -> dict[str, list[dict]]:
+    by_key: dict[str, list[dict]] = {}
+    for occurrence in iter_paper_citation_occurrences():
+        for key in occurrence["keys"]:
+            by_key.setdefault(key, []).append(occurrence)
+    return by_key
+
+
+def citation_locator_values(citation: dict) -> list[str]:
+    locators = []
+    for field in ("locator", "locators"):
+        locators.extend(strings(citation.get(field)))
+    return list(dict.fromkeys(locators))
+
+
+def citation_audit_entry(citation: dict, occurrences_by_key: dict[str, list[dict]], paper_keys: set[str]) -> dict:
+    citation_id = item_id(citation, "citation_id", "id", "bibkey")
+    keys = citation_bibkeys(citation)
+    fitness_status = str(citation.get("fitness_status", "")).strip().lower() or None
+    active = active_now(citation)
+    signature = citation_context_signature(citation)
+    ledger_locators = citation_locator_values(citation)
+    paper_locations = []
+    sample_occurrences = []
+    for occurrence in (occurrence for key in keys for occurrence in occurrences_by_key.get(key, [])):
+        if occurrence["path_line"] not in paper_locations:
+            paper_locations.append(occurrence["path_line"])
+        if len(sample_occurrences) < CITATION_AUDIT_REPORT_SAMPLE_LIMIT:
+            sample_occurrences.append(
+                {
+                    "path": rel_posix(occurrence["path"]),
+                    "line": occurrence["line"],
+                    "path_line": occurrence["path_line"],
+                    "command": occurrence["command"],
+                    "keys": occurrence["keys"],
+                    "context": occurrence["context"],
+                }
+            )
+    unmatched_locators = [locator for locator in ledger_locators if locator not in set(paper_locations)]
+    warnings = []
+    if active:
+        if not keys:
+            warnings.append("missing bibkey")
+        if not has_any_field(citation, ["purpose", "intent"]):
+            warnings.append("missing purpose/intent")
+        if not has_any_field(citation, CITATION_CONTEXT_FIELDS):
+            warnings.append("missing context/locator")
+        if not fitness_status:
+            warnings.append("missing fitness_status")
+        elif fitness_status not in CITATION_FITNESS_STATUSES:
+            warnings.append(f"invalid fitness_status {citation.get('fitness_status')}")
+        for key in keys:
+            if key not in paper_keys:
+                warnings.append(f"key not cited in paper content: {key}")
+    if unmatched_locators:
+        warnings.append("ledger locator not found in active paper content")
+    return {
+        "citation_id": citation_id,
+        "active": active,
+        "bibkeys": keys,
+        "fitness_status": fitness_status,
+        "purpose": citation.get("purpose") or citation.get("intent"),
+        "has_context_or_locator": has_any_field(citation, CITATION_CONTEXT_FIELDS),
+        "has_locator": bool(ledger_locators),
+        "generic_unaudited_context": generic_unaudited_citation_signature(signature),
+        "ledger_locators": ledger_locators,
+        "unmatched_ledger_locators": unmatched_locators,
+        "paper_occurrence_count": len(paper_locations),
+        "sample_paper_occurrences": sample_occurrences,
+        "warnings": warnings,
+    }
+
+
+def build_citation_audit_report() -> dict:
+    citation_ledger = load_doc("lab/research/citation-ledger.yaml")
+    citations = citation_ledger.get("citations", [])
+    if not isinstance(citations, list):
+        citations = []
+    occurrences_by_key = citation_occurrences_by_key()
+    paper_keys = set(occurrences_by_key)
+    active_citations = [citation for citation in citations if isinstance(citation, dict) and active_now(citation)]
+    active_ledger_keys = {
+        key
+        for citation in active_citations
+        for key in citation_bibkeys(citation)
+    }
+    entries = [
+        citation_audit_entry(citation, occurrences_by_key, paper_keys)
+        for citation in citations
+        if isinstance(citation, dict)
+    ]
+    status_counts: dict[str, int] = {}
+    for citation in active_citations:
+        status = str(citation.get("fitness_status", "")).strip().lower() or "missing"
+        status_counts[status] = status_counts.get(status, 0) + 1
+    entries_with_locator = [entry for entry in entries if entry["active"] and entry["has_locator"]]
+    generic_entries = [entry for entry in entries if entry["active"] and entry["generic_unaudited_context"]]
+    warning_entries = [entry for entry in entries if entry["warnings"]]
+    return {
+        "report_version": "citation-audit-report-v1",
+        "citation_file": "lab/research/citation-ledger.yaml",
+        "sample_limit": CITATION_AUDIT_REPORT_SAMPLE_LIMIT,
+        "bulk_import_status": citation_ledger.get("bulk_import_status"),
+        "fitness_review_status": citation_ledger.get("fitness_review_status"),
+        "audit_plan": citation_ledger.get("audit_plan"),
+        "active_paper_citation_keys": len(paper_keys),
+        "active_paper_citation_occurrences": sum(len(items) for items in occurrences_by_key.values()),
+        "active_ledger_citation_entries": len(active_citations),
+        "active_ledger_citation_keys": len(active_ledger_keys),
+        "fitness_status_counts": dict(sorted(status_counts.items())),
+        "active_entries_with_locator": len(entries_with_locator),
+        "active_entries_with_generic_unaudited_context": len(generic_entries),
+        "entries_with_warnings": len(warning_entries),
+        "paper_keys_missing_from_active_ledger": sorted(paper_keys - active_ledger_keys),
+        "active_ledger_keys_not_in_paper": sorted(active_ledger_keys - paper_keys),
+        "citations": sorted(entries, key=lambda entry: (entry.get("bibkeys") or [""], entry.get("citation_id") or "")),
+    }
+
+
+def citation_audit_report():
+    print(json.dumps(build_citation_audit_report(), indent=2, sort_keys=True))
+    return 0
 
 
 def extract_macro_names(text: str) -> set[str]:
@@ -4143,6 +4292,7 @@ CHECKS = {
     "numeric_exception_report": numeric_exception_report,
     "reference_existence": check_reference_existence,
     "citation_fitness": check_citation_fitness,
+    "citation_audit_report": citation_audit_report,
     "index_float_refs": lambda: require(["state/float-placement-map.yaml", "paper/figures/README.md", "paper/tables/README.md"]),
     "float_placement": check_float_placement,
     "notation": check_notation,
@@ -4152,7 +4302,7 @@ CHECKS = {
     "export_release": export_release,
 }
 
-REPORT_COMMANDS = {"numeric_exception_report"}
+REPORT_COMMANDS = {"numeric_exception_report", "citation_audit_report"}
 
 
 def run(name: str) -> int:

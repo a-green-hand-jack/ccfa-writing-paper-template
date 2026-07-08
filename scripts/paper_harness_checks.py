@@ -810,6 +810,22 @@ def check_capability_adapter_contract(capability: dict, cid: str, adapter: str, 
     return code
 
 
+def capability_string_list_field(capability: dict, cid: str, field: str, source: str) -> tuple[int, list[str]]:
+    value = capability.get(field)
+    if value is None:
+        return 0, []
+    if not isinstance(value, list):
+        return error(f"capability {source} {field} must be a list: {cid}"), []
+    code = 0
+    values = []
+    for index, item in enumerate(value, start=1):
+        if not isinstance(item, str) or missingish(item):
+            code |= error(f"capability {source} {field}[{index}] must be a non-empty string: {cid}")
+            continue
+        values.append(str(item))
+    return code, values
+
+
 def compare_tree(source: Path, dest: Path) -> list[str]:
     mismatches = []
     if source.is_symlink():
@@ -1193,7 +1209,9 @@ def check_worktree_physical_state(item: dict, branches: set[str], worktree_entri
     code = 0
     ident = item.get("id", "<missing>")
     branch = str(item.get("branch", "")).strip()
-    if branch and branch not in branches:
+    if missingish(branch):
+        code |= error(f"active worktree {ident} missing branch")
+    elif branch not in branches:
         code |= error(f"active worktree {ident} branch does not exist: {branch}")
 
     path_value = None
@@ -1315,6 +1333,10 @@ def check_source_revision_freshness(manifest: dict) -> int:
     if git_value("cat-file", "-t", commit) != "commit":
         code |= error(f"release manifest source_revision commit is not present: {commit}")
         return code
+    if isinstance(treeish, str) and treeish.strip() and treeish.strip().upper() != "HEAD":
+        resolved_treeish = git_value("rev-parse", "--verify", f"{treeish.strip()}^{{commit}}")
+        if resolved_treeish and resolved_treeish.lower() != commit:
+            code |= error("release manifest source_revision treeish does not resolve to commit")
 
     expected_tree = git_value("rev-parse", "--verify", f"{commit}^{{tree}}")
     if not re.fullmatch(r"[0-9a-f]{40}", tree):
@@ -1336,8 +1358,12 @@ def check_capability_parity():
         cid = cap["id"]
         registered_ids.add(cid)
         source = f".agent/capabilities/{cid}.yaml"
-        outputs = strings(cap.get("outputs"))
-        validators = strings(cap.get("validators"))
+        output_code, outputs = capability_string_list_field(cap, cid, "outputs", "registry")
+        validator_code, validators = capability_string_list_field(cap, cid, "validators", "registry")
+        code |= output_code | validator_code
+        for field in ["allowed_paths", "read_only_paths", "forbidden_paths"]:
+            field_code, _ = capability_string_list_field(cap, cid, field, "registry")
+            code |= field_code
         adapter_contract = capability_adapter_contract(cap)
         code |= require([
             source,
@@ -1351,8 +1377,12 @@ def check_capability_parity():
         code |= check_capability_path_contract(cap, cid, "registry")
         if (ROOT / source).exists():
             spec = load_doc(source)
-            spec_outputs = strings(spec.get("outputs"))
-            spec_validators = strings(spec.get("validators"))
+            spec_output_code, spec_outputs = capability_string_list_field(spec, cid, "outputs", "spec")
+            spec_validator_code, spec_validators = capability_string_list_field(spec, cid, "validators", "spec")
+            code |= spec_output_code | spec_validator_code
+            for field in ["allowed_paths", "read_only_paths", "forbidden_paths"]:
+                field_code, _ = capability_string_list_field(spec, cid, field, "spec")
+                code |= field_code
             spec_adapter_contract = capability_adapter_contract(spec)
             if spec.get("id") != cid:
                 code |= error(f"capability spec id mismatch: {cid}")
@@ -2381,6 +2411,31 @@ def registered_number_values(number: dict) -> list[str]:
     return display_values or direct_values
 
 
+def numeric_values_compatible(left_values: list[str], right_values: list[str]) -> bool:
+    for left in left_values:
+        left_equivalents = numeric_value_equivalents(left)
+        for right in right_values:
+            if left_equivalents & numeric_value_equivalents(right):
+                return True
+    return False
+
+
+def check_number_value_consistency(numeric_id: str, number: dict) -> int:
+    direct_values = []
+    for field in ["value", "display_value", "reported_value", "latex_value", "macro_value"]:
+        direct_values.extend(scalar_strings(number.get(field)))
+    display_values = []
+    display = number.get("display")
+    if isinstance(display, dict):
+        for field in ["value", "display_value", "reported_value", "latex_value", "macro_value", "text", "latex"]:
+            display_values.extend(scalar_strings(display.get(field)))
+    elif not missingish(display):
+        display_values.extend(scalar_strings(display))
+    if direct_values and display_values and not numeric_values_compatible(direct_values, display_values):
+        return error(f"number {numeric_id} value contradicts display value")
+    return 0
+
+
 def numeric_value_equivalents(value) -> set[str]:
     normalized = normalize_numeric_value(value)
     values = {normalized} if normalized else set()
@@ -3048,6 +3103,7 @@ def check_numeric_consistency():
     verified_literal_values = set()
     for number in numbers:
         numeric_id = item_id(number, "numeric_id", "id")
+        code |= check_number_value_consistency(str(numeric_id), number)
         if is_verified(number):
             verified_literal_values.update(normalize_numeric_value(value) for value in registered_number_values(number))
         for evidence_id in evidence_refs(number):
@@ -3488,6 +3544,9 @@ def check_notation():
             alias_key = alias.lower()
             if alias_key in seen_terms and seen_terms[alias_key] != definition:
                 code |= error(f"term alias conflicts with existing term: {alias}")
+            elif alias_key in seen_terms and alias_key != term:
+                code |= error(f"duplicate term alias: {alias}")
+            seen_terms[alias_key] = definition
     return code
 
 

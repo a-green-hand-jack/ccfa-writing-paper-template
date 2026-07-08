@@ -459,13 +459,15 @@
       "outputs": [
         "lab/research/reference-ledger.yaml",
         "lab/research/citation-ledger.yaml",
+        "lab/research/citation-sentence-review-worksheet-*.yaml",
         "lab/research/related-work-map.yaml",
         "paper/refs.bib"
       ],
       "validators": [
         "scripts/check-capability-parity.py",
         "scripts/check-reference-existence.py",
-        "scripts/check-citation-fitness.py"
+        "scripts/check-citation-fitness.py",
+        "scripts/check-citation-review-worksheets.py"
       ],
       "human_gates": [
         {
@@ -482,6 +484,7 @@
       "allowed_paths": [
         "lab/research/reference-ledger.yaml",
         "lab/research/citation-ledger.yaml",
+        "lab/research/citation-sentence-review-worksheet-*.yaml",
         "lab/research/related-work-map.yaml",
         "paper/refs.bib",
         "memory/current-status.md",
@@ -496,7 +499,8 @@
         "lab/research/related-work-map.yaml",
         "scripts/check-capability-parity.py",
         "scripts/check-reference-existence.py",
-        "scripts/check-citation-fitness.py"
+        "scripts/check-citation-fitness.py",
+        "scripts/check-citation-review-worksheets.py"
       ],
       "forbidden_paths": [
         ".git/**",
@@ -521,13 +525,15 @@
         "required_outputs": [
           "lab/research/reference-ledger.yaml",
           "lab/research/citation-ledger.yaml",
+          "lab/research/citation-sentence-review-worksheet-*.yaml",
           "lab/research/related-work-map.yaml",
           "paper/refs.bib"
         ],
         "required_validators": [
           "scripts/check-capability-parity.py",
           "scripts/check-reference-existence.py",
-          "scripts/check-citation-fitness.py"
+          "scripts/check-citation-fitness.py",
+          "scripts/check-citation-review-worksheets.py"
         ],
         "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or memory/current-status.md.",
         "blocker_record": "memory/current-status.md",

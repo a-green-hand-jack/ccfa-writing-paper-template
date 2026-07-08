@@ -74,6 +74,9 @@ CITATION_CONTEXT_FIELDS = ("context", "locator", "section", "quote")
 CITATION_BULK_CONTEXT_THRESHOLD = 3
 CITATION_BULK_IMPORT_REQUIRED_FIELDS = ("bulk_import_status", "migration_source", "fitness_review_status")
 CITATION_AUDIT_REPORT_SAMPLE_LIMIT = 5
+CITATION_WORKSHEET_SCHEMA_VERSION = "citation-sentence-review-worksheet-v1"
+CITATION_WORKSHEET_SOURCE_REVIEW_STATUSES = {"not-started", "in-review", "reviewed", "blocked"}
+CITATION_REVIEWED_DECISIONS = {"strong", "adequate", "weak", "missing-better-source"}
 GENERIC_UNAUDITED_CITATION_RE = re.compile(
     r"(?:"
     r"unaudited"
@@ -835,6 +838,148 @@ def build_citation_audit_report() -> dict:
 def citation_audit_report():
     print(json.dumps(build_citation_audit_report(), indent=2, sort_keys=True))
     return 0
+
+
+def citation_review_worksheet_paths() -> list[Path]:
+    research_dir = ROOT / "lab/research"
+    if not research_dir.exists():
+        return []
+    return sorted(research_dir.glob("citation-sentence-review-worksheet*.yaml"))
+
+
+def check_citation_review_worksheet_entry(
+    path_label: str,
+    entry: dict,
+    index: int,
+    active_citation_by_key: dict[str, dict],
+    locations_by_key: dict[str, list[str]],
+) -> int:
+    code = 0
+    bibkey = entry.get("bibkey")
+    if missingish(bibkey):
+        return error(f"{path_label} entries[{index}] missing bibkey")
+    key = str(bibkey)
+    if key not in active_citation_by_key:
+        code |= error(f"{path_label} entry {key} is not an active citation-ledger key")
+    expected_locations = locations_by_key.get(key, [])
+    if not expected_locations:
+        code |= error(f"{path_label} entry {key} is not cited in active paper content")
+    citation = active_citation_by_key.get(key, {})
+    expected_citation_id = item_id(citation, "citation_id", "id", "bibkey")
+    citation_id = entry.get("citation_id")
+    if expected_citation_id and not missingish(citation_id) and str(citation_id) != expected_citation_id:
+        code |= error(f"{path_label} entry {key} citation_id drifts from ledger: {citation_id} != {expected_citation_id}")
+    current = entry.get("current_ledger", {}) if isinstance(entry.get("current_ledger"), dict) else {}
+    recorded_fitness = current.get("fitness_status")
+    ledger_fitness = citation.get("fitness_status")
+    if not missingish(recorded_fitness) and str(recorded_fitness) != str(ledger_fitness):
+        code |= error(f"{path_label} entry {key} fitness_status drifts from ledger")
+    locators = strings(entry.get("all_locators") or entry.get("locators"))
+    if sorted(locators) != sorted(expected_locations):
+        code |= error(f"{path_label} entry {key} all_locators drift from active paper citations")
+    samples = entry.get("local_context_samples", [])
+    if samples and not isinstance(samples, list):
+        code |= error(f"{path_label} entry {key} local_context_samples must be a list")
+    for sample_index, sample in enumerate(samples if isinstance(samples, list) else [], start=1):
+        if not isinstance(sample, dict):
+            code |= error(f"{path_label} entry {key} local_context_samples[{sample_index}] must be a mapping")
+            continue
+        sample_path_line = sample.get("path_line")
+        if not missingish(sample_path_line) and str(sample_path_line) not in expected_locations:
+            code |= error(f"{path_label} entry {key} sample locator not found in active paper citations: {sample_path_line}")
+    source_review = entry.get("source_review")
+    if not isinstance(source_review, dict):
+        code |= error(f"{path_label} entry {key} missing source_review mapping")
+        return code
+    review_status = str(source_review.get("status") or "").strip().lower()
+    if review_status not in CITATION_WORKSHEET_SOURCE_REVIEW_STATUSES:
+        allowed = ", ".join(sorted(CITATION_WORKSHEET_SOURCE_REVIEW_STATUSES))
+        code |= error(f"{path_label} entry {key} has invalid source_review.status {source_review.get('status')}; allowed: {allowed}")
+    decision = str(source_review.get("support_decision") or "needs-review").strip().lower()
+    if decision not in CITATION_FITNESS_STATUSES:
+        allowed = ", ".join(sorted(CITATION_FITNESS_STATUSES))
+        code |= error(f"{path_label} entry {key} has invalid source_review.support_decision {source_review.get('support_decision')}; allowed: {allowed}")
+    if review_status == "reviewed":
+        if decision not in CITATION_REVIEWED_DECISIONS:
+            code |= error(f"{path_label} entry {key} reviewed source_review must end with strong, adequate, weak, or missing-better-source")
+        if missingish(source_review.get("source_locator")):
+            code |= error(f"{path_label} entry {key} reviewed source_review missing source_locator")
+        if missingish(source_review.get("sentence_fit_notes")):
+            code |= error(f"{path_label} entry {key} reviewed source_review missing sentence_fit_notes")
+    if decision in STRONG_CITATION_FITNESS_STATUSES:
+        if missingish(source_review.get("source_locator")) or missingish(source_review.get("sentence_fit_notes")):
+            code |= error(f"{path_label} entry {key} strong/adequate source_review requires source_locator and sentence_fit_notes")
+    if decision in {"weak", "missing-better-source"} and not meaningful(
+        [source_review.get("sentence_fit_notes"), source_review.get("replacement_candidates")]
+    ):
+        code |= error(f"{path_label} entry {key} {decision} source_review requires notes or replacement_candidates")
+    return code
+
+
+def worksheet_summary_int(path_label: str, summary: dict, field: str) -> tuple[int, int | None]:
+    if missingish(summary.get(field)):
+        return 0, None
+    try:
+        return 0, int(summary.get(field))
+    except (TypeError, ValueError):
+        return error(f"{path_label} summary.{field} must be an integer"), None
+
+
+def check_citation_review_worksheets():
+    paths = citation_review_worksheet_paths()
+    if not paths:
+        return 0
+    code = require(["lab/research/citation-ledger.yaml"])
+    if code:
+        return code
+    citation_ledger = load_doc("lab/research/citation-ledger.yaml")
+    citations = citation_ledger.get("citations", [])
+    if not isinstance(citations, list):
+        citations = []
+    active_citation_by_key = {
+        key: citation
+        for citation in citations
+        if isinstance(citation, dict) and active_now(citation)
+        for key in citation_bibkeys(citation)
+    }
+    locations_by_key = {
+        key: list(dict.fromkeys(occurrence["path_line"] for occurrence in occurrences))
+        for key, occurrences in citation_occurrences_by_key().items()
+    }
+    for path in paths:
+        path_label = rel_posix(path)
+        doc = load_doc(path_label)
+        if not isinstance(doc, dict):
+            code |= error(f"{path_label} must be a mapping")
+            continue
+        if doc.get("schema_version") != CITATION_WORKSHEET_SCHEMA_VERSION:
+            code |= error(f"{path_label} schema_version must be {CITATION_WORKSHEET_SCHEMA_VERSION}")
+        entries = doc.get("entries", [])
+        if not isinstance(entries, list):
+            code |= error(f"{path_label} entries must be a list")
+            continue
+        seen_keys: set[str] = set()
+        for index, entry in enumerate(entries, start=1):
+            if not isinstance(entry, dict):
+                code |= error(f"{path_label} entries[{index}] must be a mapping")
+                continue
+            key = str(entry.get("bibkey")) if not missingish(entry.get("bibkey")) else None
+            if key:
+                if key in seen_keys:
+                    code |= error(f"{path_label} duplicate bibkey {key}")
+                seen_keys.add(key)
+            code |= check_citation_review_worksheet_entry(path_label, entry, index, active_citation_by_key, locations_by_key)
+        summary = doc.get("summary", {}) if isinstance(doc.get("summary"), dict) else {}
+        count_code, unique_bibkeys = worksheet_summary_int(path_label, summary, "unique_bibkeys")
+        code |= count_code
+        if unique_bibkeys is not None and unique_bibkeys != len(seen_keys):
+            code |= error(f"{path_label} summary.unique_bibkeys does not match entries")
+        total_occurrences = sum(len(strings(entry.get("all_locators") or entry.get("locators"))) for entry in entries if isinstance(entry, dict))
+        count_code, summary_occurrences = worksheet_summary_int(path_label, summary, "total_paper_occurrences_for_keys")
+        code |= count_code
+        if summary_occurrences is not None and summary_occurrences != total_occurrences:
+            code |= error(f"{path_label} summary.total_paper_occurrences_for_keys does not match entries")
+    return code
 
 
 def extract_macro_names(text: str) -> set[str]:
@@ -4293,6 +4438,7 @@ CHECKS = {
     "numeric_exception_report": numeric_exception_report,
     "reference_existence": check_reference_existence,
     "citation_fitness": check_citation_fitness,
+    "citation_review_worksheets": check_citation_review_worksheets,
     "citation_audit_report": citation_audit_report,
     "index_float_refs": lambda: require(["state/float-placement-map.yaml", "paper/figures/README.md", "paper/tables/README.md"]),
     "float_placement": check_float_placement,

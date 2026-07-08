@@ -21,6 +21,7 @@ Source capability: `.agent/capabilities/reference-audit.yaml`. Read this file fi
 
 - `lab/research/reference-ledger.yaml`
 - `lab/research/citation-ledger.yaml`
+- `lab/research/citation-sentence-review-worksheet-*.yaml`
 - `lab/research/related-work-map.yaml`
 - `paper/refs.bib`
 
@@ -29,6 +30,7 @@ Source capability: `.agent/capabilities/reference-audit.yaml`. Read this file fi
 - `scripts/check-capability-parity.py`
 - `scripts/check-reference-existence.py`
 - `scripts/check-citation-fitness.py`
+- `scripts/check-citation-review-worksheets.py`
 
 ## Human Gates
 

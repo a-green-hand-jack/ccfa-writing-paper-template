@@ -2403,6 +2403,14 @@ def claim_numeric_literals(claim: dict) -> list[str]:
     return [match.group(0).strip() for match in NUMERIC_LITERAL_RE.finditer(text) if match.group(0).strip()]
 
 
+def active_claim_ids(claims: list[dict]) -> set[str]:
+    return {
+        claim_id
+        for claim in claims
+        if (claim_id := item_id(claim, "claim_id", "id")) and active_now(claim)
+    }
+
+
 def check_claim_numeric_literal_bindings(claims: list[dict], number_by_id: dict[str, dict]) -> int:
     code = 0
     numbers_by_claim_id: dict[str, set[str]] = {}
@@ -2661,6 +2669,29 @@ def validate_result_claim_numeric_alignment(result: dict, number_by_id: dict[str
     return code
 
 
+def validate_verified_result_active_claim_bindings(
+    result: dict,
+    claim_ids: set[str],
+    active_claim_id_set: set[str],
+    *,
+    verified: bool | None = None,
+) -> int:
+    result_id = item_id(result, "result_id", "id")
+    if not result_id:
+        return 0
+    if verified is None:
+        verified = is_verified(result)
+    if not verified:
+        return 0
+    code = 0
+    for claim_id in strings(result.get("claims_supported")):
+        if claim_ids and claim_id not in claim_ids:
+            code |= error(f"result {result_id} supports unknown claim {claim_id}")
+        elif claim_ids and claim_id not in active_claim_id_set:
+            code |= error(f"verified result {result_id} supports inactive claim {claim_id}")
+    return code
+
+
 def validate_result_evidence_claim_alignment(
     result: dict,
     claim_ids: set[str],
@@ -2864,6 +2895,7 @@ def check_result_status():
     index_code, index_ids = collect_ids(index_results, ["result_id", "id"], "lab/artifacts/result-index.yaml results", required=False)
     code |= index_code
     claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)[1]
+    active_claim_id_set = active_claim_ids(claims)
     evidence_code, evidence_ids = collect_ids(evidence, ["evidence_id", "id"], "evidence", required=False)
     code |= evidence_code
     number_ids = collect_ids(numbers, ["numeric_id", "id"], "numbers", required=False)[1]
@@ -2906,6 +2938,7 @@ def check_result_status():
         for numeric_id in refs:
             if numeric_id not in number_ids:
                 code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
+        code |= validate_verified_result_active_claim_bindings(result, claim_ids, active_claim_id_set)
         code |= validate_result_claim_numeric_alignment(result, number_by_id)
         code |= validate_result_evidence_claim_alignment(
             result,
@@ -2926,15 +2959,13 @@ def check_result_status():
             for value in source_artifact_values:
                 if not path_exists_or_external(value):
                     code |= error(f"verified result has missing artifact/source: {result_id} {value}")
-        for claim_id in strings(result.get("claims_supported")):
-            if claim_ids and claim_id not in claim_ids:
-                code |= error(f"result {result_id} supports unknown claim {claim_id}")
         refs, field_present, missing_entry_id = result_numeric_refs(result)
         if field_present and missing_entry_id:
             code |= error(f"result {result_id} numbers entries must include numeric_id/id")
         for numeric_id in refs:
             if numeric_id not in number_ids:
                 code |= error(f"result {result_id} references unknown numeric id {numeric_id}")
+        code |= validate_verified_result_active_claim_bindings(result, claim_ids, active_claim_id_set, verified=verified)
         code |= validate_result_claim_numeric_alignment(result, number_by_id)
         code |= validate_result_evidence_claim_alignment(
             result,
@@ -2967,6 +2998,9 @@ def check_numeric_consistency():
     content_text = read_paper_content_tex()
     evidence_ids = collect_ids(doc_items("lab/research/evidence.yaml", "evidence"), ["evidence_id", "id"], "evidence", required=False)[1]
     claims = doc_items("state/claim-evidence-map.yaml", "claims")
+    claim_code, claim_ids = collect_ids(claims, ["claim_id", "id"], "claims", required=False)
+    code |= claim_code
+    active_claim_id_set = active_claim_ids(claims)
     numbers = load_numeric_numbers()
     index_results = doc_items("lab/artifacts/result-index.yaml", "results")
     result_map = {item_id(result, "result_id", "id"): result for result in index_results if item_id(result, "result_id", "id")}
@@ -3038,6 +3072,11 @@ def check_numeric_consistency():
                     verified_literal_values.add(generated_value)
                     verified_literal_values.update(expected_values)
         if is_verified(number):
+            for claim_id in strings(number.get("claim_ids")):
+                if claim_ids and claim_id not in claim_ids:
+                    code |= error(f"number {numeric_id} references unknown claim {claim_id}")
+                elif claim_ids and claim_id not in active_claim_id_set:
+                    code |= error(f"verified number {numeric_id} references inactive claim {claim_id}")
             number_evidence = evidence_refs(number)
             if not number_evidence:
                 code |= error(f"verified number lacks evidence: {numeric_id}")

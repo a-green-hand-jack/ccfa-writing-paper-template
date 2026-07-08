@@ -1232,6 +1232,132 @@
         "fact_source": "Use repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
       },
       "exceptions": []
+    },
+    {
+      "id": "arxiv-case-harness-test",
+      "status": "active",
+      "purpose": "migrate arXiv TeX cases into the paper template and stress-test harness contracts",
+      "inputs": [
+        "state/ccfa.yaml",
+        "paper/",
+        "lab/research/",
+        "lab/artifacts/",
+        "release/manifest.yaml",
+        "scripts/",
+        ".agent/capabilities/registry.yaml"
+      ],
+      "outputs": [
+        "paper/",
+        "state/",
+        "lab/research/",
+        "lab/artifacts/",
+        "lab/harness-evals/",
+        "release/",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "validators": [
+        "scripts/check-capability-parity.py",
+        "scripts/check-paper-populated.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py",
+        "scripts/check-conference-template.py",
+        "scripts/check-latex.sh"
+      ],
+      "human_gates": [
+        {
+          "id": "external-source-migration",
+          "required_when": "Importing or normalizing an external arXiv source archive into paper/.",
+          "record": "paper/supplementary/source-attribution.md"
+        },
+        {
+          "id": "upstream-harness-change",
+          "required_when": "Proposing or implementing persistent validator, template, workflow, or CI/CD changes in research-project-harness.",
+          "record": "lab/harness-evals/"
+        },
+        {
+          "id": "scope-change",
+          "required_when": "A needed edit is outside allowed_paths, a forbidden_path must change, or facts are missing from repository sources.",
+          "record": "human/decisions/README.md"
+        }
+      ],
+      "allowed_paths": [
+        "paper/",
+        "state/",
+        "lab/research/",
+        "lab/artifacts/",
+        "lab/harness-evals/",
+        "release/",
+        "memory/current-status.md",
+        "human/inbox/README.md"
+      ],
+      "read_only_paths": [
+        ".agent/capabilities/arxiv-case-harness-test.yaml",
+        "state/ccfa.yaml",
+        "paper/",
+        "lab/research/",
+        "lab/artifacts/",
+        "release/manifest.yaml",
+        "scripts/",
+        ".agent/capabilities/registry.yaml",
+        "scripts/check-capability-parity.py",
+        "scripts/check-paper-populated.py",
+        "scripts/check-writing-harness.py",
+        "scripts/check-release-package.py",
+        "scripts/check-release-freshness.py",
+        "scripts/check-conference-template.py",
+        "scripts/check-latex.sh",
+        ".claude/skills/arxiv-case-harness-test/",
+        ".agents/workflows/arxiv-case-harness-test.md"
+      ],
+      "forbidden_paths": [
+        ".git/**",
+        ".venv/**",
+        "__pycache__/**",
+        ".pytest_cache/**"
+      ],
+      "claude_adapter": {
+        "skill": ".claude/skills/arxiv-case-harness-test/"
+      },
+      "codex_adapter": {
+        "workflow": ".agents/workflows/arxiv-case-harness-test.md"
+      },
+      "parity": "required",
+      "completion_contract": {
+        "success_requires": [
+          "Read the source capability spec before editing.",
+          "Changed files are limited to declared outputs unless an upstream PR is explicitly being prepared.",
+          "arXiv source provenance is recorded before migrated source is treated as paper state.",
+          "Destructive stress probes run only in disposable /tmp copies.",
+          "Every stress finding is classified as upstream harness gap, generated template gap, case ledger debt, documentation friction, or accepted regression fixture.",
+          "Persistent harness changes are proposed against research-project-harness branch ccfa-writing-paper-template.",
+          "Declared validators pass, or the unresolved blocker is recorded."
+        ],
+        "required_outputs": [
+          "paper/",
+          "state/",
+          "lab/research/",
+          "lab/artifacts/",
+          "lab/harness-evals/",
+          "release/",
+          "memory/current-status.md",
+          "human/inbox/README.md"
+        ],
+        "required_validators": [
+          "scripts/check-capability-parity.py",
+          "scripts/check-paper-populated.py",
+          "scripts/check-writing-harness.py",
+          "scripts/check-release-package.py",
+          "scripts/check-release-freshness.py",
+          "scripts/check-conference-template.py",
+          "scripts/check-latex.sh"
+        ],
+        "validator_evidence": "Record validator command names, exit codes, and important output in the handoff or lab/harness-evals/ report.",
+        "blocker_record": "memory/current-status.md",
+        "fact_source": "Use arXiv source files, repository state, lab artifacts, paper source, release manifests, and human gate records only; never infer facts from chat."
+      },
+      "exceptions": []
     }
   ],
   "roles": [

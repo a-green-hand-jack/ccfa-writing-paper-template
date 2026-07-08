@@ -1,0 +1,4 @@
+interface:
+  display_name: "ArXiv Case Harness Test"
+  short_description: "Migrate and stress-test arXiv paper cases."
+  default_prompt: "Use this skill to migrate an arXiv paper source into the CCFA writing template and run case-driven harness stress tests."

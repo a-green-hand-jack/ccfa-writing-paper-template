@@ -787,6 +787,41 @@ def check_release_manifest_contract(manifest: dict) -> int:
     return code
 
 
+def manifest_has_synced_release_surfaces(manifest: dict) -> bool:
+    surfaces = manifest.get("surfaces", [])
+    if not isinstance(surfaces, list):
+        return False
+    for surface in surfaces:
+        if isinstance(surface, dict) and str(surface.get("status", "")).strip().lower() in RELEASE_SYNC_STATUSES:
+            return True
+    return False
+
+
+def git_worktree_available() -> bool:
+    return git_value("rev-parse", "--is-inside-work-tree") == "true"
+
+
+def template_skeleton_release(manifest: dict) -> bool:
+    if manifest.get("template_skeleton") is not True:
+        return False
+    ccfa_path = ROOT / "state/ccfa.yaml"
+    if not ccfa_path.exists():
+        return False
+    ccfa = load_doc("state/ccfa.yaml")
+    paper = ccfa.get("paper", {}) if isinstance(ccfa.get("paper"), dict) else {}
+    return paper.get("slug") == "ccfa-paper-template"
+
+
+def check_release_source_revision_required(manifest: dict) -> int:
+    if not manifest_has_synced_release_surfaces(manifest) or not git_worktree_available():
+        return 0
+    if template_skeleton_release(manifest):
+        return 0
+    if meaningful(manifest.get("source_revision")):
+        return 0
+    return error("release manifest source_revision is required for synced release surfaces in a git worktree")
+
+
 def normalize_release_source(value) -> str:
     return str(value or "").strip().strip("/")
 
@@ -1247,6 +1282,7 @@ def check_release_package():
     if not isinstance(manifest, dict):
         return error("release manifest must be a mapping")
     code |= check_release_manifest_contract(manifest)
+    code |= check_release_source_revision_required(manifest)
     expected_surfaces = set(strings(ccfa.get("release", {}).get("surfaces", [])))
     manifest_surfaces = manifest.get("surfaces", [])
     if not isinstance(manifest_surfaces, list):
@@ -1295,6 +1331,7 @@ def check_release_freshness():
     code = 0
     expected_surfaces = declared_release_surfaces()
     if isinstance(manifest, dict):
+        code |= check_release_source_revision_required(manifest)
         code |= check_source_revision_freshness(manifest)
     for surface in manifest.get("surfaces", []):
         if not isinstance(surface, dict):

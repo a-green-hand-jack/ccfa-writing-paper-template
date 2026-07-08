@@ -1,6 +1,7 @@
 {
   "manifest_version": "release-manifest-v1",
   "checksum_algorithm": "sha256",
+  "template_skeleton": true,
   "source_revision": {},
   "surfaces": [
     {

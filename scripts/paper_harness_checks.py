@@ -3008,6 +3008,7 @@ def validate_result_evidence_claim_alignment(
 
 
 VALID_EXCEPTION_MATCH_SCOPES = {"literal", "context", "literal_or_context"}
+NUMERIC_EXCEPTION_REPORT_SAMPLE_LIMIT = 5
 
 
 def normalize_exception_match_scope(scope) -> str:
@@ -3027,6 +3028,120 @@ def exception_matches(exception: dict, path: Path, literal: str, context: str) -
     if scope == "context":
         return context_match
     return literal_match or context_match
+
+
+def numeric_exception_report_entry(index: int, item, literals: list[tuple[Path, int, str, str]]) -> dict:
+    entry = {
+        "index": index,
+        "id": None,
+        "reason": None,
+        "match_scope": "literal",
+        "pattern": None,
+        "path_pattern_present": False,
+        "path_pattern": None,
+        "match_count": 0,
+        "path_counts": {},
+        "sample_matches": [],
+        "warnings": [],
+    }
+    if not isinstance(item, dict):
+        entry["warnings"].append("entry is not a mapping")
+        return entry
+
+    entry["id"] = item_id(item, "id", "exception_id")
+    if entry["id"] is None:
+        entry["warnings"].append("missing id")
+
+    pattern = item.get("pattern")
+    reason = item.get("reason")
+    if missingish(pattern):
+        entry["warnings"].append("missing pattern")
+    else:
+        entry["pattern"] = str(pattern)
+    if missingish(reason):
+        entry["warnings"].append("missing reason")
+    else:
+        entry["reason"] = str(reason)
+
+    match_scope = normalize_exception_match_scope(item.get("match_scope"))
+    entry["match_scope"] = match_scope
+    if match_scope not in VALID_EXCEPTION_MATCH_SCOPES:
+        entry["warnings"].append(
+            f"invalid match_scope {item.get('match_scope')}; expected literal, context, or literal_or_context"
+        )
+
+    entry["path_pattern_present"] = "path_pattern" in item
+    path_pattern = item.get("path_pattern")
+    if entry["path_pattern_present"] and path_pattern is not None:
+        entry["path_pattern"] = str(path_pattern)
+    if not entry["path_pattern_present"] or missingish(path_pattern):
+        entry["warnings"].append("missing path_pattern")
+
+    if missingish(pattern) or missingish(reason) or match_scope not in VALID_EXCEPTION_MATCH_SCOPES:
+        return entry
+
+    try:
+        compiled_pattern = re.compile(str(pattern))
+    except re.error as exc:
+        entry["warnings"].append(f"invalid regex: {exc}")
+        return entry
+
+    compiled_path_pattern = None
+    if not missingish(path_pattern):
+        try:
+            compiled_path_pattern = re.compile(str(path_pattern))
+        except re.error as exc:
+            entry["warnings"].append(f"invalid path_pattern regex: {exc}")
+            return entry
+
+    exception = {
+        "pattern": compiled_pattern,
+        "reason": str(reason),
+        "match_scope": match_scope,
+        "path_pattern": compiled_path_pattern,
+    }
+    path_counts: dict[str, int] = {}
+    samples = []
+    for path, line_no, literal, context in literals:
+        if not exception_matches(exception, path, literal, context):
+            continue
+        path_key = rel_posix(path)
+        path_counts[path_key] = path_counts.get(path_key, 0) + 1
+        if len(samples) < NUMERIC_EXCEPTION_REPORT_SAMPLE_LIMIT:
+            samples.append(
+                {
+                    "path": path_key,
+                    "line": line_no,
+                    "path_line": f"{path_key}:{line_no}",
+                    "literal": literal,
+                    "context": context,
+                }
+            )
+
+    entry["match_count"] = sum(path_counts.values())
+    entry["path_counts"] = dict(sorted(path_counts.items()))
+    entry["sample_matches"] = samples
+    return entry
+
+
+def build_numeric_exception_report() -> dict:
+    exceptions = doc_items("state/numbers/exceptions.yaml", "exceptions")
+    literals = list(iter_paper_numeric_literals())
+    return {
+        "report_version": "numeric-exception-report-v1",
+        "exception_file": "state/numbers/exceptions.yaml",
+        "sample_limit": NUMERIC_EXCEPTION_REPORT_SAMPLE_LIMIT,
+        "numeric_literal_count": len(literals),
+        "exceptions": [
+            numeric_exception_report_entry(index, item, literals)
+            for index, item in enumerate(exceptions, start=1)
+        ],
+    }
+
+
+def numeric_exception_report():
+    print(json.dumps(build_numeric_exception_report(), indent=2, sort_keys=True))
+    return 0
 
 
 def strip_tex_comment(line: str) -> str:
@@ -4025,6 +4140,7 @@ CHECKS = {
     "claim_evidence": check_claim_evidence,
     "result_status": check_result_status,
     "numeric_consistency": check_numeric_consistency,
+    "numeric_exception_report": numeric_exception_report,
     "reference_existence": check_reference_existence,
     "citation_fitness": check_citation_fitness,
     "index_float_refs": lambda: require(["state/float-placement-map.yaml", "paper/figures/README.md", "paper/tables/README.md"]),
@@ -4036,13 +4152,15 @@ CHECKS = {
     "export_release": export_release,
 }
 
+REPORT_COMMANDS = {"numeric_exception_report"}
+
 
 def run(name: str) -> int:
     if name not in CHECKS:
         print(f"ERROR unknown check {name}")
         return 2
     code = CHECKS[name]()
-    if code == 0:
+    if code == 0 and name not in REPORT_COMMANDS:
         print(f"OK {name}")
     return code
 

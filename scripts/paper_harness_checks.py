@@ -2441,6 +2441,10 @@ def numeric_value_equivalents(value) -> set[str]:
     values = {normalized} if normalized else set()
     if normalized.endswith("%"):
         values.add(normalized[:-1])
+    currency_stripped = re.sub(r"^(?:usd|us\$|\$)", "", normalized)
+    currency_stripped = re.sub(r"(?:usd)$", "", currency_stripped)
+    if currency_stripped and currency_stripped != normalized:
+        values.add(currency_stripped)
     return values
 
 

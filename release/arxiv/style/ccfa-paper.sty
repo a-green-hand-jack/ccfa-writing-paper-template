@@ -1,0 +1,66 @@
+% ccfa-paper.sty
+% Reusable presentation macros for the ccfa-paper-template writing layer.
+% Project-specific macros belong in paper/macros.tex, not here — this file
+% must stay swappable (e.g. for a compat.sty venue shim) without touching
+% paper/sections/*.tex.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{ccfa-paper}[2026/07/17 v1.0 CCFA reusable paper display macros]
+
+\RequirePackage{etoolbox}
+\RequirePackage{amsmath}
+\RequirePackage{xcolor}
+\RequirePackage{array}
+\RequirePackage{tabularx}
+\RequirePackage{pifont}
+
+% ---------------------------------------------------------------------
+% Optional accent theme: \papercolor{<name>}, \paperstyle{accent|plain}
+% ---------------------------------------------------------------------
+\definecolor{ccfaAccentblue}{HTML}{1B4F8C}
+\definecolor{ccfaAccentslate}{HTML}{2E2E2E}
+\definecolor{ccfaAccentforest}{HTML}{1F5C3E}
+\colorlet{ccfaAccent}{ccfaAccentblue}
+
+\newbool{ccfaAccentEnabled}
+\booltrue{ccfaAccentEnabled}
+
+\newcommand{\papercolor}[1]{%
+  \ifstrequal{#1}{blue}{\colorlet{ccfaAccent}{ccfaAccentblue}}{%
+  \ifstrequal{#1}{slate}{\colorlet{ccfaAccent}{ccfaAccentslate}}{%
+  \ifstrequal{#1}{forest}{\colorlet{ccfaAccent}{ccfaAccentforest}}{%
+    \PackageError{ccfa-paper}{Unknown paper color `#1'}{Available colors: blue, slate, forest.}%
+  }}}%
+}
+
+\newcommand{\paperstyle}[1]{%
+  \ifstrequal{#1}{accent}{\booltrue{ccfaAccentEnabled}}{%
+  \ifstrequal{#1}{plain}{\boolfalse{ccfaAccentEnabled}}{%
+    \PackageError{ccfa-paper}{Unknown paper style `#1'}{Available styles: accent, plain.}%
+  }}%
+}
+
+% ---------------------------------------------------------------------
+% Class API: heading and cross-reference helpers
+% ---------------------------------------------------------------------
+\newcommand{\headbf}[1]{{\bfseries\ifbool{ccfaAccentEnabled}{\color{ccfaAccent}}{}#1}}
+\newcommand{\parahead}[1]{\par\noindent\headbf{#1.}\enspace\ignorespaces}
+
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\algref}[1]{Algorithm~\ref{#1}}
+\newcommand{\eqnref}[1]{Equation~\eqref{#1}}
+
+% ---------------------------------------------------------------------
+% Class API: compact table helpers
+% ---------------------------------------------------------------------
+\newcommand{\tablestyle}[2]{\setlength{\tabcolsep}{#1}\renewcommand{\arraystretch}{#2}\centering\small}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1pt}}
+\newcolumntype{y}[1]{>{\raggedright\arraybackslash}p{#1pt}}
+\newcolumntype{z}[1]{>{\raggedleft\arraybackslash}p{#1pt}}
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\endinput

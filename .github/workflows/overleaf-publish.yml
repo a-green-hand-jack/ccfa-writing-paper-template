@@ -1,0 +1,71 @@
+name: Publish overleaf branch
+
+# One-way publish only: this repo is the source of truth. It pushes the
+# tex-only `release/overleaf/` export surface to the `overleaf` branch so it
+# can be opened in Overleaf. Edits made directly in Overleaf are never read
+# back by this workflow; re-run `scripts/export-tex-release.sh` and merge
+# through the normal `paper/` -> `release/` flow instead.
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "release/overleaf/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: overleaf-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install PyYAML
+        run: pip install --disable-pip-version-check pyyaml
+
+      - name: Verify release/overleaf is a valid, fresh tex-only surface
+        run: |
+          python3 scripts/check-release-package.py
+          python3 scripts/check-release-freshness.py
+
+      - name: Guard against control-plane leakage
+        run: |
+          forbidden='(^|/)(\.git|\.github|\.agent|\.claude|\.agents|state|lab|memory|human|exemplars)(/|$)'
+          if find release/overleaf -mindepth 1 | grep -E "$forbidden"; then
+            echo "::error::release/overleaf contains a forbidden control-plane path" >&2
+            exit 1
+          fi
+          if find release/overleaf -type l | grep -q .; then
+            echo "::error::release/overleaf contains a symlink" >&2
+            exit 1
+          fi
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Split release/overleaf into a standalone branch
+        run: git subtree split --prefix=release/overleaf -b overleaf-publish-tmp
+
+      - name: Force-push to overleaf branch
+        run: git push origin overleaf-publish-tmp:overleaf --force
+
+      - name: Clean up temporary branch
+        if: always()
+        run: git branch -D overleaf-publish-tmp || true

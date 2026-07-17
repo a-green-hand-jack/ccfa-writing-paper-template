@@ -1176,6 +1176,7 @@
       ],
       "outputs": [
         "release/arxiv/",
+        "release/arxiv-flat/",
         "release/overleaf/",
         "release/github-tex/",
         "release/manifest.yaml"
@@ -1184,7 +1185,9 @@
         "scripts/check-capability-parity.py",
         "scripts/export-tex-release.sh",
         "scripts/check-release-package.py",
-        "scripts/check-release-freshness.py"
+        "scripts/check-release-freshness.py",
+        "scripts/check-latex.sh",
+        "scripts/check-arxiv-portability.py"
       ],
       "human_gates": [
         {
@@ -1200,6 +1203,7 @@
       ],
       "allowed_paths": [
         "release/arxiv/",
+        "release/arxiv-flat/",
         "release/overleaf/",
         "release/github-tex/",
         "release/manifest.yaml",
@@ -1214,7 +1218,9 @@
         "scripts/check-capability-parity.py",
         "scripts/export-tex-release.sh",
         "scripts/check-release-package.py",
-        "scripts/check-release-freshness.py"
+        "scripts/check-release-freshness.py",
+        "scripts/check-latex.sh",
+        "scripts/check-arxiv-portability.py"
       ],
       "forbidden_paths": [
         ".git/**",

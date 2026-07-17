@@ -213,6 +213,10 @@ RELEASE_FLATTEN_ASSET_EXTENSIONS = {
 RELEASE_FLATTEN_ASSET_DIRS = ("figures", "tables", "generated")
 RELEASE_FLATTEN_STATUSES = {"flattened", "skipped-no-latexpand", "skipped-no-main", "error"}
 RELEASE_FLATTEN_SRCS_RE = re.compile(r"(?:figures|tables)/srcs/")
+# Style files (*.cls/*.sty/*.bst) are copied to the flat bundle root, so any
+# `{style/NAME}` reference in the flattened main.tex (e.g. \usepackage,
+# \documentclass, \bibliographystyle) must drop the `style/` prefix to resolve.
+RELEASE_FLATTEN_STYLE_RE = re.compile(r"\{style/")
 
 
 def load_doc(path: str):
@@ -1438,7 +1442,8 @@ def flatten_asset_relpath(rel_parts: tuple[str, ...]) -> Path:
 
 
 def rewrite_flatten_asset_paths(text: str) -> str:
-    return RELEASE_FLATTEN_SRCS_RE.sub("srcs/", text)
+    text = RELEASE_FLATTEN_SRCS_RE.sub("srcs/", text)
+    return RELEASE_FLATTEN_STYLE_RE.sub("{", text)
 
 
 def compute_flatten_bundle(arxiv_dest: Path, out_dir: Path) -> tuple[str, str | None]:

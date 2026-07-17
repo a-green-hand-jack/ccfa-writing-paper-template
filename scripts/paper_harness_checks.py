@@ -2020,6 +2020,9 @@ def check_conference_template():
     if template.get("year") != venue_year:
         code |= error("conference template year does not match state/ccfa.yaml")
     code |= check_conference_template_binding(template, venue_id, venue_year)
+    compat_shim = template.get("compat_shim")
+    if not missingish(compat_shim) and not path_exists_or_external(compat_shim):
+        code |= error(f"conference template compat_shim not found: {compat_shim}")
     if str(template.get("status", "")).lower() == "verified":
         for field in ["raw_template", "normalized_template", "delta", "hash", "source", "downloaded_at", "human_verified_at"]:
             if missingish(template.get(field)):
@@ -4259,6 +4262,13 @@ def check_anonymity():
                     scan_chunks.append(path.read_text(encoding="utf-8"))
                 except UnicodeDecodeError:
                     continue
+    venue_export_root = ROOT / "release/venue"
+    if venue_export_root.exists():
+        for path in venue_export_root.rglob("*-anonymous/**/*.tex"):
+            try:
+                scan_chunks.append(path.read_text(encoding="utf-8"))
+            except UnicodeDecodeError:
+                continue
     scan_text = "\n".join(scan_chunks)
     lower_scan = scan_text.lower()
 

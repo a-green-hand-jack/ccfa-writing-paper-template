@@ -4,6 +4,7 @@
   "track": "TODO",
   "raw_template": "TODO",
   "normalized_template": "paper/",
+  "compat_shim": "paper/style/compat.sty",
   "delta": "TODO",
   "hash": "TODO",
   "source": "official",

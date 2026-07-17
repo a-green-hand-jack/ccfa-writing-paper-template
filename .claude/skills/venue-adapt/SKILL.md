@@ -15,18 +15,41 @@ Source capability: `.agent/capabilities/venue-adapt.yaml`. Read this file first 
 - `state/conference-template.yaml`
 - `state/venue-profile.yaml`
 - `paper/venue_preamble.tex`
+- `paper/style/compat.sty`
+- `scripts/export-venue-template.sh`
 
 ## Declared Outputs
 
 - `state/venue-profile.yaml`
 - `state/conference-template.yaml`
 - `state/ccfa.yaml`
+- `release/venue/`
 
 ## Validators
 
 - `scripts/check-capability-parity.py`
 - `scripts/check-conference-template.py`
 - `scripts/check-anonymity.py`
+- `scripts/check-latex.sh`
+
+## Venue Conversion (compat.sty shim)
+
+`paper/style/compat.sty` reimplements the `paper/style/ccfa-paper.sty` Class
+API (`\parahead`, `\headbf`, `\figref`/`\tabref`/`\algref`/`\eqnref`,
+`\tablestyle`, `\cmark`/`\xmark`, compact column types) on packages an
+official venue class already loads, so `paper/sections/*.tex` compiles
+unmodified under CVPR/ICCV/NeurIPS/etc.
+
+`scripts/export-venue-template.sh --mode anonymous|camera-ready
+[--raw-template <local-kit-path>]` copies `paper/` sources plus
+`compat.sty` and the user-supplied official kit (never fetched from the
+network) into `release/venue/<venue>-<year>-<mode>/`, generates a
+`main.tex` bound to the official class, and independently compiles it.
+It never edits `paper/`, `paper/refs.bib`, or the official kit files.
+`release/venue/` is gitignored — regenerate it, do not hand-edit or
+commit it. In anonymous mode, run `scripts/check-anonymity.py` after
+export; it scans generated `*-anonymous/` venue exports for leaked
+author names and emails in addition to the three release surfaces.
 
 ## Human Gates
 

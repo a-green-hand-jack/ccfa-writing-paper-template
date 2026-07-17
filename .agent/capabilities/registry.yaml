@@ -901,17 +901,21 @@
         "state/ccfa.yaml",
         "state/conference-template.yaml",
         "state/venue-profile.yaml",
-        "paper/venue_preamble.tex"
+        "paper/venue_preamble.tex",
+        "paper/style/compat.sty",
+        "scripts/export-venue-template.sh"
       ],
       "outputs": [
         "state/venue-profile.yaml",
         "state/conference-template.yaml",
-        "state/ccfa.yaml"
+        "state/ccfa.yaml",
+        "release/venue/"
       ],
       "validators": [
         "scripts/check-capability-parity.py",
         "scripts/check-conference-template.py",
-        "scripts/check-anonymity.py"
+        "scripts/check-anonymity.py",
+        "scripts/check-latex.sh"
       ],
       "human_gates": [
         {
@@ -929,6 +933,7 @@
         "state/venue-profile.yaml",
         "state/conference-template.yaml",
         "state/ccfa.yaml",
+        "release/venue/**",
         "memory/current-status.md",
         "human/inbox/README.md"
       ],
@@ -938,15 +943,25 @@
         "state/conference-template.yaml",
         "state/venue-profile.yaml",
         "paper/venue_preamble.tex",
+        "paper/sections/",
+        "paper/figures/",
+        "paper/tables/",
+        "paper/generated/",
+        "paper/refs.bib",
+        "paper/macros.tex",
+        "paper/style/compat.sty",
+        "scripts/export-venue-template.sh",
         "scripts/check-capability-parity.py",
         "scripts/check-conference-template.py",
-        "scripts/check-anonymity.py"
+        "scripts/check-anonymity.py",
+        "scripts/check-latex.sh"
       ],
       "forbidden_paths": [
         ".git/**",
         ".venv/**",
         "__pycache__/**",
-        ".pytest_cache/**"
+        ".pytest_cache/**",
+        "paper/**"
       ],
       "claude_adapter": {
         "skill": ".claude/skills/venue-adapt/"

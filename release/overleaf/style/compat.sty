@@ -1,0 +1,77 @@
+% compat.sty
+% Venue-conversion compatibility shim for the ccfa-paper Class API.
+%
+% NOT used by paper/main.tex. This file reimplements the same macro names
+% as ccfa-paper.sty (\parahead, \headbf, \figref/\tabref/\algref/\eqnref,
+% \tablestyle, \cmark/\xmark, compact column types x/y/z/P/Y, optional
+% \papercolor/\paperstyle) on top of whatever packages an official venue
+% class (CVPR/ICCV/NeurIPS, etc.) already loads, so paper/sections/*.tex
+% compiles unmodified under that class. scripts/export-venue-template.sh
+% copies this file into a generated venue conversion output alongside the
+% official kit; it never edits paper/ or the official kit.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{compat}[2026/07/17 v1.0 ccfa-paper venue conversion compat shim]
+
+\makeatletter
+\@ifpackageloaded{etoolbox}{}{\RequirePackage{etoolbox}}
+\@ifpackageloaded{amsmath}{}{\RequirePackage{amsmath}}
+\@ifpackageloaded{xcolor}{}{\RequirePackage{xcolor}}
+\@ifpackageloaded{array}{}{\RequirePackage{array}}
+\@ifpackageloaded{tabularx}{}{\RequirePackage{tabularx}}
+\@ifpackageloaded{pifont}{}{\RequirePackage{pifont}}
+\makeatother
+
+% ---------------------------------------------------------------------
+% Optional accent theme: \papercolor{<name>}, \paperstyle{accent|plain}
+% ---------------------------------------------------------------------
+\providecommand{\ccfaAccent}{}
+\definecolor{ccfaAccentblue}{HTML}{1B4F8C}
+\definecolor{ccfaAccentslate}{HTML}{2E2E2E}
+\definecolor{ccfaAccentforest}{HTML}{1F5C3E}
+\colorlet{ccfaAccent}{ccfaAccentblue}
+
+\newbool{ccfaAccentEnabled}
+\booltrue{ccfaAccentEnabled}
+
+\providecommand{\papercolor}[1]{%
+  \ifstrequal{#1}{blue}{\colorlet{ccfaAccent}{ccfaAccentblue}}{%
+  \ifstrequal{#1}{slate}{\colorlet{ccfaAccent}{ccfaAccentslate}}{%
+  \ifstrequal{#1}{forest}{\colorlet{ccfaAccent}{ccfaAccentforest}}{%
+    \PackageError{compat}{Unknown paper color `#1'}{Available colors: blue, slate, forest.}%
+  }}}%
+}
+
+\providecommand{\paperstyle}[1]{%
+  \ifstrequal{#1}{accent}{\booltrue{ccfaAccentEnabled}}{%
+  \ifstrequal{#1}{plain}{\boolfalse{ccfaAccentEnabled}}{%
+    \PackageError{compat}{Unknown paper style `#1'}{Available styles: accent, plain.}%
+  }}%
+}
+
+% ---------------------------------------------------------------------
+% Class API: heading and cross-reference helpers
+% ---------------------------------------------------------------------
+\providecommand{\headbf}[1]{{\bfseries\ifbool{ccfaAccentEnabled}{\color{ccfaAccent}}{}#1}}
+\providecommand{\parahead}[1]{\par\noindent\headbf{#1.}\enspace\ignorespaces}
+
+\providecommand{\figref}[1]{Figure~\ref{#1}}
+\providecommand{\tabref}[1]{Table~\ref{#1}}
+\providecommand{\algref}[1]{Algorithm~\ref{#1}}
+\providecommand{\eqnref}[1]{Equation~\eqref{#1}}
+
+% ---------------------------------------------------------------------
+% Class API: compact table helpers
+% ---------------------------------------------------------------------
+\providecommand{\tablestyle}[2]{\setlength{\tabcolsep}{#1}\renewcommand{\arraystretch}{#2}\centering\small}
+\providecommand{\cmark}{\ding{51}}
+\providecommand{\xmark}{\ding{55}}
+
+\makeatletter
+\@ifundefined{NC@find@x}{\newcolumntype{x}[1]{>{\centering\arraybackslash}p{#1pt}}}{}
+\@ifundefined{NC@find@y}{\newcolumntype{y}[1]{>{\raggedright\arraybackslash}p{#1pt}}}{}
+\@ifundefined{NC@find@z}{\newcolumntype{z}[1]{>{\raggedleft\arraybackslash}p{#1pt}}}{}
+\@ifundefined{NC@find@P}{\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}}{}
+\@ifundefined{NC@find@Y}{\newcolumntype{Y}{>{\centering\arraybackslash}X}}{}
+\makeatother
+
+\endinput

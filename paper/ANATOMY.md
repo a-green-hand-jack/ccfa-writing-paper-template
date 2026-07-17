@@ -2,6 +2,11 @@
 
 LaTeX source lives here. It is not the source of truth for claims, numbers, references, or release policy.
 
+## Directory layout
+
+- `style/`: reusable, project-agnostic display macros (Class API). See `style/README.md`.
+- `macros.tex`: project-specific macros only. Reusable display logic belongs in `style/`, not here.
+
 ## File naming convention
 
 `paper/sections/`, `paper/figures/`, and `paper/tables/` wrapper files use a

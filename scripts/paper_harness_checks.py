@@ -145,17 +145,32 @@ REQUIRED_PAPER_SURFACE = [
     "paper/macros.tex",
     "paper/venue_preamble.tex",
     "paper/refs.bib",
-    "paper/sections/title.tex",
-    "paper/sections/abstract.tex",
-    "paper/sections/intro.tex",
-    "paper/sections/related.tex",
-    "paper/sections/method.tex",
-    "paper/sections/exp.tex",
-    "paper/sections/conclusion.tex",
-    "paper/sections/limitations.tex",
-    "paper/sections/acknowledgement.tex",
-    "paper/sections/appendix.tex",
+    "paper/sections/00_title.tex",
+    "paper/sections/01_abstract.tex",
+    "paper/sections/02_intro.tex",
+    "paper/sections/03_related.tex",
+    "paper/sections/04_method.tex",
+    "paper/sections/05_exp.tex",
+    "paper/sections/06_conclusion.tex",
+    "paper/sections/07_limitations.tex",
+    "paper/sections/08_acknowledgement.tex",
+    "paper/sections/10_appendix.tex",
 ]
+# NN_name convention: first digit 0=body/1=appendix, second digit=order within
+# that group. See paper/ANATOMY.md and .agent/anatomy-policy.md.
+NN_NAME_RE = re.compile(r"^[01]\d_[a-z][a-z0-9_]*$")
+SECTION_INPUT_FILES = [
+    "00_title",
+    "01_abstract",
+    "02_intro",
+    "03_related",
+    "04_method",
+    "05_exp",
+    "06_conclusion",
+    "07_limitations",
+    "10_appendix",
+]
+FIGURE_ASSET_EXTENSIONS = (".pdf", ".png", ".jpg", ".jpeg")
 RELEASE_ITEMS = [
     "main.tex",
     "macros.tex",
@@ -2038,8 +2053,78 @@ def has_active_core_or_strong_claims() -> bool:
     )
 
 
+def check_nn_name_wrappers(dir_path: Path, dir_rel: str) -> int:
+    code = 0
+    if not dir_path.exists():
+        return code
+    for path in sorted(dir_path.glob("*.tex")):
+        if not NN_NAME_RE.match(path.stem):
+            code |= error(
+                f"{dir_rel}/{path.name} does not match the NN_name convention "
+                "(two-digit prefix, 0=body/1=appendix, then lowercase snake_case name)"
+            )
+    return code
+
+
+def check_section_naming_and_order() -> int:
+    code = check_nn_name_wrappers(ROOT / "paper/sections", "paper/sections")
+    main_path = ROOT / "paper/main.tex"
+    if not main_path.exists():
+        return code
+    text = main_path.read_text(encoding="utf-8")
+    appendix_match = re.search(r"\\appendix\b", text)
+    appendix_pos = appendix_match.start() if appendix_match else None
+    body_stems: list[str] = []
+    appendix_stems: list[str] = []
+    for match in re.finditer(r"\\input\{sections/([^}]+)\}", text):
+        stem = match.group(1)
+        if not NN_NAME_RE.match(stem):
+            code |= error(f"paper/main.tex inputs sections/{stem} which does not match the NN_name convention")
+            continue
+        is_body = appendix_pos is None or match.start() < appendix_pos
+        expected_prefix = "0" if is_body else "1"
+        if stem[0] != expected_prefix:
+            side = "before" if is_body else "after"
+            code |= error(
+                f"paper/main.tex inputs sections/{stem} {side} \\appendix but its prefix is not {expected_prefix}"
+            )
+        (body_stems if is_body else appendix_stems).append(stem)
+    for group in (body_stems, appendix_stems):
+        if group != sorted(group):
+            code |= error(f"paper/main.tex \\input order for sections is not ascending: {group}")
+    return code
+
+
+def check_figure_table_wrapper_naming() -> int:
+    code = check_nn_name_wrappers(ROOT / "paper/figures", "paper/figures")
+    code |= check_nn_name_wrappers(ROOT / "paper/tables", "paper/tables")
+    figures_dir = ROOT / "paper/figures"
+    srcs_dir = figures_dir / "srcs"
+    if figures_dir.exists():
+        for path in sorted(figures_dir.glob("*.tex")):
+            stem = path.stem
+            if not NN_NAME_RE.match(stem):
+                continue
+            assets = sorted(srcs_dir.glob(f"{stem}.*")) if srcs_dir.exists() else []
+            if not any(asset.suffix.lower() in FIGURE_ASSET_EXTENSIONS for asset in assets):
+                code |= error(
+                    f"paper/figures/{path.name} has no matching asset in "
+                    f"paper/figures/srcs/{stem}.<pdf|png|jpg|jpeg>"
+                )
+    if srcs_dir.exists():
+        for asset in sorted(srcs_dir.glob("*")):
+            if asset.is_dir() or asset.suffix.lower() not in FIGURE_ASSET_EXTENSIONS:
+                continue
+            wrapper = figures_dir / f"{asset.stem}.tex"
+            if not wrapper.exists():
+                code |= error(
+                    f"paper/figures/srcs/{asset.name} has no matching wrapper paper/figures/{asset.stem}.tex"
+                )
+    return code
+
+
 def check_anatomy_drift():
-    return require([
+    code = require([
         "ANATOMY.md",
         "state/ANATOMY.md",
         "paper/ANATOMY.md",
@@ -2050,6 +2135,8 @@ def check_anatomy_drift():
         "memory/ANATOMY.md",
         "scripts/ANATOMY.md",
     ])
+    code |= check_section_naming_and_order()
+    return code
 
 
 def check_paper_surface():
@@ -2058,17 +2145,7 @@ def check_paper_surface():
     if not main.exists():
         return code
     text = main.read_text(encoding="utf-8")
-    for section in [
-        "title",
-        "abstract",
-        "intro",
-        "related",
-        "method",
-        "exp",
-        "conclusion",
-        "limitations",
-        "appendix",
-    ]:
+    for section in SECTION_INPUT_FILES:
         if f"\\input{{sections/{section}}}" not in text:
             code |= error(f"paper/main.tex does not input paper/sections/{section}.tex")
     if "\\bibliography{refs}" not in text:
@@ -3990,6 +4067,7 @@ def check_figures_tables():
     code = require(["lab/artifacts/figure-index.yaml", "lab/artifacts/table-index.yaml", "state/float-placement-map.yaml"])
     if code:
         return code
+    code |= check_figure_table_wrapper_naming()
     figures = doc_items("lab/artifacts/figure-index.yaml", "figures")
     tables = doc_items("lab/artifacts/table-index.yaml", "tables")
     floats = doc_items("state/float-placement-map.yaml", "floats")

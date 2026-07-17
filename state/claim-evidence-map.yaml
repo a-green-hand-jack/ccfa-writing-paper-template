@@ -1,3 +1,50 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "claim-adversarial-harness",
+      "statement": "ARIS is an open-source research harness that coordinates machine-learning research workflows through cross-model adversarial collaboration as its default configuration: an executor model drives forward progress while a reviewer drawn (in the recommended configuration) from a different model family critiques intermediate artifacts and requests revisions.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-three-layers",
+      "statement": "ARIS is organized into three architectural layers: an execution layer providing more than 65 reusable Markdown-defined skills plus a persistent research wiki, an orchestration layer coordinating five end-to-end workflows with adjustable effort and reviewer routing, and an assurance layer providing a three-stage evidence-to-claim audit cascade and a five-pass scientific-editing pipeline.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-effort-presets",
+      "statement": "ARIS exposes four effort presets that scale breadth-, depth-, and iteration-related settings while leaving core review invariants unchanged: lite (approximately 0.4x), balanced (1x, default), max (approximately 2.5x), and beast (approximately 5-8x).",
+      "status": "active",
+      "claim_strength": "supporting",
+      "numeric_ids": [
+        "effort-lite-0-4",
+        "effort-max-2-5"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-overnight-run",
+      "statement": "In one documented overnight auto-review run of approximately eight hours, ARIS completed four review-revise rounds, increased an internal reviewer score from 5.0 to 7.5 out of 10, launched more than 20 GPU experiments, and removed claims not supported by the available evidence; this is a single observational trajectory that is not generalized.",
+      "status": "active",
+      "claim_strength": "supporting",
+      "numeric_ids": [
+        "overnight-score-start-5-0",
+        "overnight-score-end-7-5"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    }
+  ]
 }

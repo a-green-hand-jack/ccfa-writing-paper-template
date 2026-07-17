@@ -1,3 +1,53 @@
 {
-  "tables": []
+  "tables": [
+    {
+      "table_id": "tab-snapshot",
+      "label": "tab:snapshot",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-workflows",
+      "label": "tab:workflows",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-comparison",
+      "label": "tab:comparison",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-ecosystem",
+      "label": "tab:ecosystem",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-fullinventory",
+      "label": "tab:fullinventory",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-scope",
+      "label": "tab:scope",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-context",
+      "label": "tab:context",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "qualitative": true
+    }
+  ]
 }

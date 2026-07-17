@@ -1,3 +1,19 @@
 {
-  "evidence": []
+  "evidence": [
+    {
+      "evidence_id": "evidence-arxiv-source",
+      "status": "active",
+      "verification_state": "verified",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "external_source": "https://arxiv.org/abs/2605.03042",
+      "strength": "reported",
+      "claim_ids": [
+        "claim-adversarial-harness",
+        "claim-three-layers",
+        "claim-effort-presets",
+        "claim-overnight-run"
+      ],
+      "notes": "Provenance for this case migration is the published arXiv source itself (2605.03042 ARIS technical report), not a local lab artifact -- the reported deployment numbers are self-reported and observational (see paper sec:evidence). See paper/supplementary/source-attribution.md and lab/harness-evals/ for the migration-debt discussion of this evidence model."
+    }
+  ]
 }

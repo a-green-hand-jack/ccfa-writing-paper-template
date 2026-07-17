@@ -1,13 +1,13 @@
 {
   "paper": {
-    "slug": "ccfa-paper-template",
-    "title": "TODO Paper Title",
-    "short_title": "TODO Paper",
-    "owner": "TODO"
+    "slug": "aris-arxiv-2605-03042",
+    "title": "ARIS: Autonomous Research via Adversarial Multi-Agent Collaboration",
+    "short_title": "ARIS",
+    "owner": "case-arxiv-2605-03042-harness-test"
   },
   "venue": {
     "id": "iclr",
-    "year": 2027,
+    "year": 2026,
     "must_verify_current_year_rules": true
   },
   "paper_type": {
@@ -17,8 +17,12 @@
     "repo_mode": "standalone"
   },
   "team": {
-    "authors": [],
-    "anonymous_mode": "TODO"
+    "authors": [
+      "Ruofeng Yang",
+      "Yongcan Li",
+      "Shuai Li"
+    ],
+    "anonymous_mode": false
   },
   "submission": {
     "track": "TODO",
@@ -44,5 +48,10 @@
   "profile": "writing",
   "bridge": {
     "chassis_pin": "state/bridge-chassis.yaml"
+  },
+  "case_provenance": {
+    "arxiv_id": "2605.03042",
+    "source_url": "https://arxiv.org/abs/2605.03042",
+    "attribution": "paper/supplementary/source-attribution.md"
   }
 }

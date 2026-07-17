@@ -1,9 +1,19 @@
 {
   "exceptions": [
     {
-      "pattern": "2027",
+      "pattern": "2026",
       "match_scope": "literal",
-      "reason": "venue year metadata"
+      "reason": "venue/report year metadata (ICLR 2026 venue kit; ARIS technical report dated April 2026), not an empirical result"
+    },
+    {
+      "pattern": "5\\.4",
+      "match_scope": "literal",
+      "reason": "model version name (GPT-5.4 / GPT-5.4 Pro reviewer backend), not a metric"
+    },
+    {
+      "pattern": "1\\.5",
+      "match_scope": "literal",
+      "reason": "workflow identifier (Workflow 1.5 Experiment Bridge / W1.5), not a metric"
     }
   ]
 }

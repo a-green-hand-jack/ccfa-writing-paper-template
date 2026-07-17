@@ -1,1 +1,5 @@
 claim_id,evidence_id,relationship,status,notes
+claim-adversarial-harness,evidence-arxiv-source,supports,active,reported in arXiv 2605.03042 abstract/intro
+claim-three-layers,evidence-arxiv-source,supports,active,reported in arXiv 2605.03042 abstract/overview
+claim-effort-presets,evidence-arxiv-source,supports,active,reported in arXiv 2605.03042 assurance stack (effort levels)
+claim-overnight-run,evidence-arxiv-source,supports,active,reported in arXiv 2605.03042 deployment evidence

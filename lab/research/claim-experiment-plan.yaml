@@ -1,3 +1,28 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "claim-adversarial-harness",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published technical report; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-three-layers",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published technical report; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-effort-presets",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published technical report; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-overnight-run",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published technical report; no local experiment plan is needed, evidence is the published source itself."
+    }
+  ]
 }

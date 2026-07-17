@@ -107,3 +107,39 @@ Remaining known limitations (out of scope here):
   targets and must be reconciled with the published Bridge chassis-spec once it
   exists. The promotion proposal stays a governance-gated candidate until a
   Bridge RFC and fixtures are in place.
+
+## Case: arXiv 2605.03042 (ARIS) migration — 2026-07-17
+
+Second real-paper case (after `case/arxiv-2505-22954` DGM), on branch
+`case/arxiv-2605-03042`, via the `arxiv-case-harness-test` capability.
+
+- **Paper**: ARIS: Autonomous Research via Adversarial Multi-Agent Collaboration
+  (Yang, Li, Li; cs.SE/cs.AI; arXiv 2605.03042; v1 2026-05-04). Source archive
+  sha256 `6a85036f2c6dfa522aac355e013b54cb1299b2f68bceeb92dccea298adad4390`.
+  Provenance + full migration mapping in `paper/supplementary/source-attribution.md`
+  (human gate `external-source-migration`).
+- **Venue**: same ICLR-2026 kit as the DGM case (`iclr2026_conference.sty/.bst`).
+  Unlike the DGM migration, the source is already modular (`main.tex` `\input`s
+  `sec/*.tex`) and I wrote `\usepackage{style/iclr2026_conference}` /
+  `\bibliographystyle{style/iclr2026_conference}` correctly on first pass, so the
+  DGM case's separate "fix venue path" commit was folded into the migration commit.
+  `natbib`/`fancyhdr` are not shipped by the source and come from local TeX Live
+  (the venue class `\RequirePackage`s both).
+- **Evidence model**: reported numbers are self-reported/observational (the paper
+  says outcomes "cannot be causally attributed to ARIS alone"). Single evidence
+  item `evidence-arxiv-source`. Four regex-matched decimals registered as verified
+  numbers (`effort-lite-0-4`, `effort-max-2-5`, `overnight-score-start-5-0`,
+  `overnight-score-end-7-5`); `2026`/`5.4`/`1.5` + decorative `paper/pixel_chars.tex`
+  TikZ coords covered by `state/numbers/exceptions.yaml`.
+- **Structural debt** (recorded in source-attribution.md): Related Work and the
+  Limitations subsection are relocated to fixed slots (`03_related`, `07_limitations`)
+  so compiled PDF order differs from source reading order; three source sections
+  (overview/assurance/implementation) concatenated into `04_method`; two appendix
+  figures reuse body assets (`fig6`/`fig7`) as inline reprises since the
+  one-wrapper=one-asset convention cannot express reuse; ARIS has no Acknowledgements
+  so `08_acknowledgement.tex` is a not-`\input` stub.
+- **Blockers / not-covered**: the capability mentions upstream
+  `research_project_harness validate --profile paper`, which does not exist on this
+  machine; it was skipped and only the repo's self-contained leaf validators were
+  run. Stress-test / mutation probes and the round-N report in `lab/harness-evals/`
+  are the downstream audit station's job, not this migration station's.

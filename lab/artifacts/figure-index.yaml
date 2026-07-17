@@ -1,3 +1,100 @@
 {
-  "figures": []
+  "figures": [
+    {
+      "figure_id": "fig-01-arch",
+      "label": "fig:arch",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/01_arch.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/01_arch.tex"
+    },
+    {
+      "figure_id": "fig-02-loop",
+      "label": "fig:loop",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/02_loop.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/02_loop.tex"
+    },
+    {
+      "figure_id": "fig-03-audit",
+      "label": "fig:audit",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/03_audit.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/03_audit.tex"
+    },
+    {
+      "figure_id": "fig-04-wiki",
+      "label": "fig:wiki",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/04_wiki.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/04_wiki.tex"
+    },
+    {
+      "figure_id": "fig-05-pipeline",
+      "label": "fig:pipeline",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/05_pipeline.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/05_pipeline.tex"
+    },
+    {
+      "figure_id": "fig-06-wf2",
+      "label": "fig:wf2",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/06_wf2.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/06_wf2.tex"
+    },
+    {
+      "figure_id": "fig-07-wf3",
+      "label": "fig:wf3",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/07_wf3.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/07_wf3.tex"
+    },
+    {
+      "figure_id": "fig-10-appwf1",
+      "label": "fig:appwf1",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/10_appwf1.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/10_appwf1.tex"
+    },
+    {
+      "figure_id": "fig-11-appwf15",
+      "label": "fig:appwf15",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/11_appwf15.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/11_appwf15.tex"
+    },
+    {
+      "figure_id": "fig-12-appwf4",
+      "label": "fig:appwf4",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/12_appwf4.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "wrapper_path": "paper/figures/12_appwf4.tex"
+    },
+    {
+      "figure_id": "fig-06b-appwf2",
+      "label": "fig:appwf2",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/06_wf2.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "notes": "Appendix figure reuses the body asset 06_wf2.pdf (source uses the same PDF for two labels); rendered inline in paper/sections/10_appendix.tex, no separate wrapper."
+    },
+    {
+      "figure_id": "fig-07b-appwf3",
+      "label": "fig:appwf3",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/07_wf3.pdf",
+      "source": "https://arxiv.org/abs/2605.03042",
+      "notes": "Appendix figure reuses the body asset 07_wf3.pdf (source uses the same PDF for two labels); rendered inline in paper/sections/10_appendix.tex, no separate wrapper."
+    }
+  ]
 }

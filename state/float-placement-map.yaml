@@ -1,3 +1,149 @@
 {
-  "floats": []
+  "floats": [
+    {
+      "float_id": "fig-01-arch",
+      "label": "fig:arch",
+      "status": "active",
+      "figure_id": "fig-01-arch",
+      "asset_path": "paper/figures/srcs/01_arch.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-02-loop",
+      "label": "fig:loop",
+      "status": "active",
+      "figure_id": "fig-02-loop",
+      "asset_path": "paper/figures/srcs/02_loop.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-03-audit",
+      "label": "fig:audit",
+      "status": "active",
+      "figure_id": "fig-03-audit",
+      "asset_path": "paper/figures/srcs/03_audit.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-04-wiki",
+      "label": "fig:wiki",
+      "status": "active",
+      "figure_id": "fig-04-wiki",
+      "asset_path": "paper/figures/srcs/04_wiki.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-05-pipeline",
+      "label": "fig:pipeline",
+      "status": "active",
+      "figure_id": "fig-05-pipeline",
+      "asset_path": "paper/figures/srcs/05_pipeline.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-06-wf2",
+      "label": "fig:wf2",
+      "status": "active",
+      "figure_id": "fig-06-wf2",
+      "asset_path": "paper/figures/srcs/06_wf2.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-07-wf3",
+      "label": "fig:wf3",
+      "status": "active",
+      "figure_id": "fig-07-wf3",
+      "asset_path": "paper/figures/srcs/07_wf3.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-10-appwf1",
+      "label": "fig:appwf1",
+      "status": "active",
+      "figure_id": "fig-10-appwf1",
+      "asset_path": "paper/figures/srcs/10_appwf1.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-11-appwf15",
+      "label": "fig:appwf15",
+      "status": "active",
+      "figure_id": "fig-11-appwf15",
+      "asset_path": "paper/figures/srcs/11_appwf15.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-12-appwf4",
+      "label": "fig:appwf4",
+      "status": "active",
+      "figure_id": "fig-12-appwf4",
+      "asset_path": "paper/figures/srcs/12_appwf4.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-06b-appwf2",
+      "label": "fig:appwf2",
+      "status": "active",
+      "figure_id": "fig-06b-appwf2",
+      "asset_path": "paper/figures/srcs/06_wf2.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "fig-07b-appwf3",
+      "label": "fig:appwf3",
+      "status": "active",
+      "figure_id": "fig-07b-appwf3",
+      "asset_path": "paper/figures/srcs/07_wf3.pdf",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-snapshot",
+      "label": "tab:snapshot",
+      "status": "active",
+      "table_id": "tab-snapshot",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-workflows",
+      "label": "tab:workflows",
+      "status": "active",
+      "table_id": "tab-workflows",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-comparison",
+      "label": "tab:comparison",
+      "status": "active",
+      "table_id": "tab-comparison",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-ecosystem",
+      "label": "tab:ecosystem",
+      "status": "active",
+      "table_id": "tab-ecosystem",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-fullinventory",
+      "label": "tab:fullinventory",
+      "status": "active",
+      "table_id": "tab-fullinventory",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-scope",
+      "label": "tab:scope",
+      "status": "active",
+      "table_id": "tab-scope",
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "float_id": "tab-context",
+      "label": "tab:context",
+      "status": "active",
+      "table_id": "tab-context",
+      "source": "https://arxiv.org/abs/2605.03042"
+    }
+  ]
 }

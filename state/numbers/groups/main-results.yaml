@@ -1,3 +1,62 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "effort-lite-0-4",
+      "value": 0.4,
+      "display_value": "0.4",
+      "status": "verified",
+      "claim_ids": [
+        "claim-effort-presets"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "numeric_id": "effort-max-2-5",
+      "value": 2.5,
+      "display_value": "2.5",
+      "status": "verified",
+      "claim_ids": [
+        "claim-effort-presets"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2605.03042"
+    },
+    {
+      "numeric_id": "overnight-score-start-5-0",
+      "value": 5.0,
+      "display_value": "5.0",
+      "status": "verified",
+      "claim_ids": [
+        "claim-overnight-run"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2605.03042",
+      "result_ids": [
+        "result-overnight-run"
+      ]
+    },
+    {
+      "numeric_id": "overnight-score-end-7-5",
+      "value": 7.5,
+      "display_value": "7.5",
+      "status": "verified",
+      "claim_ids": [
+        "claim-overnight-run"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2605.03042",
+      "result_ids": [
+        "result-overnight-run"
+      ]
+    }
+  ]
 }

@@ -1,6 +1,6 @@
 {
   "venue": "iclr",
-  "year": 2027,
+  "year": 2026,
   "track": "TODO",
   "raw_template": "TODO",
   "normalized_template": "paper/",
@@ -9,5 +9,6 @@
   "hash": "TODO",
   "source": "official",
   "downloaded_at": "TODO",
-  "human_verified_at": null
+  "human_verified_at": null,
+  "migration_exemption": "arXiv case-harness-test replay of a published technical report (2605.03042 ARIS). This machine has no local real ICLR 2026 author-kit checkout, so scripts/export-venue-template.sh cannot produce a realkit_receipts compile verification, and status cannot honestly be set to verified. The migrated paper/style/iclr2026_conference.sty|.bst and paper/venue_preamble.tex packages are copied verbatim from the arXiv source's own iclr2026_conference-based build (a real, if unverified-by-this-harness, venue kit); natbib/fancyhdr come from the local TeX Live. See lab/harness-evals/ for the stress-test record of this exemption."
 }

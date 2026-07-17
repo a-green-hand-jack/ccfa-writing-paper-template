@@ -1,3 +1,562 @@
 {
-  "citations": []
+  "bulk_import_status": "bulk-imported-arxiv-migration",
+  "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+  "fitness_review_status": "pending",
+  "citations": [
+    {
+      "citation_id": "bai2022constitutional",
+      "bibkey": "bai2022constitutional",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:15",
+      "locators": [
+        "paper/sections/06_conclusion.tex:15"
+      ],
+      "context": "A natural adaptation is to insert them between any model output and any downstream training-data retention or reward signal, complementing recent self-improvement approaches~\\citep{bai2022constitution",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "du2024multiagentdebate",
+      "bibkey": "du2024multiagentdebate",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:15",
+      "locators": [
+        "paper/sections/02_intro.tex:15",
+        "paper/sections/02_intro.tex:33",
+        "paper/sections/03_related.tex:15",
+        "paper/sections/04_method.tex:51"
+      ],
+      "context": "(1)~many rely on the same or closely related model family for both execution and review---a same-model self-refinement pattern in the spirit of~\\citet{madaan2023selfrefine,shinn2023reflexion}---which ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "evoscientist2026",
+      "bibkey": "evoscientist2026",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Recent critical analyses of autonomous research systems~\\citep{luo2025aiscientistpitfalls} identify integrity failure modes such as inappropriate benchmark selection, data leakage, metric misuse, and ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gottweis2025coscientist",
+      "bibkey": "gottweis2025coscientist",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "The AI Scientist~\\citep{lu2024aiscientist} and AI Scientist-v2~\\citep{yamada2025aiscientistv2} pursue end-to-end idea-to-paper automation; AI co-scientist~\\citep{gottweis2025coscientist} emphasizes hy",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hong2024metagpt",
+      "bibkey": "hong2024metagpt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26",
+        "paper/sections/03_related.tex:55"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ifargan2024data2paper",
+      "bibkey": "ifargan2024data2paper",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8",
+        "paper/sections/03_related.tex:53"
+      ],
+      "context": "The AI Scientist~\\citep{lu2024aiscientist} and AI Scientist-v2~\\citep{yamada2025aiscientistv2} pursue end-to-end idea-to-paper automation; AI co-scientist~\\citep{gottweis2025coscientist} emphasizes hy",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "karpathy2026wiki",
+      "bibkey": "karpathy2026wiki",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/04_method.tex:68",
+      "locators": [
+        "paper/sections/04_method.tex:68"
+      ],
+      "context": "Each project maintains a research wiki that stores papers, ideas, experiment records, and tracked claims across sessions, allowing the system to revisit and refine prior work rather than restarting fr",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lee2024rlaif",
+      "bibkey": "lee2024rlaif",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:15",
+      "locators": [
+        "paper/sections/06_conclusion.tex:15"
+      ],
+      "context": "A natural adaptation is to insert them between any model output and any downstream training-data retention or reward signal, complementing recent self-improvement approaches~\\citep{bai2022constitution",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lee2026metaharness",
+      "bibkey": "lee2026metaharness",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:6",
+      "locators": [
+        "paper/sections/02_intro.tex:6",
+        "paper/sections/03_related.tex:25",
+        "paper/sections/04_method.tex:6",
+        "paper/sections/04_method.tex:293"
+      ],
+      "context": "Recent work on harness engineering~\\citep{lee2026metaharness} suggests that the performance of LLM systems can depend heavily on the \\emph{harness}---the surrounding system logic that governs storage,",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "li2023camel",
+      "bibkey": "li2023camel",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "li2026autosota",
+      "bibkey": "li2026autosota",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/04_method.tex:239",
+      "locators": [
+        "paper/sections/04_method.tex:239"
+      ],
+      "context": "\\caption{\\aris{} workflow library. Each workflow chains reusable skills through plain-text artifact contracts. For the idea discovery, the research taste is important for the idea quality, and we reco",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liang2024divergent",
+      "bibkey": "liang2024divergent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:15",
+      "locators": [
+        "paper/sections/02_intro.tex:15",
+        "paper/sections/02_intro.tex:33",
+        "paper/sections/03_related.tex:15",
+        "paper/sections/04_method.tex:51"
+      ],
+      "context": "(1)~many rely on the same or closely related model family for both execution and review---a same-model self-refinement pattern in the spirit of~\\citet{madaan2023selfrefine,shinn2023reflexion}---which ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liang2024llmfeedback",
+      "bibkey": "liang2024llmfeedback",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:21",
+      "locators": [
+        "paper/sections/03_related.tex:21"
+      ],
+      "context": "ReviewerGPT~\\citep{liu2023reviewergpt} and large-scale analyses~\\citep{liang2024llmfeedback} suggest that LLMs can assist targeted review tasks and produce feedback overlapping with human reviewers on",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2023reviewergpt",
+      "bibkey": "liu2023reviewergpt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:21",
+      "locators": [
+        "paper/sections/03_related.tex:21"
+      ],
+      "context": "ReviewerGPT~\\citep{liu2023reviewergpt} and large-scale analyses~\\citep{liang2024llmfeedback} suggest that LLMs can assist targeted review tasks and produce feedback overlapping with human reviewers on",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2026autoresearchclaw",
+      "bibkey": "liu2026autoresearchclaw",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Recent critical analyses of autonomous research systems~\\citep{luo2025aiscientistpitfalls} identify integrity failure modes such as inappropriate benchmark selection, data leakage, metric misuse, and ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2024aiscientist",
+      "bibkey": "lu2024aiscientist",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:8",
+      "locators": [
+        "paper/sections/02_intro.tex:8",
+        "paper/sections/02_intro.tex:11",
+        "paper/sections/03_related.tex:8",
+        "paper/sections/03_related.tex:50"
+      ],
+      "context": "This research harness is still assembled manually in many settings: researchers coordinate compute, references, manuscript tooling, and feedback workflows across separate systems~\\citep{lu2024aiscient",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "luo2025aiscientistpitfalls",
+      "bibkey": "luo2025aiscientistpitfalls",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Recent critical analyses of autonomous research systems~\\citep{luo2025aiscientistpitfalls} identify integrity failure modes such as inappropriate benchmark selection, data leakage, metric misuse, and ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "madaan2023selfrefine",
+      "bibkey": "madaan2023selfrefine",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:15",
+      "locators": [
+        "paper/sections/02_intro.tex:15",
+        "paper/sections/03_related.tex:14",
+        "paper/sections/04_method.tex:51"
+      ],
+      "context": "(1)~many rely on the same or closely related model family for both execution and review---a same-model self-refinement pattern in the spirit of~\\citet{madaan2023selfrefine,shinn2023reflexion}---which ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "openhands_skills",
+      "bibkey": "openhands_skills",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:56",
+      "locators": [
+        "paper/sections/03_related.tex:56"
+      ],
+      "context": "OpenHands~\\citep{wang2025openhands,openhands_skills} & none & \\texttimes & partial & \\texttimes & \\texttimes & \\texttimes \\\\",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "qian2024chatdev",
+      "bibkey": "qian2024chatdev",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "sainani2019writing",
+      "bibkey": "sainani2019writing",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/04_method.tex:148",
+      "locators": [
+        "paper/sections/04_method.tex:148"
+      ],
+      "context": "Inspired by the principles of scientific writing pedagogy~\\citep{sainani2019writing}, the \\texttt{/paper-write} skill applies five automated editing passes after initial drafting:",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidgall2025agentrxiv",
+      "bibkey": "schmidgall2025agentrxiv",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:8",
+      "locators": [
+        "paper/sections/02_intro.tex:8",
+        "paper/sections/02_intro.tex:12",
+        "paper/sections/03_related.tex:8",
+        "paper/sections/03_related.tex:9",
+        "paper/sections/03_related.tex:52"
+      ],
+      "context": "This research harness is still assembled manually in many settings: researchers coordinate compute, references, manuscript tooling, and feedback workflows across separate systems~\\citep{lu2024aiscient",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:15",
+      "locators": [
+        "paper/sections/02_intro.tex:15",
+        "paper/sections/03_related.tex:14",
+        "paper/sections/04_method.tex:51"
+      ],
+      "context": "(1)~many rely on the same or closely related model family for both execution and review---a same-model self-refinement pattern in the spirit of~\\citet{madaan2023selfrefine,shinn2023reflexion}---which ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "shumailov2024curse",
+      "bibkey": "shumailov2024curse",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:16",
+      "locators": [
+        "paper/sections/06_conclusion.tex:16"
+      ],
+      "context": "Two known concerns motivate the hypothesis: LLM judges can exhibit systematic biases~\\citep{zheng2023judging}, and recursive training on model-generated data can degrade quality across iterations~\\cit",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "tong2026aitaste",
+      "bibkey": "tong2026aitaste",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/04_method.tex:239",
+      "locators": [
+        "paper/sections/04_method.tex:239"
+      ],
+      "context": "\\caption{\\aris{} workflow library. Each workflow chains reusable skills through plain-text artifact contracts. For the idea discovery, the research taste is important for the idea quality, and we reco",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ultraworkers2025",
+      "bibkey": "ultraworkers2025",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/04_method.tex:286",
+      "locators": [
+        "paper/sections/04_method.tex:286",
+        "paper/sections/10_appendix.tex:119"
+      ],
+      "context": "Beyond skill-based integration into existing IDEs, \\ariscode{} is a standalone Rust-based CLI built on \\texttt{claw-code}~\\citep{ultraworkers2025} that bundles all skills as slash commands.",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2025openhands",
+      "bibkey": "wang2025openhands",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26",
+        "paper/sections/03_related.tex:56"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wu2023autogen",
+      "bibkey": "wu2023autogen",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26",
+        "paper/sections/03_related.tex:54"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yamada2025aiscientistv2",
+      "bibkey": "yamada2025aiscientistv2",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/02_intro.tex:11",
+      "locators": [
+        "paper/sections/02_intro.tex:11",
+        "paper/sections/03_related.tex:8",
+        "paper/sections/03_related.tex:51"
+      ],
+      "context": "The AI Scientist~\\citep{lu2024aiscientist} and AI Scientist v2~\\citep{yamada2025aiscientistv2} automate a pipeline from idea generation to manuscript drafting.",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/03_related.tex:26",
+      "locators": [
+        "paper/sections/03_related.tex:26"
+      ],
+      "context": "AutoGen~\\citep{wu2023autogen}, CAMEL~\\citep{li2023camel}, OpenHands~\\citep{wang2025openhands}, SWE-agent~\\citep{yang2024sweagent}, MetaGPT~\\citep{hong2024metagpt}, and ChatDev~\\citep{qian2024chatdev} ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yu2025rlaifv",
+      "bibkey": "yu2025rlaifv",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:15",
+      "locators": [
+        "paper/sections/06_conclusion.tex:15"
+      ],
+      "context": "A natural adaptation is to insert them between any model output and any downstream training-data retention or reward signal, complementing recent self-improvement approaches~\\citep{bai2022constitution",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yuan2024selfrewarding",
+      "bibkey": "yuan2024selfrewarding",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:15",
+      "locators": [
+        "paper/sections/06_conclusion.tex:15"
+      ],
+      "context": "A natural adaptation is to insert them between any model output and any downstream training-data retention or reward signal, complementing recent self-improvement approaches~\\citep{bai2022constitution",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zheng2023judging",
+      "bibkey": "zheng2023judging",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2605.03042 source prose",
+      "locator": "paper/sections/06_conclusion.tex:16",
+      "locators": [
+        "paper/sections/06_conclusion.tex:16"
+      ],
+      "context": "Two known concerns motivate the hypothesis: LLM judges can exhibit systematic biases~\\citep{zheng2023judging}, and recursive training on model-generated data can degrade quality across iterations~\\cit",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2605.03042 references.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    }
+  ]
 }

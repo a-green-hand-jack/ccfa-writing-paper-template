@@ -1,3 +1,202 @@
 {
-  "references": []
+  "references": [
+    {
+      "reference_id": "bai2022constitutional",
+      "bibkey": "bai2022constitutional",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "du2024multiagentdebate",
+      "bibkey": "du2024multiagentdebate",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "evoscientist2026",
+      "bibkey": "evoscientist2026",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "gottweis2025coscientist",
+      "bibkey": "gottweis2025coscientist",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "hong2024metagpt",
+      "bibkey": "hong2024metagpt",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "ifargan2024data2paper",
+      "bibkey": "ifargan2024data2paper",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "karpathy2026wiki",
+      "bibkey": "karpathy2026wiki",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "lee2024rlaif",
+      "bibkey": "lee2024rlaif",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "lee2026metaharness",
+      "bibkey": "lee2026metaharness",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "li2023camel",
+      "bibkey": "li2023camel",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "li2026autosota",
+      "bibkey": "li2026autosota",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "liang2024divergent",
+      "bibkey": "liang2024divergent",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "liang2024llmfeedback",
+      "bibkey": "liang2024llmfeedback",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "liu2023reviewergpt",
+      "bibkey": "liu2023reviewergpt",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "liu2026autoresearchclaw",
+      "bibkey": "liu2026autoresearchclaw",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "lu2024aiscientist",
+      "bibkey": "lu2024aiscientist",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "luo2025aiscientistpitfalls",
+      "bibkey": "luo2025aiscientistpitfalls",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "madaan2023selfrefine",
+      "bibkey": "madaan2023selfrefine",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "openhands_skills",
+      "bibkey": "openhands_skills",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "qian2024chatdev",
+      "bibkey": "qian2024chatdev",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "sainani2019writing",
+      "bibkey": "sainani2019writing",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "schmidgall2025agentrxiv",
+      "bibkey": "schmidgall2025agentrxiv",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "shumailov2024curse",
+      "bibkey": "shumailov2024curse",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "tong2026aitaste",
+      "bibkey": "tong2026aitaste",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "ultraworkers2025",
+      "bibkey": "ultraworkers2025",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "wang2025openhands",
+      "bibkey": "wang2025openhands",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "wu2023autogen",
+      "bibkey": "wu2023autogen",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "yamada2025aiscientistv2",
+      "bibkey": "yamada2025aiscientistv2",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "yu2025rlaifv",
+      "bibkey": "yu2025rlaifv",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "yuan2024selfrewarding",
+      "bibkey": "yuan2024selfrewarding",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    },
+    {
+      "reference_id": "zheng2023judging",
+      "bibkey": "zheng2023judging",
+      "status": "active",
+      "source": "arxiv-2605.03042-migration"
+    }
+  ]
 }

@@ -1,2 +1,215 @@
+% ============================================================
+% Section: Experiments
+% ============================================================
+
+\vspace{-4pt}
 \section{Experiments}
-TODO
+\vspace{-4pt}
+
+\subsection{Experimental Setup}
+\label{sec:exp_setup}
+
+\textbf{Tasks.}
+We evaluate CORAL on two benchmark suites and two stress-test problems.
+The benchmark suites follow the experiment set-up in EvoX~\citep{liu2026evox} and TTT-Discover ~\citep{yuksekgonul2026tttdiscover}, consisting of 6 mathematical optimization tasks (e.g., circle packing, Erd\H{o}s minimum overlap) and 5 systems optimization tasks (e.g., expert placement load balancing, GPU placement, cross-cloud transfer). These suites are used for both single-agent and multi-agent experiments.
+The two challenging stress-test problems are further used for multi-agent evaluation: Anthropic's kernel engineering ~\citep{anthropic_takehome}, a VLIW SIMD tree-traversal task with an official best score of 1,363 cycles, and the Polyominoes packing problem from Frontier-CS~\citep{mang2025frontiercs}, which is one of the hardest among all 172 problems in the benchmark.
+
+\textbf{Baselines and models.}
+For single-agent experiments, we compare CORAL against OpenEvolve~\citep{sharma2025openevolve}, ShinkaEvolve~\citep{lange2025shinkaevolve}, and EvoX~\citep{liu2026evox}, all given the same seed programs, evaluators, and budgets. All single-agent methods and the stress-test multi-agent experiments use Claude Code + Opus 4.6. For multi-agent experiments on the math and systems suites, we use a fully open-source stack (MiniMax M2.5~\citep{minimax2026m25} + OpenCode~\citep{opencode2025}) to verify that CORAL's gains generalize beyond proprietary models and agents. No internet access is provided.
+
+\textbf{Budget and evaluation.}
+All runs on the math and systems suites are given a 3-hour wall-clock budget or 100 iterations for the baseline methods, whichever is longer. For fairness, we run CORAL for the minimum duration among all baseline runs. Stress-test problems run until convergence due to difficulty. All results are averaged over 4 independent trials. We report:
+\squishlisttwo
+  \item \textbf{Final score}: the best score achieved within the evaluation budget (primary metric).
+  \item \textbf{Improvement rate}: fraction of evaluations that yield an improvement on the best score.
+  \item \textbf{Number of evaluations}: number of evaluations required to reach the final score.
+\squishend
+{\setlength{\fboxsep}{1pt}\colorbox{myyellow!15}{SOTA}} denotes the best previously known results (human or AI).
+
+\subsection{Autonomous Evolution Outperforms Fixed Evolutionary Search}
+\label{sec:exp_main_single}
+
+As shown in Table~\ref{tab:main_results}, \method{} \textbf{achieves the best final score on all 11 tasks, establishing new SOTA on 8 tasks}. Among baselines, EvoX~\citep{liu2026evox} is the strongest competitor due to its meta-evolved search strategy, yet CORAL still outperforms it on every task. All three baselines trail CORAL by a wide margin on improvement rate and evaluation efficiency. CORAL's improvement rate is 3 -- 10$\times$ higher, and it typically converges within 5 -- 20 evaluations versus 60 -- 100 for fixed evolutionary search methods. This means CORAL wastes far fewer evaluations on unproductive candidates. We attribute this to CORAL's autonomous design. fixed evolutionary search baselines select candidates for mutation based on predefined heuristics and follow a fixed pipeline at each evolution step. CORAL agents instead decide what to explore next based on their own analysis of prior attempts and evaluation feedback, choosing which aspects of a solution to modify, when to pivot to a different approach, and when a candidate is ready for evaluation. This autonomy over the evolutionary process is reflected directly in the gap in improvement rates.
+
+
+\renewcommand{\arraystretch}{0.96}
+\begin{table}[t]
+\caption{Single-agent \method{} vs.\ fixed evolutionary search baselines on mathematical and systems optimization tasks. OE = OpenEvolve, SE = ShinkaEvolve. All methods use Claude Opus 4.6. For Final Score, $\uparrow$ means higher is better and $\downarrow$ means lower is better. For Improvement Rate, higher is better. For \# Evals, lower is better. {\setlength{\fboxsep}{1pt}\colorbox{cyan!10}{Cyan}} cells surpass previous {\setlength{\fboxsep}{1pt}\colorbox{myyellow!15}{SOTA}} on final score. Best results are \textbf{bolded}. CORAL's autonomous evolution significantly outperforms fixed evolutionary search, achieving the best final score on all 11 tasks and establishing new SOTA on 8 tasks.}
+\label{tab:main_results}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.7pt}
+\vspace{-7pt}
+\begin{threeparttable}
+\begin{tabular}{c c | >{\columncolor{myyellow!15}}c cccc | cccc | cccc}
+\toprule
+& \multirow{3}{*}{\textbf{Task}} & \multicolumn{5}{c|}{\textbf{Final Score}} & \multicolumn{4}{c|}{\textbf{Impr.\ Rate (\%)}} & \multicolumn{4}{c}{\textbf{\# Evals}} \\ \cmidrule(lr){3-7}  \cmidrule(lr){8-11} \cmidrule(lr){12-15}
+& & \textbf{SOTA} & \textbf{OE} & \textbf{SE} & \textbf{EvoX} & \textbf{CORAL} & \textbf{OE} & \textbf{SE} & \textbf{EvoX} & \textbf{CORAL} & \textbf{OE} & \textbf{SE} & \textbf{EvoX} & \textbf{CORAL} \\
+\midrule
+\multirow{6}{*}{\rotatebox{90}{\textbf{Math}}}
+& Circle-Pack.\,$\uparrow$         & 2.6359 & 2.6293 & 2.6001 & 2.6320 & \hl{\textbf{2.6360}} & 7.0 & 19.4 & 27.1 & \textbf{100.0}   & 100 & 62  & 48  & \textbf{11} \\
+& Signal Proc.\,$\uparrow$         & 0.7429 & 0.6420 & \hl{0.8171} & 0.7306 & \hl{\textbf{0.8229}} & 11.8 & 8.6 & 21.1 & \textbf{30.3} & 85  & 58  & 71  & \textbf{56} \\
+& Erd\H{o}s Over.\,$\downarrow$    & \textbf{0.38088} & 0.38188 & 0.38156 & 0.38125 & 0.38089 & 9.5 & 15.7 & 27.8 & \textbf{36.8} & 84  & 89  & 36  & \textbf{19} \\
+& MMD-16-2\,$\downarrow$           & \textbf{12.89} & 12.92 & \textbf{12.89} & 12.96 & \textbf{12.89} & 8.2 & 9.8 & 33.3 & \textbf{83.3} & 97  & 82  & 18  & \textbf{6}  \\
+& MMD-14-3\,$\downarrow$           & \textbf{4.16} & 4.21 & 4.46 & 4.46 & \textbf{4.16} & 25.0 & 9.4 & 24.5 & \textbf{75.0} & 12  & 96  & 53  & \textbf{8}  \\
+& 3rd-Autocorr.\,$\downarrow$      & \textbf{1.4557} & 1.4731 & 1.4812 & 1.5552 & \textbf{1.4557} & 6.2 & 32.4 & 12.0 & \textbf{60.0} & 97  & 37  & 75  & \textbf{5}  \\
+\midrule
+\multirow{5}{*}{\rotatebox{90}{\textbf{System}}}
+& EPLB\,$\uparrow$                 & 0.145 & 0.127 & 0.129 & \hl{0.146} & \hl{\textbf{0.149}} & 8.3 & 12.6 & 10.0 & \textbf{78.9} & 60  & 87  & 100 & \textbf{19} \\
+& PRISM\,$\uparrow$                & \textbf{26.26} & \textbf{26.26} & \textbf{26.26} & \textbf{26.26} & \textbf{26.26} & 31.6 & 18.8 & 25.0 & \textbf{100.0}   & 19  & 32  & 16  & \textbf{3}  \\
+& LLM-SQL\,$\uparrow$              & 0.730 & 0.716 & 0.724 & 0.726 & \hl{\textbf{0.731}} & 6.7 & 23.8   & 6.0 & \textbf{53.3} & 100 & 21  & 83  & \textbf{15} \\
+& Txn Sched.\,$\uparrow$           & 4348 & 3774 & 3802 & 3984 & \hl{\textbf{4566}} & 10.1 & 16.0 & 16.0 & \textbf{27.3} & 99  & 25  & 94  & \textbf{22}  \\
+& Cloudcast\,$\downarrow$          & 632.7 & \hl{627.2} & \hl{627.8} & \hl{623.5} & \hl{\textbf{618.4}} & 7.2 & 20.8 & 12.3 & \textbf{33.3} & 69  & 24  & 65  & \textbf{9} \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+% \vspace{-14pt}
+\end{table}
+
+
+
+\subsection{Multi-Agent Evolution Extends the Search Frontier}
+\label{sec:exp_main_multi}
+
+
+\textbf{Multi-agent gains over strong single-agent autonomy.}
+While single-agent \method{} already outperforms all fixed evolutionary search baselines, 4-agent co-evolution pushes performance even further (Table~\ref{tab:multi-agent}). The largest improvements appear on the stress-test problems, where single-agent runs tend to plateau early, with co-evolution achieving an 18.3\% cycle reduction on Kernel Engineering and a 5.0\% score increase on Polyominoes. Notably, without web search, CORAL already \textbf{establishes a new SOTA on the Kernel Engineering task}. With web search enabled, CORAL also \textbf{achieves a new SOTA (89.4) on the Polyominoes problem}, although for fairness, we report the non-web-search results in Table~\ref{tab:multi-agent}; the full web-enabled results are provided in Appendix~\ref{app:polyominoes_sota}. These gains do not arise solely from additional compute: single-agent runs exhibit higher per-eval improvement rates, yet co-evolution achieves better final scores by exploring more diverse search trajectories. This is enabled by CORAL's asynchronous shared persistent memory, where multiple agents independently explore different regions of the solution space and share discoveries through persistent attempts, notes, and skills. Useful techniques diffuse across agents organically without requiring explicit coordination protocols. 
+
+\renewcommand{\arraystretch}{0.98}
+\begin{table}[t]
+\caption{Multi-agent co-evolution vs.\ single-agent CORAL. \textbf{Bolded} Gain (\%) values denote the relative improvement of 4-Agents over 1-Agent. Multi-Agent evolution can significantly improve the search frontier, especially on tasks where single-agent runs plateau early.}
+\label{tab:multi-agent}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{threeparttable}
+\begin{tabular}{c c c | >{\columncolor{myyellow!15}}c ccc | cc | cc}
+\toprule
+& \multirow{3}{*}{\textbf{Runtime}} & \multirow{3}{*}{\textbf{Task}} & \multicolumn{4}{c|}{\textbf{Final Score}} & \multicolumn{2}{c|}{\textbf{Impr.\ Rate (\%)}} & \multicolumn{2}{c}{\textbf{\# Evals}} \\  \cmidrule(lr){4-7}  \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+&   &  & \textbf{SOTA} & \textbf{1-Agent} & \textbf{4-Agent} & \textbf{Gain (\%)} & \textbf{1-Agent} & \textbf{4-Agent} & \textbf{1-Agent} & \textbf{4-Agent} \\
+\midrule
+& \multirow{2}{*}{\shortstack{Claude Code +\\Opus 4.6}}
+& Polynominoes\,$\uparrow$        & 87.0 & 80.2   & 84.2   & \textbf{4.99}  &  42.4     &   19.4    &  33   &  67   \\[-1pt]
+\multirow{-2}{*}{\rotatebox{90}{\textbf{Stress}}}
+& & Kernel Eng.\,$\downarrow$          & 1363 & 1350   & 1103   & \textbf{18.30} &    43.0   &  9.0     &  56   &  596   \\[2pt]
+\midrule
+\multirow{6}{*}{\rotatebox{90}{\textbf{Math}}}
+& \multirow{6}{*}{\shortstack{OpenCode +\\MiniMax M2.5}}
+& Circle-Pack.\,$\uparrow$         & 2.6359 & 2.3531 & 2.5391 & \textbf{7.90}  & 20.7 & 28.3 & 29  & 46  \\
+& & Signal Proc.\,$\uparrow$         & 0.7429 & 0.7174 & 0.7383 & \textbf{2.91}  & 30.5 & 19.8 & 59  & 253 \\
+& & Erd\H{o}s Over.\,$\downarrow$    & 0.38088 & 0.39237 & 0.38311 & \textbf{2.36} & 16.7 & 6.9 & 42  & 58  \\
+& & MMD-16-2\,$\downarrow$           & 12.89 & 12.91  & 12.89  & \textbf{0.15}  & 32.4 & 11.5 & 34  & 103 \\
+& & MMD-14-3\,$\downarrow$           & 4.16 & 4.53   & 4.19   & \textbf{7.51}  & 63.6 & 15.0 & 11  & 80  \\
+& & 3rd-Autocorr\,$\downarrow$       & 1.4557 & 1.5337 & 1.4931 & \textbf{2.65}  & 42.9 & 22.1 & 7   & 59  \\
+\midrule
+\multirow{5}{*}{\rotatebox{90}{\textbf{System}}}
+& \multirow{5}{*}{\shortstack{OpenCode +\\MiniMax M2.5}}
+& EPLB\,$\uparrow$                 & 0.145 & 0.128  & 0.129  & \textbf{0.78}  & 50.0   & 65.4 & 6   & 26  \\
+& & PRISM\,$\uparrow$                & 26.26 & 25.85  & 26.26  & \textbf{1.59}  & 32.6 & 31.7 & 46  & 82  \\
+& & LLM-SQL\,$\uparrow$              & 0.730 & 0.693  & 0.730  & \textbf{5.34}  & 83.3 & 71.7 & 6   & 46  \\
+& & Txn Sched.\,$\uparrow$           & 4348 & 3704   & 3774   & \textbf{1.89}  & 50.0   & 66.7 & 16  & 24  \\
+& & Cloudcast\,$\downarrow$          & 632.7 & 849.4  & 672.8  & \textbf{20.80} & 72.7 & 66.7 & 11  & 12  \\
+\bottomrule
+\end{tabular}
+\end{threeparttable}
+\end{table}
+
+\textbf{Generalization to open-source models.}
+The multi-agent gains are not tied to proprietary models. When evaluated on the math and systems suites using a fully open-source stack (MiniMax M2.5 + OpenCode), 4-agent co-evolution consistently improves final scores over the single-agent counterpart across most tasks (Table~\ref{tab:multi-agent}). These results show that CORAL's organizational advantages arise from the co-evolution mechanism itself rather than model-specific capabilities, and that the benefits of distributed exploration and shared persistent memory transfer to open-source settings.
+
+ 
+\vspace{-4pt}
+\subsection{Analysis}
+\label{sec:exp_analysis}
+\vspace{-4pt}
+
+\subsubsection{Why Autonomous Evolution Works}
+To understand why autonomous evolution is effective, we analyze agent trajectories qualitatively and quantitatively. Detailed results are reported in Appendix~\ref{app:trajectory_statistics}. Across tasks, local verification and knowledge accumulation are strongly associated with performance: 
+
+\textbf{Local verification.} Agents often execute code and run tests locally before submitting for external evaluation, allowing them to debug and validate candidates within a single iteration. Attempts with local execution improve more often than the average attempt on the same task. This effect is the strongest on tasks involving compiled code: on Transaction (61\% local test rate) and Kernel Engineering (57\%) (see Table~\ref{tab:single_agent_trajectory_analysis} and~\ref{tab:task_level_trajectory_analysis}), local execution often catches compilation failures before an evaluation is consumed. By contrast, tasks with non-reproducible or hidden evaluations show much lower local test rates; for example, Prism (0\%) relies on grader-generated randomized tests.
+
+\textbf{Knowledge accumulation.} Knowledge accumulation through notes and skills also helps, but its role differs sharply across task types. On standard tasks, agents create only 0.05 knowledge artifacts per attempt, and knowledge access yields only a small gain (+2 percentage points over attempts without knowledge access). On advanced tasks, agents create over 10$\times$ more knowledge per attempt (0.55 and 0.68), and knowledge access is much more strongly associated with improvement: 55\% on Kernel Engineering versus 26\% on standard tasks (see Table~\ref{tab:single_agent_trajectory_analysis}). The knowledge itself also differs in quality. On standard tasks, notes are often lightweight progress logs, such as records of parameter changes. On advanced tasks, they capture reusable insights: for example, Kernel Engineering notes identify architectural bottlenecks such as VALU or record cases where relaxing WAR dependencies hurts performance, while Polyominoes includes a ``what NEVER worked'' folder to document failed approaches and avoid revisiting unpromising design strategies across attempts.
+
+Agents also proactively inspect prior attempts, compare implementations, and look for patterns when deciding what to try next. However, whether this form of inspection is more effective than retrieval in earlier fixed evolutionary search methods is difficult to isolate, so we leave it to future work.
+
+
+
+
+% \paragraph{Local Evaluation}
+
+% \paragraph{Improvement genealogy.}
+% Ask whether improvements mainly come from the current best parent or from broader branching.
+
+% \paragraph{Memory reuse.}
+% Quantify how often accumulated discoveries are reused and when reuse leads to measurable gains.
+
+% \paragraph{Trajectory case study.}
+% Give one sharp example of a non-trivial improvement trajectory, preferably showing:
+% \begin{itemize}
+%     \item a failed line of search
+%     \item a reflected insight or reusable discovery
+%     \item a later successful branch enabled by that discovery
+% \end{itemize}
+
+\subsubsection{Why Multi-Agent Organization Helps}
+\label{sec:exp_analysis_multi}
+We analyze 4-agent runs on Kernel Engineering (596 attempts) and Polyominoes (67 attempts) across three dimensions.
+
+\textbf{Cross-agent information transfer.}
+Building on another agent's work is very effective. On Kernel Engineering, 36\% of attempts use another agent's commit as their parent, and these improve at 17\% versus 9\% for all attempts. The majority (66\%) of new records originate from a cross-agent parent. On Polyominoes, direct code transfer is rarer (12\%) but still very powerful (50\% versus a 19\% average improvement rate); transfer instead occurs more often through shared notes and skills, with 87\% of rounds referencing knowledge committed by other agents. The two tasks exhibit complementary information transfer modes: Kernel Engineering agents transfer more through referencing others' code, whereas Polyominoes agents transfer more through knowledge.
+
+\textbf{Exploration diversity.}
+We extract strategy keywords from attempt titles and compute pairwise Jaccard similarity. On Kernel Engineering, agents average 0.43 pairwise overlap; on Polyominoes, 0.31. More than half of each agent's strategy vocabulary is unique, meaning that the population collectively explores substantially more of the search space than any individual agent.
+
+\textbf{Contribution balance.}
+On Kernel Engineering, all four agents produce 130--165 attempts with 10--16 improvements each, and all four independently reach the best score of 1103 cycles. Records are evenly split (14/15/10/15). Leader tenure is more skewed: agent-1 holds the best score for 45\% of the run. On Polyominoes, contributions are less balanced: agent-3 sets 6 of 13 records, and agent-4 leads for 34\% of the total time.
+
+\subsubsection{Ablations}
+\label{sec:ablations}
+
+\renewcommand{\arraystretch}{0.97}
+\begin{wraptable}{r}{0.34\textwidth}
+\vspace{-20pt}
+\caption{Ablation study on knowledge accumulation and multi-agent co-evolution. All runs use Claude Code + Opus 4.6. Best results are \textbf{bolded}.}
+\label{tab:ablations}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+
+\begin{tabular}{lcc}
+\toprule
+
+\multicolumn{3}{c}{\textbf{Knowledge Accumulation (1-Agent)}} \\
+% \cmidrule(lr){1-3}
+
+\textbf{Task} & \textbf{w/ Know.} & \textbf{w/o Know.} \\
+\midrule
+Kernel Eng.\,$\downarrow$  & \textbf{1350} & 1601 \\
+Polyominoes\,$\uparrow$    & \textbf{80.2} & 77.3 \\
+Txn Sched.\,$\uparrow$     & \textbf{4566} & 4444 \\
+
+% \addlinespace[4pt]
+\midrule
+
+
+\multicolumn{3}{c}{\textbf{Co-evolution (4-Agent)}} \\
+% \cmidrule(lr){1-3}
+\textbf{Task} & \textbf{Co-evol.} & \textbf{Indep.\ Best} \\
+\midrule
+Kernel Eng.\,$\downarrow$  & \textbf{1103} & 1180 \\
+Polyominoes\,$\uparrow$    & \textbf{84.2} & 80.8 \\
+Txn Sched.\,$\uparrow$     & \textbf{4694} & 4629 \\
+
+\bottomrule
+\end{tabular}
+\vspace{-25pt}
+\end{wraptable}
+
+We ablate two core components of \method{}: knowledge accumulation and multi-agent co-evolution. Table~\ref{tab:ablations} reports results on three stress-test tasks using Claude Code + Opus 4.6.
+
+
+
+
+\textbf{Knowledge accumulation.} Disabling note and skill creation degrades final scores across all three tasks, with the largest drop on Kernel Engineering ($1350 \to 1601$ cycles, an 18.6\% regression). This confirms that knowledge artifacts causally contribute to search quality, rather than being merely correlated with improvement.
+
+\textbf{Co-evolution vs.\ independent runs.} To test whether multi-agent evolution gains come from co-evolution or simply from running more agents, we compare 4-agent co-evolution against the best-of-4 independent single-agent runs. Co-evolution outperforms independent best on all three tasks. This shows that the gains from multi-agent evolution are not reducible to additional compute.

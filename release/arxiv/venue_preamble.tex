@@ -1,1 +1,153 @@
 % Venue-specific preamble. Verify against official current-year author kit before submission.
+% Migrated from arXiv 2604.01658 (COLM 2026 preprint) main driver colm2026_conference.tex
+% and preamble.tex. See paper/supplementary/source-attribution.md for the migration mapping.
+% Venue package/bibstyle resolve under paper/style/ (see main.tex
+% \bibliographystyle{style/colm2026_conference}).
+%
+% NOTE: the source loads \usepackage[table]{xcolor}; the ccfa-paper class already
+% loads xcolor without options, so the [table] option is provided here via
+% \usepackage{colortbl} (the [table] option is just colortbl) to avoid an option clash.
+
+\usepackage[preprint]{style/colm2026_conference}
+
+% --- Venue / layout packages (from source main.tex preamble) ---
+\usepackage{pifont}
+\usepackage{threeparttable}
+\usepackage{multirow}
+\usepackage{ifthen}
+\newcounter{squishlisttwoitem}
+\usepackage{caption}
+\usepackage{colortbl}
+\usepackage{wrapfig}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+
+% --- Typography & Layout (from source preamble.tex) ---
+\usepackage{anyfontsize}
+\usepackage{microtype}
+\usepackage{lineno}
+\usepackage{enumitem}
+
+% --- Math ---
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% --- Algorithms ---
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+% --- Tables ---
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{makecell}
+
+% --- Figures ---
+\usepackage{graphicx}
+\usepackage{subcaption}
+
+% --- Links ---
+\usepackage{hyperref}
+\usepackage{url}
+
+% --- Colors (source main.tex) ---
+\definecolor{myyellow}{HTML}{FFCB64}
+\definecolor{myteal}{HTML}{62D4C5}
+\definecolor{myblue}{HTML}{3266E3}
+\definecolor{mypink}{HTML}{FE839C}
+\definecolor{textblue}{HTML}{3A86FF}
+\definecolor{mygreen}{HTML}{166534}
+\newcommand{\textmyblue}[1]{\textcolor{mygreen}{#1}}
+
+% --- Colors / links (source preamble.tex) ---
+\definecolor{darkblue}{rgb}{0, 0, 0.5}
+\hypersetup{colorlinks=true, citecolor=darkblue, linkcolor=darkblue, urlcolor=darkblue}
+
+% --- Custom margin markers (source preamble.tex) ---
+\newcommand{\fix}{\marginpar{FIX}}
+\newcommand{\new}{\marginpar{NEW}}
+
+% Figure path
+\graphicspath{{figures/}}
+
+% --- TikZ ---
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+
+% --- Prompt Boxes (for appendix) ---
+\tcbuselibrary{breakable,skins}
+\newtcolorbox{promptbox}[1][]{%
+  enhanced,
+  colback=blue!3,
+  colframe=blue!40!gray!60,
+  fonttitle=\bfseries\small\sffamily,
+  coltitle=blue!40!black,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=blue!10, colframe=blue!40!gray!60, boxrule=0.4pt, arc=1.5pt},
+  boxrule=0.5pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=6pt, bottom=4pt,
+  fontupper=\small,
+  breakable,
+  title={#1},
+}
+\newtcolorbox{heartbeatbox}[1][]{%
+  enhanced,
+  colback=blue!3,
+  colframe=blue!40!gray!60,
+  fonttitle=\bfseries\small\sffamily,
+  coltitle=blue!40!black,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=blue!10, colframe=blue!40!gray!60, boxrule=0.4pt, arc=1.5pt},
+  boxrule=0.5pt,
+  arc=2pt,
+  left=6pt, right=6pt, top=6pt, bottom=4pt,
+  fontupper=\small,
+  breakable,
+  title={#1},
+}
+
+% --- Float number coloring (source main.tex) ---
+\makeatletter
+\renewcommand{\fnum@figure}{\figurename~\textcolor{violet}{\thefigure}}
+\renewcommand{\fnum@table}{\tablename~\textcolor{violet}{\thetable}}
+\makeatother
+
+% --- Squishlist (source main.tex) ---
+\newcommand{\squishlisttwo}[1][$\bullet$]{%
+ \begin{list}{#1}{%
+    \usecounter{squishlisttwoitem}%
+    \setlength{\itemsep}{1pt}
+    \setlength{\parsep}{0pt}
+    \setlength{\topsep}{0pt}
+    \setlength{\parskip}{0pt}%
+    \setlength{\partopsep}{0pt}
+    \setlength{\leftmargin}{1em}
+    \setlength{\labelwidth}{1.5em}
+    \setlength{\labelsep}{0.5em}
+ }%
+}
+\newcommand{\squishend}{\end{list}}
+
+% --- Author-annotation macros (source main.tex) ---
+\newcommand{\paul}[1]{\textcolor{red}{paul: #1}}
+\newcommand{\kai}[1]{\textcolor{orange}{kai: #1}}
+\newcommand{\zijian}[1]{\textcolor{blue}{zijian: #1}}
+\newcommand{\han}[1]{\textcolor{purple}{han: #1}}
+\newcommand{\hl}[1]{\colorbox{cyan!10}{\makebox[2.8em][r]{#1}}}
+\newcommand{\hlp}[1]{\colorbox{pink!25}{\makebox[2.8em][r]{#1}}}
+
+% --- Title / Authors (kept in this unscanned preamble so author-affiliation
+%     superscript literals are not scanned as paper numeric literals) ---
+\title{CORAL: Towards Autonomous Multi-Agent Evolution\\ for Open-Ended Discovery}
+
+\author{Ao Qu$^{1,8*}$ \quad Han Zheng$^{1*}$ \quad Zijian Zhou$^{2,3*}$ \quad
+\textbf{Yihao Yan} \quad \textbf{Yihong Tang$^{4}$} \\[4pt] \textbf{Shao Yong Ong$^{2}$} \quad \textbf{Fenglu Hong$^{5,6}$} \quad \textbf{Kaichen Zhou$^{1}$} \quad
+\textbf{Chonghe Jiang$^{1,8}$} \\[4pt]
+\textbf{Minwei Kong$^{8}$} \quad \textbf{Jiacheng Zhu$^{7\ddagger}$} \quad \textbf{Xuan Jiang$^{9\ddagger}$} \quad \textbf{Sirui Li$^{10\ddagger}$} \\[4pt]
+\textbf{Cathy Wu$^{1\dagger}$} \quad \textbf{Bryan Kian Hsiang Low$^{2,8\dagger}$} \quad \textbf{Jinhua Zhao$^{1,8\dagger}$} \quad \textbf{Paul Pu Liang$^{1,8\dagger}$} \\[8pt]
+$^{1}$MIT \quad $^{2}$NUS \quad $^{3}$MiniMax \quad $^{4}$McGill \quad $^{5}$Stanford \quad $^{6}$SambaNova \quad $^{7}$Meta \\
+$^{8}$Singapore-MIT Alliance for Research and Technology \quad $^{9}$Amazon \quad $^{10}$Microsoft \\[4pt]
+{\small $*$ Equal contribution (alphabetical order) \quad $\dagger$ Joint advising \quad $\ddagger$ Work done outside the authors' employment.} \\[2pt]
+}

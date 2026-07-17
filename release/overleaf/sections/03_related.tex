@@ -1,2 +1,17 @@
+
 \section{Related Work}
-TODO
+
+
+\textbf{LLM-Driven Evolutionary Search.}
+A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\citep{romera2024funsearch} introduced this paradigm, and AlphaEvolve~\citep{novikov2025alphaevolve} extended it to full codebases with MAP-Elites. Subsequent systems refine the search orchestration through adaptive sampling, island-based architectures, and Pareto-based selection~\citep{sharma2025openevolve,lange2025shinkaevolve,khrulkov2025gigaevo,assumpcao2026codeevolve,yan2026pacevolve,agrawal2025gepa}, while AdaEvolve~\citep{cemri2026adaevolve} and EvoX~\citep{liu2026evox} make the search strategy itself adaptive. A complementary direction fine-tunes the generator at test time~\citep{wang2025thetaevolve,yuksekgonul2026tttdiscover} or builds experience libraries from solver feedback~\citep{ouyang2025reasoningbank,kong2025alphaopt}. All these systems follow a fixed pipeline: select parents via predefined heuristics, construct a prompt, and call the LLM to produce a mutation. The LLM has no agency over what to explore next. CORAL removes this scaffolding and lets the agent decide what to explore and what knowledge to carry forward.
+
+ 
+\textbf{Autonomous LLM Agents.}
+A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\citep{yang2024sweagent,wang2024openhands} navigate codebases, execute code, and iteratively debug within sandboxed environments, while the AI Scientist~\citep{lu2024aiscientist} automates the full research cycle. Self-improvement techniques such as verbal self-feedback~\citep{shinn2023reflexion,madaan2023selfrefine}, interleaved reasoning and tool use~\citep{yao2023react}, and learned memory consolidation~\citep{zhou2026mem,yu2026memagent} further extend agent capabilities over long horizons. Recent position papers argue for elevating deployment-time adaptation to an autonomous evolver agent~\citep{gao2026agentic}. These systems demonstrate the power of agent autonomy, but they target one-off task completion rather than sustained, goal-driven optimisation. CORAL brings this autonomy into the evolutionary loop, replacing rigid search heuristics with agent-level intelligence at each evolution step.
+ 
+ 
+\textbf{Multi-Agent Collaboration.}
+Multi-agent LLM systems decompose complex tasks through role assignment and structured communication~\citep{wu2023autogen,langgraph2024,qian2024chatdev,hong2024metagpt}, or explore emergent cooperation via role-playing and dynamic group formation~\citep{li2023camel,chen2024agentverse}.
+In existing evolutionary systems such as FunSearch and AlphaEvolve, parallelism is limited to running multiple stateless evaluation workers concurrently with no memory across steps.
+CORAL introduces long-lived, stateful agents that communicate asynchronously through shared knowledge (scored attempts, notes, and skills), enabling emergent behaviours such as technique diffusion, spontaneous consensus, and cross-referencing, none of which are hardcoded.
+ 

@@ -52,3 +52,27 @@ Destructive stress probes are out of scope for this run (baseline + fidelity onl
 ## Validators run
 
 See the migration commit message and the handoff for the full command/exit-code list.
+
+## Harness-gap finding (observed, NOT fixed on this case branch)
+
+- **Probe/trigger:** `scripts/check-latex.sh --compile-release arxiv` (proactively
+  run; not part of the required validator set).
+- **Observed:** the modular `release/arxiv` surface compiles cleanly, but
+  `release/arxiv-flat` fails with `! LaTeX Error: File 'style/ccfa-paper.sty' not
+  found.` at `main.tex:3`.
+- **Root cause:** `compute_flatten_bundle()` in `scripts/paper_harness_checks.py`
+  copies `style/*.sty|*.bst` into the flat bundle root (dropping the `style/`
+  directory), but `rewrite_flatten_asset_paths()` only rewrites `figures/srcs/` /
+  `tables/srcs/` -> `srcs/`. It does not rewrite the `style/` prefix in
+  `\usepackage{style/...}` / `\bibliographystyle{style/...}`. The base template's
+  own `paper/main.tex` ships `\usepackage{style/ccfa-paper}`, so the flat surface
+  cannot resolve the style package for ANY case, not just this one.
+- **Classification:** harness gap (flatten path-rewriter incomplete), pre-existing
+  and template-wide; exposed by this real-paper case.
+- **Follow-up:** durable fix belongs on a dedicated `fix/...` branch off `main`
+  (out of scope for this migration lane): teach `rewrite_flatten_asset_paths()` (or
+  the flatten copier) to also rewrite `style/<name>` -> `<name>` in `\usepackage`
+  and `\bibliographystyle`, with a negative regression test. Not fixed here; scripts
+  are read-only for the case branch. The required validators (six Python checks +
+  `check-latex.sh --compile` on `paper/`) and the mandatory `compare-original-pdf.sh`
+  fidelity gate all pass; the modular `release/arxiv` surface compiles.

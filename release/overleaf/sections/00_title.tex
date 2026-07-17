@@ -1,1 +1,16 @@
+% Correspondence footnote + title + teaser, migrated from arXiv 2604.01658 main driver
+% (colm2026_conference.tex \begin{document} preamble). \title/\author live in
+% paper/venue_preamble.tex (unscanned) so author-affiliation superscripts are not
+% mis-scanned as paper numeric literals. See paper/supplementary/source-attribution.md.
+\begingroup
+\renewcommand{\thefootnote}{}
+\footnotetext{Correspondence: \texttt{qua@mit.edu}, \texttt{hanzheng@mit.edu}, \texttt{zhou\_zijian@u.nus.edu}}
+\endgroup
+
+\ifcolmsubmission
+\linenumbers
+\fi
+
 \maketitle
+
+\input{figures/00_teaser}

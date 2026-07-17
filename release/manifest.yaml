@@ -4,8 +4,8 @@
   "template_skeleton": true,
   "source_revision": {
     "treeish": "HEAD",
-    "commit": "aef99633f8392eec6fcaac2d8f5dcdcfe13ef738",
-    "tree": "bd2b0fc748a295ca25dafceac0954bbed29c139e"
+    "commit": "78ba58403b1f0ca37f6962c17f5f6287c1f6bc53",
+    "tree": "e5622597f4434bccee6aaab9c496e6dda6ae1c56"
   },
   "surfaces": [
     {
@@ -47,13 +47,13 @@
         },
         {
           "relpath": "macros.tex",
-          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
-          "size": 105
+          "sha256": "c6c39a1096184554b478e92db9820e0c0d0834907a1ce753a352fcfc9af090c4",
+          "size": 215
         },
         {
           "relpath": "main.tex",
-          "sha256": "ff5bdf85da800c86e04b4006c91df6398b81196e8d78ce38180ebeb5955ed712",
-          "size": 441
+          "sha256": "93405f2c4a2247de18b09cb6067172a5e18f75695c9c454dd13f58b8826f2107",
+          "size": 471
         },
         {
           "relpath": "refs.bib",
@@ -112,8 +112,18 @@
         },
         {
           "relpath": "style/README.md",
-          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
-          "size": 107
+          "sha256": "69e437104dd3b79372651f056538730ab45ce8fdcb1e11a6cbb51844aff3c847",
+          "size": 2584
+        },
+        {
+          "relpath": "style/ccfa-paper.sty",
+          "sha256": "efb25529dbe6545156b3e2b02d6662a132c90604da885e02acc8a7d42f534ca2",
+          "size": 2716
+        },
+        {
+          "relpath": "style/compat.sty",
+          "sha256": "7faf0f6e8e203ed28b1dd06785642252de8952f1ada6e1aa348e782bff0027ef",
+          "size": 3544
         },
         {
           "relpath": "supplementary/README.md",
@@ -183,13 +193,13 @@
         },
         {
           "relpath": "macros.tex",
-          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
-          "size": 105
+          "sha256": "c6c39a1096184554b478e92db9820e0c0d0834907a1ce753a352fcfc9af090c4",
+          "size": 215
         },
         {
           "relpath": "main.tex",
-          "sha256": "ff5bdf85da800c86e04b4006c91df6398b81196e8d78ce38180ebeb5955ed712",
-          "size": 441
+          "sha256": "93405f2c4a2247de18b09cb6067172a5e18f75695c9c454dd13f58b8826f2107",
+          "size": 471
         },
         {
           "relpath": "refs.bib",
@@ -248,8 +258,18 @@
         },
         {
           "relpath": "style/README.md",
-          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
-          "size": 107
+          "sha256": "69e437104dd3b79372651f056538730ab45ce8fdcb1e11a6cbb51844aff3c847",
+          "size": 2584
+        },
+        {
+          "relpath": "style/ccfa-paper.sty",
+          "sha256": "efb25529dbe6545156b3e2b02d6662a132c90604da885e02acc8a7d42f534ca2",
+          "size": 2716
+        },
+        {
+          "relpath": "style/compat.sty",
+          "sha256": "7faf0f6e8e203ed28b1dd06785642252de8952f1ada6e1aa348e782bff0027ef",
+          "size": 3544
         },
         {
           "relpath": "supplementary/README.md",
@@ -319,13 +339,13 @@
         },
         {
           "relpath": "macros.tex",
-          "sha256": "ff600878d72fad779a9cbbe336c6eaa0dc5cdf3e49582d37d07f09024a2a74fd",
-          "size": 105
+          "sha256": "c6c39a1096184554b478e92db9820e0c0d0834907a1ce753a352fcfc9af090c4",
+          "size": 215
         },
         {
           "relpath": "main.tex",
-          "sha256": "ff5bdf85da800c86e04b4006c91df6398b81196e8d78ce38180ebeb5955ed712",
-          "size": 441
+          "sha256": "93405f2c4a2247de18b09cb6067172a5e18f75695c9c454dd13f58b8826f2107",
+          "size": 471
         },
         {
           "relpath": "refs.bib",
@@ -384,8 +404,18 @@
         },
         {
           "relpath": "style/README.md",
-          "sha256": "1502f28a9c4f61a0b49db43ea1f4cf7d14dcb743eb8d7139b7835aedaf84106c",
-          "size": 107
+          "sha256": "69e437104dd3b79372651f056538730ab45ce8fdcb1e11a6cbb51844aff3c847",
+          "size": 2584
+        },
+        {
+          "relpath": "style/ccfa-paper.sty",
+          "sha256": "efb25529dbe6545156b3e2b02d6662a132c90604da885e02acc8a7d42f534ca2",
+          "size": 2716
+        },
+        {
+          "relpath": "style/compat.sty",
+          "sha256": "7faf0f6e8e203ed28b1dd06785642252de8952f1ada6e1aa348e782bff0027ef",
+          "size": 3544
         },
         {
           "relpath": "supplementary/README.md",

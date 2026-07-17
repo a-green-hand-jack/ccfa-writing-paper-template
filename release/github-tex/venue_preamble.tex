@@ -1,1 +1,58 @@
 % Venue-specific preamble. Verify against official current-year author kit before submission.
+% Migrated verbatim from arXiv 2505.22954 main.tex preamble. See
+% paper/supplementary/source-attribution.md for the migration mapping.
+\usepackage{style/iclr2026_conference}
+\usepackage{times}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage[normalem]{ulem}
+\usepackage{titletoc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{cleveref}
+\crefname{algocf}{algorithm}{algorithms}
+\Crefname{algocf}{Algorithm}{Algorithms}
+\usepackage{multicol}
+\usepackage{tcolorbox}
+\usepackage{float}
+\usepackage[ruled,vlined]{algorithm2e}
+\tcbuselibrary{breakable}
+\tcbuselibrary{listings}
+\tcbuselibrary{listingsutf8}
+\usepackage{subcaption}
+\usepackage{fvextra}
+\usepackage{adjustbox}
+\DefineVerbatimEnvironment{MyVerbatim}{Verbatim}{breaklines=true}
+% nicer diff display
+\lstdefinelanguage{Diff}{
+  sensitive=false,
+  morekeywords={diff,index,---,+++},               % keywords
+  morecomment=[f][\color{red!80!black}]{-},         % lines beginning with '-'
+  morecomment=[f][\color{green!60!black}]{+},       % lines beginning with '+'
+}
+\lstdefinestyle{diffstyle}{
+  language=Diff,
+  basicstyle=\ttfamily\scriptsize,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gray!50},
+  backgroundcolor=\color{black!2},
+  breaklines=true,
+  breakatwhitespace=true,
+  postbreak=\mbox{\textcolor{gray}{$\hookrightarrow$}\space},
+  xleftmargin=1em,
+  xrightmargin=1em,
+  aboveskip=0.5em,                        % less vertical padding
+  belowskip=0.5em,
+  commentstyle=\itshape,                  % context lines
+  keywordstyle=\bfseries\color{blue!70!black}, % diff/index/@@...
+}
+\lstset{style=diffstyle}

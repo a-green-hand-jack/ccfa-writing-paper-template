@@ -1,2 +1,12 @@
 \section{Limitations}
-TODO
+\label{sec:limitations}
+
+% NOTE: source arXiv 2505.22954 main.tex merges Conclusion and Limitations
+% into a single "Conclusion and Limitations" section (sec:conclusion). This
+% file holds the limitations-focused verbatim paragraphs from that section;
+% see paper/sections/06_conclusion.tex and
+% paper/supplementary/source-attribution.md.
+
+We demonstrate that the DGM can autonomously achieve performance on par with openly available solutions. However, it still falls short of closed-source SoTA SWE-bench solutions. An open question is whether running the DGM for longer would continue to yield performance gains and eventually surpass closed-source solutions. These closed-source solutions often rely on elaborately handcrafted techniques developed by teams of highly skilled experts. Since FMs have yet to match the capabilities of such experts (e.g., in reasoning), the DGM currently requires extensive compute to discover improvements. A single run of the DGM on SWE-bench, as presented in \Cref{sec:experiments}, takes about 2 weeks and incurs significant API costs (\Cref{app:cost-estimate}). We hypothesize that further progress will require more efficient use of computational resources and the development of better reasoning skills.
+
+Since this version of the DGM is mainly powered by FMs, it is inherently limited by the capabilities of the underlying FM. Hence, an exciting future direction is to extend self-modification beyond just prompts or FM workflows, to include more computationally intensive methods, such as rewriting its own training script to update the FM itself. While this version of the DGM focuses on coding, AI systems are increasingly applied across a wide range of domains (e.g., computer vision, creative writing). Another promising extension is to develop self-improving AI systems capable of enhancing themselves beyond just the coding domain. A key assumption in this work is that coding benchmarks are a good reflection of the agent's ability to self-improve, since the self-modification task requires the agent to modify its own codebase. However, one could envision an alternative approach that co-evolves the target task distribution~\citep{faldor2025omni, wang2023robogen}, thereby removing the constraint of self-improvement being tied to a single objective, as in true open-ended processes. \Cref{app:future-work} presents additional potential directions for future work. As we continue to explore this powerful technology, we must also keep safety front and center, as discussed in \Cref{sec:safety}.

@@ -1,0 +1,6 @@
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.95\textwidth]{figures/srcs/10_dgm_no_selfimprove.pdf}
+    \caption{\textbf{DGM without self-improving agents.} Keeping the meta-agent that is modifying and producing the next coding agents the same, DGM w/o self-improve is unable to continuously improve over time. (Left) Archive of coding agents generated during the DGM w/o self-improve run on SWE-bench. Each node represents a coding agent, with node 0 corresponding to the base agent. Node color indicates performance on SWE-bench (percentage of solved tasks), while border color reflects the number of tasks for which the agent was evaluated. Edges show which agents self-modified to produce the offsprings. (Right) Progress plot of the DGM w/o self-improve on SWE-bench. The light green line shows the average score of all agents possessing basic codebase-editing functionality. The green line tracks the best score achieved by any agent in the archive at each iteration. The dark line shows the lineage of the final best-discovered agent and its precursor nodes.}
+    \label{fig:dgm-no-selfimprove}
+\end{figure}

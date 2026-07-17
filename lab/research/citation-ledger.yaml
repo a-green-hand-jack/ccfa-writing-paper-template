@@ -1,3 +1,3007 @@
 {
-  "citations": []
+  "bulk_import_status": "bulk-imported-arxiv-migration",
+  "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+  "fitness_review_status": "pending",
+  "citations": [
+    {
+      "citation_id": "GoogleDeepMind2025GeminiThinking",
+      "bibkey": "GoogleDeepMind2025GeminiThinking",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "Novikov2025AlphaEvolve",
+      "bibkey": "Novikov2025AlphaEvolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "aider2024",
+      "bibkey": "aider2024",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14",
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/05_exp.tex:27",
+        "paper/sections/10_appendix.tex:330"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "aki2024llm",
+      "bibkey": "aki2024llm",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "alur2018search",
+      "bibkey": "alur2018search",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "amari1972learning",
+      "bibkey": "amari1972learning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "andrychowicz2017hindsight",
+      "bibkey": "andrychowicz2017hindsight",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "anthropic2024claude35sonnet",
+      "bibkey": "anthropic2024claude35sonnet",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:9",
+      "locators": [
+        "paper/sections/05_exp.tex:9"
+      ],
+      "context": "The DGM is initialized with a single coding agent. This base agent is built around a frozen FM and augmented with tool use capabilities~\\citep{schick2023toolformer, anthropic_tool_use_2024}. The FM autonomously determines its action at each step, using whichever tool it deems appropriate. The base a",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "anthropic2025claude37",
+      "bibkey": "anthropic2025claude37",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:50",
+      "locators": [
+        "paper/sections/05_exp.tex:50"
+      ],
+      "context": "To evaluate the generality of the improvements from the DGM, we tested the base agent (\\Cref{sec:experiment-setup}) and the best agent discovered during the DGM run (\\Cref{fig:dgm-comparisons}) with different FMs than those used during optimization. For SWE-bench, where the DGM was run using Claude ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "anthropic_tool_use_2024",
+      "bibkey": "anthropic_tool_use_2024",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:9",
+      "locators": [
+        "paper/sections/05_exp.tex:9"
+      ],
+      "context": "The DGM is initialized with a single coding agent. This base agent is built around a frozen FM and augmented with tool use capabilities~\\citep{schick2023toolformer, anthropic_tool_use_2024}. The FM autonomously determines its action at each step, using whichever tool it deems appropriate. The base a",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "anwar2024foundational",
+      "bibkey": "anwar2024foundational",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bahdanau2015neural",
+      "bibkey": "bahdanau2015neural",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bai2022constitutional",
+      "bibkey": "bai2022constitutional",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:61",
+      "locators": [
+        "paper/sections/05_exp.tex:61",
+        "paper/sections/10_appendix.tex:410"
+      ],
+      "context": "Conversely, a significant potential benefit of the self-improvement paradigm is that it could, in principle, be directed toward enhancing safety and interpretability themselves. We conduct a preliminary investigation into how the DGM can be deployed in AI safety settings to develop countermeasures f",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "baranes2013active",
+      "bibkey": "baranes2013active",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "barke2024hysynth",
+      "bibkey": "barke2024hysynth",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bengio2024managing",
+      "bibkey": "bengio2024managing",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:63",
+      "locators": [
+        "paper/sections/05_exp.tex:63",
+        "paper/sections/10_appendix.tex:399"
+      ],
+      "context": "The DGM demonstrates the potential of self-improving AI while still operating within safe research boundaries due to the current limitations of frontier FMs and effective mitigations like sandboxing. \\Cref{app:safety} presents additional discussion on broader safety uncertainties. We include this sa",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bostrom2002a",
+      "bibkey": "bostrom2002a",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:63",
+      "locators": [
+        "paper/sections/05_exp.tex:63"
+      ],
+      "context": "The DGM demonstrates the potential of self-improving AI while still operating within safe research boundaries due to the current limitations of frontier FMs and effective mitigations like sandboxing. \\Cref{app:safety} presents additional discussion on broader safety uncertainties. We include this sa",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bostrom2020ethical",
+      "bibkey": "bostrom2020ethical",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bradley2023quality",
+      "bibkey": "bradley2023quality",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "brown2020language",
+      "bibkey": "brown2020language",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4",
+        "paper/sections/03_related.tex:5",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "bruce2024genie",
+      "bibkey": "bruce2024genie",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "buchi1990solving",
+      "bibkey": "buchi1990solving",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "cao2024spider2",
+      "bibkey": "cao2024spider2",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "chatzilygeroudis2021quality",
+      "bibkey": "chatzilygeroudis2021quality",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "chen2023unleashing",
+      "bibkey": "chen2023unleashing",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "cheng2025trace",
+      "bibkey": "cheng2025trace",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "clune2019ai",
+      "bibkey": "clune2019ai",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/05_exp.tex:57",
+        "paper/sections/05_exp.tex:63",
+        "paper/sections/06_conclusion.tex:12",
+        "paper/sections/10_appendix.tex:399"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "colas2019curious",
+      "bibkey": "colas2019curious",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "colas2022autotelic",
+      "bibkey": "colas2022autotelic",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:25",
+      "locators": [
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "To isolate and evaluate the contribution of the DGM's core components, we compare the DGM against two baselines: DGM without self-improving agents (\\textbf{DGM w/o self-improve}) and DGM without open-ended exploration (\\textbf{DGM w/o open-ended exploration}). DGM w/o self-improve replicates the app",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "colas2022language",
+      "bibkey": "colas2022language",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "colas2023augmenting",
+      "bibkey": "colas2023augmenting",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "coulom2006efficient",
+      "bibkey": "coulom2006efficient",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:106",
+      "locators": [
+        "paper/sections/10_appendix.tex:106"
+      ],
+      "context": "At each DGM iteration, we select a subset of agents from the archive as parents to self-modify and produce new child agents (\\Cref{sec:methods}). The details of the parent selection process, inspired by \\citet{ecoffet2019go}, are outlined below. Future work could explore alternative search and explo",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "darwin2023origin",
+      "bibkey": "darwin2023origin",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:8",
+      "locators": [
+        "paper/sections/02_intro.tex:8",
+        "paper/sections/04_method.tex:4",
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "\\citet{schmidhuber2007godel} presented a class of mathematically rigorous, self-referential, self-improving problem solvers. It relies on formal proofs to justify code rewrites, ensuring that any self-modification is provably beneficial. However, in practice and without restrictive assumptions about",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "dawkins2019evolution",
+      "bibkey": "dawkins2019evolution",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "dennis2020emergent",
+      "bibkey": "dennis2020emergent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "dharna2024quality",
+      "bibkey": "dharna2024quality",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ding2023quality",
+      "bibkey": "ding2023quality",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "dobzhansky1970genetics",
+      "bibkey": "dobzhansky1970genetics",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:85",
+      "locators": [
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "This work is heavily inspired by the mechanisms of Darwinian evolution~\\citep{darwin2023origin}, notably variation (mutation), selection, and the preservation of lineages (stepping stones), and brings them into the realm of self-modifying coding agents. In DGM, an archive of past agent versions is m",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ecoffet2019go",
+      "bibkey": "ecoffet2019go",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/10_appendix.tex:106",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ecoffet2020open",
+      "bibkey": "ecoffet2020open",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:63",
+      "locators": [
+        "paper/sections/05_exp.tex:63",
+        "paper/sections/10_appendix.tex:399"
+      ],
+      "context": "The DGM demonstrates the potential of self-improving AI while still operating within safe research boundaries due to the current limitations of frontier FMs and effective mitigations like sandboxing. \\Cref{app:safety} presents additional discussion on broader safety uncertainties. We include this sa",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ecoffet2021first",
+      "bibkey": "ecoffet2021first",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "edwards2000genetical",
+      "bibkey": "edwards2000genetical",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:85",
+      "locators": [
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "This work is heavily inspired by the mechanisms of Darwinian evolution~\\citep{darwin2023origin}, notably variation (mutation), selection, and the preservation of lineages (stepping stones), and brings them into the realm of self-modifying coding agents. In DGM, an archive of past agent versions is m",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ellis2021dreamcoder",
+      "bibkey": "ellis2021dreamcoder",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "eysenbach2018diversity",
+      "bibkey": "eysenbach2018diversity",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "faldor2025omni",
+      "bibkey": "faldor2025omni",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:10",
+      "locators": [
+        "paper/sections/02_intro.tex:10",
+        "paper/sections/04_method.tex:4",
+        "paper/sections/07_limitations.tex:12",
+        "paper/sections/10_appendix.tex:394",
+        "paper/sections/10_appendix.tex:407",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "We propose the \\textbf{Darwin G\\\"odel Machine (DGM)}, a self-referential, self-improving system that writes and modifies its own code to become a better coding agent. Each self-modification requires the DGM to edit its own codebase. We use Python, which is Turing-complete, giving the DGM the potenti",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "fernandopromptbreeder",
+      "bibkey": "fernandopromptbreeder",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:10",
+      "locators": [
+        "paper/sections/02_intro.tex:10",
+        "paper/sections/03_related.tex:8",
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "We propose the \\textbf{Darwin G\\\"odel Machine (DGM)}, a self-referential, self-improving system that writes and modifies its own code to become a better coding agent. Each self-modification requires the DGM to edit its own codebase. We use Python, which is Turing-complete, giving the DGM the potenti",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ganguli2022red",
+      "bibkey": "ganguli2022red",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gao2025flowreasoner",
+      "bibkey": "gao2025flowreasoner",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gauthier2024polyglot",
+      "bibkey": "gauthier2024polyglot",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12",
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/05_exp.tex:4"
+      ],
+      "context": "We present results on two coding benchmarks: SWE-bench~\\citep{jimenez2024swebench} and Polyglot~\\citep{gauthier2024polyglot}. The DGM automatically improves itself from 20.0\\% to 50.0\\% on SWE-bench, and from 14.2\\% to 30.7\\% on Polyglot. We show that self-improvement enables continued progress, as ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gaven2025magellan",
+      "bibkey": "gaven2025magellan",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gerhart2007theory",
+      "bibkey": "gerhart2007theory",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "good1966speculations",
+      "bibkey": "good1966speculations",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "greenblatt2024alignment",
+      "bibkey": "greenblatt2024alignment",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gulwani2011automating",
+      "bibkey": "gulwani2011automating",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "guo2025deepseek",
+      "bibkey": "guo2025deepseek",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hall2007self",
+      "bibkey": "hall2007self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "havrilla2024glore",
+      "bibkey": "havrilla2024glore",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "havrilla2024surveying",
+      "bibkey": "havrilla2024surveying",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hendrikse2007evolvability",
+      "bibkey": "hendrikse2007evolvability",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "herr2025llm",
+      "bibkey": "herr2025llm",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:106",
+      "locators": [
+        "paper/sections/10_appendix.tex:106",
+        "paper/sections/10_appendix.tex:407"
+      ],
+      "context": "At each DGM iteration, we select a subset of agents from the archive as parents to self-modify and produce new child agents (\\Cref{sec:methods}). The details of the parent selection process, inspired by \\citet{ecoffet2019go}, are outlined below. Future work could explore alternative search and explo",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hobbhahn2025swebenchmini",
+      "bibkey": "hobbhahn2025swebenchmini",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11",
+        "paper/sections/05_exp.tex:20"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hopfield1982neural",
+      "bibkey": "hopfield1982neural",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hu2023ThoughtCloning",
+      "bibkey": "hu2023ThoughtCloning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hu2024self",
+      "bibkey": "hu2024self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hu2025automated",
+      "bibkey": "hu2025automated",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/03_related.tex:8",
+        "paper/sections/04_method.tex:7",
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "huang2022large",
+      "bibkey": "huang2022large",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hughes2024open",
+      "bibkey": "hughes2024open",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "irie2022modern",
+      "bibkey": "irie2022modern",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "irie2025metalearning",
+      "bibkey": "irie2025metalearning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "jaderberg2017population",
+      "bibkey": "jaderberg2017population",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "jiang2021prioritized",
+      "bibkey": "jiang2021prioritized",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "jiang2023general",
+      "bibkey": "jiang2023general",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "jimenez2024swebench",
+      "bibkey": "jimenez2024swebench",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12",
+        "paper/sections/05_exp.tex:16",
+        "paper/sections/05_exp.tex:4"
+      ],
+      "context": "We present results on two coding benchmarks: SWE-bench~\\citep{jimenez2024swebench} and Polyglot~\\citep{gauthier2024polyglot}. The DGM automatically improves itself from 20.0\\% to 50.0\\% on SWE-bench, and from 14.2\\% to 30.7\\% on Polyglot. We show that self-improvement enables continued progress, as ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kanitscheider2021multi",
+      "bibkey": "kanitscheider2021multi",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "khan2024debating",
+      "bibkey": "khan2024debating",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "khattab2023dspy",
+      "bibkey": "khattab2023dspy",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kim2017structured",
+      "bibkey": "kim2017structured",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kimura1979neutral",
+      "bibkey": "kimura1979neutral",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:85",
+      "locators": [
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "This work is heavily inspired by the mechanisms of Darwinian evolution~\\citep{darwin2023origin}, notably variation (mutation), selection, and the preservation of lineages (stepping stones), and brings them into the realm of self-modifying coding agents. In DGM, an archive of past agent versions is m",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kirsch2022self",
+      "bibkey": "kirsch2022self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "klissarov2023motif",
+      "bibkey": "klissarov2023motif",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "klissarov2024maestromotif",
+      "bibkey": "klissarov2024maestromotif",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kompella2017continual",
+      "bibkey": "kompella2017continual",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lange2023discovering",
+      "bibkey": "lange2023discovering",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lange2024large",
+      "bibkey": "lange2024large",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lee2020learning",
+      "bibkey": "lee2020learning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:25",
+      "locators": [
+        "paper/sections/05_exp.tex:25"
+      ],
+      "context": "To isolate and evaluate the contribution of the DGM's core components, we compare the DGM against two baselines: DGM without self-improving agents (\\textbf{DGM w/o self-improve}) and DGM without open-ended exploration (\\textbf{DGM w/o open-ended exploration}). DGM w/o self-improve replicates the app",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lehman2011novelty",
+      "bibkey": "lehman2011novelty",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lehman2023evolution",
+      "bibkey": "lehman2023evolution",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lehman2023machine",
+      "bibkey": "lehman2023machine",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lewis2020retrieval",
+      "bibkey": "lewis2020retrieval",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "li2014encouraging",
+      "bibkey": "li2014encouraging",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "li2024guiding",
+      "bibkey": "li2024guiding",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liang2023encouraging",
+      "bibkey": "liang2023encouraging",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lightman2023let",
+      "bibkey": "lightman2023let",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lim2024large",
+      "bibkey": "lim2024large",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "linnainmaa1970representation",
+      "bibkey": "linnainmaa1970representation",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2023think",
+      "bibkey": "liu2023think",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2024evolution",
+      "bibkey": "liu2024evolution",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2023arbitrary",
+      "bibkey": "lu2023arbitrary",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2024ai",
+      "bibkey": "lu2024ai",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2024intelligent",
+      "bibkey": "lu2024intelligent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2025automated",
+      "bibkey": "lu2025automated",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ma2023eureka",
+      "bibkey": "ma2023eureka",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "madaan2303self",
+      "bibkey": "madaan2303self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "markoff2016machines",
+      "bibkey": "markoff2016machines",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "mayr1982growth",
+      "bibkey": "mayr1982growth",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:85",
+      "locators": [
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "This work is heavily inspired by the mechanisms of Darwinian evolution~\\citep{darwin2023origin}, notably variation (mutation), selection, and the preservation of lineages (stepping stones), and brings them into the realm of self-modifying coding agents. In DGM, an archive of past agent versions is m",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "meta2022human",
+      "bibkey": "meta2022human",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "metz2021training",
+      "bibkey": "metz2021training",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "modarressi2023ret",
+      "bibkey": "modarressi2023ret",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "mouret2015illuminating",
+      "bibkey": "mouret2015illuminating",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "muennighoff2025s1",
+      "bibkey": "muennighoff2025s1",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "nasir2023practical",
+      "bibkey": "nasir2023practical",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "nasir2024word2world",
+      "bibkey": "nasir2024word2world",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "nguyen2015innovation",
+      "bibkey": "nguyen2015innovation",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "nie2025weak",
+      "bibkey": "nie2025weak",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "niu2025flow",
+      "bibkey": "niu2025flow",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "openai2024o1",
+      "bibkey": "openai2024o1",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:144",
+      "locators": [
+        "paper/sections/10_appendix.tex:144"
+      ],
+      "context": "In every iteration, an agent is chosen to self-modify. For this step, the current implementation of DGM leverages a separate FM to diagnose improvement opportunities, which are then passed to the coding agent for implementation. To identify the next potential improvement, the evaluation logs from th",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "openai2024sweverified",
+      "bibkey": "openai2024sweverified",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:16",
+      "locators": [
+        "paper/sections/05_exp.tex:16"
+      ],
+      "context": "\\textbf{SWE-bench.} To avoid wasting compute on unsolvable tasks, we use SWE-bench Verified~\\citep{openai2024sweverified}, a human-filtered subset of SWE-bench~\\citep{jimenez2024swebench} where all tasks are solvable. Throughout this paper, the term SWE-bench refers by default to to the SWE-bench Ve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "openai2025o3mini",
+      "bibkey": "openai2025o3mini",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:9",
+      "locators": [
+        "paper/sections/05_exp.tex:9"
+      ],
+      "context": "The DGM is initialized with a single coding agent. This base agent is built around a frozen FM and augmented with tool use capabilities~\\citep{schick2023toolformer, anthropic_tool_use_2024}. The FM autonomously determines its action at each step, using whichever tool it deems appropriate. The base a",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "oudeyer2007intrinsic",
+      "bibkey": "oudeyer2007intrinsic",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ouyang2022training",
+      "bibkey": "ouyang2022training",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:410",
+      "locators": [
+        "paper/sections/10_appendix.tex:410"
+      ],
+      "context": "In the current formulation of the DGM, proposed self-modifications are autonomously evaluated without any human intervention. However, as autonomous systems grow in complexity and influence, the question of how humans should remain involved becomes increasingly pressing. Should human oversight be fr",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "parikh2016decomposable",
+      "bibkey": "parikh2016decomposable",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "parkerholder2024genie2",
+      "bibkey": "parkerholder2024genie2",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "pathak2017curiosity",
+      "bibkey": "pathak2017curiosity",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "polozov2015flashmeta",
+      "bibkey": "polozov2015flashmeta",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "pugh2016quality",
+      "bibkey": "pugh2016quality",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "radford2019language",
+      "bibkey": "radford2019language",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "robeyns2025self",
+      "bibkey": "robeyns2025self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11",
+        "paper/sections/04_method.tex:11",
+        "paper/sections/10_appendix.tex:30"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "romera2024mathematical",
+      "bibkey": "romera2024mathematical",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "rosser2025agentbreeder",
+      "bibkey": "rosser2025agentbreeder",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8",
+        "paper/sections/05_exp.tex:61"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "rumelhart1985learning",
+      "bibkey": "rumelhart1985learning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "samvelyan2024rainbow",
+      "bibkey": "samvelyan2024rainbow",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:25",
+      "locators": [
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/10_appendix.tex:407",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "To isolate and evaluate the contribution of the DGM's core components, we compare the DGM against two baselines: DGM without self-improving agents (\\textbf{DGM w/o self-improve}) and DGM without open-ended exploration (\\textbf{DGM w/o open-ended exploration}). DGM w/o self-improve replicates the app",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "sancaktar2025sensei",
+      "bibkey": "sancaktar2025sensei",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schaul2015universal",
+      "bibkey": "schaul2015universal",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schick2023toolformer",
+      "bibkey": "schick2023toolformer",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:9",
+      "locators": [
+        "paper/sections/05_exp.tex:9"
+      ],
+      "context": "The DGM is initialized with a single coding agent. This base agent is built around a frozen FM and augmented with tool use capabilities~\\citep{schick2023toolformer, anthropic_tool_use_2024}. The FM autonomously determines its action at each step, using whichever tool it deems appropriate. The base a",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber1987evolutionary",
+      "bibkey": "schmidhuber1987evolutionary",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11",
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber1990learning",
+      "bibkey": "schmidhuber1990learning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber1993self",
+      "bibkey": "schmidhuber1993self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber2007godel",
+      "bibkey": "schmidhuber2007godel",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/01_abstract.tex:2",
+      "locators": [
+        "paper/sections/01_abstract.tex:2",
+        "paper/sections/02_intro.tex:8",
+        "paper/sections/03_related.tex:11",
+        "paper/sections/04_method.tex:4"
+      ],
+      "context": "Most of today's AI systems are constrained by human-designed, fixed architectures and cannot autonomously and continuously improve themselves. The scientific method, on the other hand, is a cumulative and open-ended system, where each innovation builds upon previous artifacts, enabling future discov",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber2008driven",
+      "bibkey": "schmidhuber2008driven",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schmidhuber2013powerplay",
+      "bibkey": "schmidhuber2013powerplay",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "schulhoff2024prompt",
+      "bibkey": "schulhoff2024prompt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "sheth2025safety",
+      "bibkey": "sheth2025safety",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:57",
+      "locators": [
+        "paper/sections/05_exp.tex:57"
+      ],
+      "context": "Systems capable of self-improvement, such as the DGM, represent a step toward more autonomous AI development, aligning with long-standing goals in the field of making capable AI that can benefit humanity~\\citep{schmidhuber1987evolutionary, clune2019ai, markoff2016machines, lehman2023machine}. Howeve",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "shi2023lambdabeam",
+      "bibkey": "shi2023lambdabeam",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:82",
+      "locators": [
+        "paper/sections/10_appendix.tex:82"
+      ],
+      "context": "Program synthesis~\\citep{alur2018search, polozov2015flashmeta, buchi1990solving, gulwani2011automating, ellis2021dreamcoder} seeks to generate code meeting external specifications such as input-output examples or logical formulas. Hybrid approaches combine symbolic methods with neural or FM guidance",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "silver2016mastering",
+      "bibkey": "silver2016mastering",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:106",
+      "locators": [
+        "paper/sections/10_appendix.tex:106"
+      ],
+      "context": "At each DGM iteration, we select a subset of agents from the archive as parents to self-modify and produce new child agents (\\Cref{sec:methods}). The details of the parent selection process, inspired by \\citet{ecoffet2019go}, are outlined below. Future work could explore alternative search and explo",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "silver2017mastering",
+      "bibkey": "silver2017mastering",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "singh2023beyond",
+      "bibkey": "singh2023beyond",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "skalse2022defining",
+      "bibkey": "skalse2022defining",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:394",
+      "locators": [
+        "paper/sections/10_appendix.tex:394"
+      ],
+      "context": "In conclusion, the DGM can be applied beyond the coding domain, and we highlighted a case of objective hacking. Similar to reward hacking in reinforcement learning~\\citep{skalse2022defining}, objective hacking occurs when a system optimizes for a predefined, quantifiable objective rather than fulfil",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "stanley2015greatness",
+      "bibkey": "stanley2015greatness",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/04_method.tex:4",
+      "locators": [
+        "paper/sections/04_method.tex:4",
+        "paper/sections/05_exp.tex:25"
+      ],
+      "context": "A G\\\"odel Machine is a theoretical idea of an AI that searches for ways that \\emph{provably} improve itself~\\citep{schmidhuber2007godel}. In this paper, we propose Darwin G\\\"odel Machine (DGM), an attempt to realize the long-held dream of creating a G\\\"odel Machine. The DGM relaxes the G\\\"odel Machi",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "stanley2017open",
+      "bibkey": "stanley2017open",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "strathern1997improving",
+      "bibkey": "strathern1997improving",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:394",
+      "locators": [
+        "paper/sections/10_appendix.tex:394"
+      ],
+      "context": "In conclusion, the DGM can be applied beyond the coding domain, and we highlighted a case of objective hacking. Similar to reward hacking in reinforcement learning~\\citep{skalse2022defining}, objective hacking occurs when a system optimizes for a predefined, quantifiable objective rather than fulfil",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "su2025debflow",
+      "bibkey": "su2025debflow",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "sudhakaran2023mariogpt",
+      "bibkey": "sudhakaran2023mariogpt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "vaswani2017attention",
+      "bibkey": "vaswani2017attention",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:4",
+      "locators": [
+        "paper/sections/02_intro.tex:4"
+      ],
+      "context": "Scientific progress is cumulative and open-ended, with each breakthrough standing on the shoulders of countless prior insights. In the same way, our most advanced AI systems are built upon a long lineage of innovations. For instance, transformers~\\citep{vaswani2017attention}, the backbone of current",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2019paired",
+      "bibkey": "wang2019paired",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/02_intro.tex:10",
+      "locators": [
+        "paper/sections/02_intro.tex:10"
+      ],
+      "context": "We propose the \\textbf{Darwin G\\\"odel Machine (DGM)}, a self-referential, self-improving system that writes and modifies its own code to become a better coding agent. Each self-modification requires the DGM to edit its own codebase. We use Python, which is Turing-complete, giving the DGM the potenti",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2023diversity",
+      "bibkey": "wang2023diversity",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2023robogen",
+      "bibkey": "wang2023robogen",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/07_limitations.tex:12",
+      "locators": [
+        "paper/sections/07_limitations.tex:12"
+      ],
+      "context": "Since this version of the DGM is mainly powered by FMs, it is inherently limited by the capabilities of the underlying FM. Hence, an exciting future direction is to extend self-modification beyond just prompts or FM workflows, to include more computationally intensive methods, such as rewriting its ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2023voyager",
+      "bibkey": "wang2023voyager",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2024openhands",
+      "bibkey": "wang2024openhands",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:325",
+      "locators": [
+        "paper/sections/10_appendix.tex:325"
+      ],
+      "context": "At the time of writing this paper (16 April 2025), the highest performing, checked (i.e., the SWE-bench team received access to the system and were able to reproduce the patch generations), open-source entry on SWE-bench Verified is OpenHands + CodeAct v2.1 (claude-3-5-sonnet-20241022)~\\citep{wang20",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wei2022chain",
+      "bibkey": "wei2022chain",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wiering1997hq",
+      "bibkey": "wiering1997hq",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wright1932roles",
+      "bibkey": "wright1932roles",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:85",
+      "locators": [
+        "paper/sections/10_appendix.tex:85"
+      ],
+      "context": "This work is heavily inspired by the mechanisms of Darwinian evolution~\\citep{darwin2023origin}, notably variation (mutation), selection, and the preservation of lineages (stepping stones), and brings them into the realm of self-modifying coding agents. In DGM, an archive of past agent versions is m",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "xia2024agentless",
+      "bibkey": "xia2024agentless",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:413",
+      "locators": [
+        "paper/sections/10_appendix.tex:413"
+      ],
+      "context": "Recent FMs have advanced dramatically, enabling scaffolds to become simpler on current coding benchmarks \\citep{yang2024sweagent}. It is possible that in some settings, like current coding benchmarks, certain engineering efforts in scaffolding might be downplayed by the improvement of the FMs. Howev",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yao2023react",
+      "bibkey": "yao2023react",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ye2025mas",
+      "bibkey": "ye2025mas",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yin2024g",
+      "bibkey": "yin2024g",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:11",
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yuan2024evoagent",
+      "bibkey": "yuan2024evoagent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yudkowsky2008artificial",
+      "bibkey": "yudkowsky2008artificial",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:63",
+      "locators": [
+        "paper/sections/05_exp.tex:63"
+      ],
+      "context": "The DGM demonstrates the potential of self-improving AI while still operating within safe research boundaries due to the current limitations of frontier FMs and effective mitigations like sandboxing. \\Cref{app:safety} presents additional discussion on broader safety uncertainties. We include this sa",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yuksekgonul2024textgrad",
+      "bibkey": "yuksekgonul2024textgrad",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zelikman2024quiet",
+      "bibkey": "zelikman2024quiet",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zelikman2024self",
+      "bibkey": "zelikman2024self",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:11",
+      "locators": [
+        "paper/sections/03_related.tex:11"
+      ],
+      "context": "Early on, various researchers outlined theoretical and conceptual approaches to self-improvement \\citep{good1966speculations, schmidhuber1987evolutionary, schmidhuber2007godel}. Some practical approaches to automated self-improvement include systems defined by neural network weight parameterizations",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2024aflow",
+      "bibkey": "zhang2024aflow",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8",
+        "paper/sections/04_method.tex:7"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2024autocoderover",
+      "bibkey": "zhang2024autocoderover",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2024omni",
+      "bibkey": "zhang2024omni",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:5",
+      "locators": [
+        "paper/sections/03_related.tex:5",
+        "paper/sections/04_method.tex:4",
+        "paper/sections/05_exp.tex:25",
+        "paper/sections/10_appendix.tex:394",
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "A grand challenge for driving unbounded innovation is designing open-ended AI systems that continuously generate novel and learnable artifacts~\\citep{stanley2017open}. \\citet{hughes2024open} characterized open-endedness as a system's capacity to generate sequences of artifacts that are both novel an",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2024rest",
+      "bibkey": "zhang2024rest",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/05_exp.tex:14",
+      "locators": [
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "We evaluate the DGM on two popular benchmarks that assess different aspects of coding tasks to validate the algorithm's effectiveness across various use cases. Both SWE-bench and Polyglot are benchmarks that evaluate how well AI agents solve coding tasks automatically. Given a code repository and a ",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2025gnns",
+      "bibkey": "zhang2025gnns",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhang2025multi",
+      "bibkey": "zhang2025multi",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhong2024memorybank",
+      "bibkey": "zhong2024memorybank",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhou2024symbolic",
+      "bibkey": "zhou2024symbolic",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhou2025autoredteamer",
+      "bibkey": "zhou2025autoredteamer",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/10_appendix.tex:79",
+      "locators": [
+        "paper/sections/10_appendix.tex:79"
+      ],
+      "context": "Early approaches to open-endedness explored different mechanisms to balance learnability and interestingness. Quality-diversity algorithms sought to illuminate vast solution spaces with diverse, high-performing behaviors~\\citep{pugh2016quality, chatzilygeroudis2021quality, mouret2015illuminating, ng",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhu2024hot",
+      "bibkey": "zhu2024hot",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhuge2023mindstorms",
+      "bibkey": "zhuge2023mindstorms",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhugegptswarm",
+      "bibkey": "zhugegptswarm",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2505.22954 source prose",
+      "locator": "paper/sections/03_related.tex:8",
+      "locators": [
+        "paper/sections/03_related.tex:8"
+      ],
+      "context": "Many FM-based agents are handcrafted. Some building blocks include prompt engineering~\\citep{chen2023unleashing, schulhoff2024prompt}, chain-of-thought~\\citep{wei2022chain, yao2023react, hu2023ThoughtCloning, guo2025deepseek, lightman2023let, muennighoff2025s1, zelikman2024quiet}, self-reflection \\c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2505.22954 main.bib + main.tex citation occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    }
+  ]
 }

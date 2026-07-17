@@ -1,9 +1,65 @@
 {
   "exceptions": [
     {
-      "pattern": "2027",
+      "pattern": "2026",
       "match_scope": "literal",
-      "reason": "venue year metadata"
+      "reason": "venue year metadata (ICLR 2026)"
+    },
+    {
+      "pattern": "2024",
+      "match_scope": "literal",
+      "reason": "publication/writing date reference (e.g. Aider release year, SoTA snapshot year), not an empirical DGM result"
+    },
+    {
+      "pattern": "2025",
+      "match_scope": "literal",
+      "reason": "publication/writing date reference (arXiv preprint year, 'time of writing' date), not an empirical DGM result"
+    },
+    {
+      "pattern": "33,000",
+      "match_scope": "literal",
+      "reason": "Aider GitHub star count, an incidental community-adoption figure, not a DGM benchmark result; case ledger debt, not individually promoted to the numeric registry"
+    },
+    {
+      "pattern": "22,000",
+      "match_scope": "literal",
+      "reason": "USD cost estimate for a single DGM SWE-bench run; case ledger debt, not individually promoted to the numeric registry"
+    },
+    {
+      "pattern": "10,000",
+      "match_scope": "literal",
+      "reason": "USD cost estimate for a single baseline SWE-bench run; case ledger debt, not individually promoted to the numeric registry"
+    },
+    {
+      "pattern": ".*",
+      "match_scope": "literal",
+      "path_pattern": "^paper/supplementary/.*",
+      "reason": "arXiv 2505.22954 bulk-migrated appendix supplementary content (task lists, code diffs, tool/prompt listings) copied verbatim from the source. These numeric literals are code/data artifacts (line numbers, hashes, task ids, benchmark repo versions), not individually-verifiable paper claims. Registering each one in the numeric registry is out of scope for this case migration; recorded as migration debt in lab/harness-evals/."
+    },
+    {
+      "pattern": "3\\.5",
+      "match_scope": "literal",
+      "reason": "model version name (Claude 3.5 Sonnet), not a metric"
+    },
+    {
+      "pattern": "3\\.7",
+      "match_scope": "literal",
+      "reason": "model version name (Claude 3.7 Sonnet), not a metric"
+    },
+    {
+      "pattern": "40\\\\%",
+      "match_scope": "literal",
+      "reason": "staged-evaluation heuristic threshold (progression gate to a larger task subset), not a reported benchmark result"
+    },
+    {
+      "pattern": "20241022",
+      "match_scope": "literal",
+      "reason": "model checkpoint date suffix embedded in the model identifier string claude-3-5-sonnet-20241022, not a metric"
+    },
+    {
+      "pattern": "4\\.1",
+      "match_scope": "literal",
+      "reason": "model version name (GPT-4.1), not a metric"
     }
   ]
 }

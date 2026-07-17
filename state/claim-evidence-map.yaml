@@ -1,3 +1,82 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "claim-swe-improve",
+      "statement": "Over 80 iterations, the Darwin Godel Machine automatically improves a coding agent's performance on SWE-bench from 20.0% to 50.0%, comparable to the checked open-source state of the art.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [
+        "swe-base-20-0",
+        "swe-final-50-0"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-polyglot-improve",
+      "statement": "Over 80 iterations, the Darwin Godel Machine automatically improves a coding agent's performance on the full Polyglot benchmark from 14.2% to 30.7%, surpassing the Aider baseline.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [
+        "polyglot-base-14-2",
+        "polyglot-final-30-7",
+        "polyglot-subset-base-14-0",
+        "polyglot-subset-final-38-0"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-ablation",
+      "statement": "Ablating either self-improvement or open-ended exploration substantially reduces DGM performance relative to the full method on SWE-bench and Polyglot, and DGM-discovered agents are more stable and edit-capable than the ablations.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [
+        "swe-sota-openhands-full-53-0",
+        "swe-sota-openhands-200subset-51-0",
+        "ablation-dgm-greedy-swe-39-7",
+        "ablation-dgm-greedy-polyglot-30-0",
+        "ablation-dgm-wo-selfimprove-swe-39-0",
+        "ablation-dgm-wo-openended-swe-23-0",
+        "ablation-dgm-wo-openended-polyglot-14-0",
+        "code-editing-dgm-51-3",
+        "code-editing-dgm-wo-32-5",
+        "stability-mean-40-7",
+        "stability-std-2-3",
+        "halluc-score-node96-1-67",
+        "halluc-score-node114-2-0",
+        "parent-select-temperature-1-0",
+        "parent-select-alpha0-0-5",
+        "ablation-dgm-wo-selfimprove-polyglot-28-0",
+        "diffimpl-node6-23-3",
+        "diffimpl-node24-40-5"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    },
+    {
+      "claim_id": "claim-transfer",
+      "statement": "DGM-discovered improvements transfer across foundation models, across benchmarks (SWE-bench to/from Polyglot), and across programming-language tasks within Polyglot.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [
+        "swe-transfer-o3mini-base-23-0",
+        "swe-transfer-o3mini-dgm-33-0",
+        "swe-transfer-claude37-base-19-0",
+        "swe-transfer-claude37-dgm-59-5",
+        "cross-bench-swe-to-polyglot-28-9",
+        "cross-bench-polyglot-to-swe-24-5",
+        "polyglot-transfer-claude35-base-32-0",
+        "polyglot-transfer-claude35-dgm-33-3",
+        "polyglot-transfer-claude37-base-35-6",
+        "polyglot-transfer-claude37-dgm-36-8"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ]
+    }
+  ]
 }

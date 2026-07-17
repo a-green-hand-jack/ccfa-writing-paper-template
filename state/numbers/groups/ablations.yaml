@@ -1,3 +1,56 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "code-editing-dgm-51-3",
+      "value": 51.3,
+      "display_value": "51.3%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "code-editing-dgm-wo-32-5",
+      "value": 32.5,
+      "display_value": "32.5%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "stability-mean-40-7",
+      "value": 40.7,
+      "display_value": "40.7%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "stability-std-2-3",
+      "value": 2.3,
+      "display_value": "2.3%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

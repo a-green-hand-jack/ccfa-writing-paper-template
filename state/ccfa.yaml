@@ -1,13 +1,13 @@
 {
   "paper": {
-    "slug": "ccfa-paper-template",
-    "title": "TODO Paper Title",
-    "short_title": "TODO Paper",
-    "owner": "TODO"
+    "slug": "darwin-godel-machine-arxiv-2505-22954",
+    "title": "Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents",
+    "short_title": "Darwin Gödel Machine",
+    "owner": "case-arxiv-2505-22954-harness-test"
   },
   "venue": {
     "id": "iclr",
-    "year": 2027,
+    "year": 2026,
     "must_verify_current_year_rules": true
   },
   "paper_type": {
@@ -17,8 +17,14 @@
     "repo_mode": "standalone"
   },
   "team": {
-    "authors": [],
-    "anonymous_mode": "TODO"
+    "authors": [
+      "Jenny Zhang",
+      "Shengran Hu",
+      "Cong Lu",
+      "Robert Lange",
+      "Jeff Clune"
+    ],
+    "anonymous_mode": false
   },
   "submission": {
     "track": "TODO",
@@ -40,5 +46,10 @@
   },
   "capabilities": {
     "parity": "claude-and-codex"
+  },
+  "case_provenance": {
+    "arxiv_id": "2505.22954",
+    "source_url": "https://arxiv.org/abs/2505.22954",
+    "attribution": "paper/supplementary/source-attribution.md"
   }
 }

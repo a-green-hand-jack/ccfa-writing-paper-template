@@ -1,3 +1,28 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "claim-swe-improve",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published paper; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-polyglot-improve",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published paper; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-ablation",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published paper; no local experiment plan is needed, evidence is the published source itself."
+    },
+    {
+      "claim_id": "claim-transfer",
+      "required_experiments": [],
+      "optional_experiments": [],
+      "notes": "External case-replay of a published paper; no local experiment plan is needed, evidence is the published source itself."
+    }
+  ]
 }

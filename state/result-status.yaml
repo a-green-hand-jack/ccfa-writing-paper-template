@@ -1,3 +1,34 @@
 {
-  "results": []
+  "results": [
+    {
+      "result_id": "result-swe-improve",
+      "status": "verified",
+      "claims_supported": [
+        "claim-swe-improve"
+      ],
+      "numeric_ids": [
+        "swe-base-20-0",
+        "swe-final-50-0"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "result_id": "result-polyglot-improve",
+      "status": "verified",
+      "claims_supported": [
+        "claim-polyglot-improve"
+      ],
+      "numeric_ids": [
+        "polyglot-base-14-2",
+        "polyglot-final-30-7"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

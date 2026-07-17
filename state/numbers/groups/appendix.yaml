@@ -1,3 +1,121 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "polyglot-transfer-claude35-base-32-0",
+      "value": 32.0,
+      "display_value": "32.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-transfer"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "polyglot-transfer-claude35-dgm-33-3",
+      "value": 33.3,
+      "display_value": "33.3%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-transfer"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "polyglot-transfer-claude37-base-35-6",
+      "value": 35.6,
+      "display_value": "35.6%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-transfer"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "polyglot-transfer-claude37-dgm-36-8",
+      "value": 36.8,
+      "display_value": "36.8%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-transfer"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "halluc-score-node96-1-67",
+      "value": 1.67,
+      "display_value": "1.67",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "halluc-score-node114-2-0",
+      "value": 2.0,
+      "display_value": "2.0",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-wo-selfimprove-polyglot-28-0",
+      "value": 28.0,
+      "display_value": "28.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "diffimpl-node6-23-3",
+      "value": 23.3,
+      "display_value": "23.3%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "diffimpl-node24-40-5",
+      "value": 40.5,
+      "display_value": "40.5%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

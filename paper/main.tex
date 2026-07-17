@@ -2,8 +2,22 @@
 \usepackage{style/ccfa-paper}
 \input{macros}
 \input{venue_preamble}
-\title{TODO Paper Title}
-\author{TODO}
+\title{Darwin G\"odel Machine: Open-Ended Evolution of Self-Improving Agents}
+\author{%
+Jenny Zhang\textsuperscript{*,1,2} \quad
+Shengran Hu\textsuperscript{*,1,2,3} \quad
+Cong Lu\textsuperscript{1,2,3} \quad
+Robert Lange\textsuperscript{\dag,3} \quad
+Jeff Clune\textsuperscript{\dag,1,2,4}
+\\
+\textsuperscript{1}University of British Columbia \quad
+\textsuperscript{2}Vector Institute \quad
+\textsuperscript{3}Sakana AI \quad
+\textsuperscript{4}Canada CIFAR AI Chair
+\\
+\texttt{\{jennyzzt,srhu,conglu\}@cs.ubc.ca}, \texttt{robert@sakana.ai}, \texttt{jeff.clune@ubc.ca}
+}
+\iclrfinalcopy % Uncomment for camera-ready version, but NOT for submission.
 \begin{document}
 \input{sections/00_title}
 \input{sections/01_abstract}
@@ -13,8 +27,10 @@
 \input{sections/05_exp}
 \input{sections/06_conclusion}
 \input{sections/07_limitations}
-\bibliographystyle{plain}
+\input{sections/08_acknowledgement}
+\input{sections/09_statements}
 \bibliography{refs}
+\bibliographystyle{iclr2026_conference}
 \appendix
 \input{sections/10_appendix}
 \end{document}

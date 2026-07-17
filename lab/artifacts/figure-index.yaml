@@ -1,3 +1,84 @@
 {
-  "figures": []
+  "figures": [
+    {
+      "figure_id": "fig-00-conceptual",
+      "label": "fig:conceptual",
+      "status": "active",
+      "wrapper_path": "paper/figures/00_conceptual.tex",
+      "asset_path": "paper/figures/srcs/00_conceptual.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-01-dgm-comparisons-swe",
+      "label": "fig:dgm-comparisons",
+      "status": "active",
+      "wrapper_path": "paper/figures/01_dgm_comparisons_swe.tex",
+      "asset_path": "paper/figures/srcs/01_dgm_comparisons_swe.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-02-dgm-comparisons-polyglot",
+      "label": "fig:dgm-comparisons-polyglot",
+      "status": "active",
+      "wrapper_path": "paper/figures/02_dgm_comparisons_polyglot.tex",
+      "asset_path": "paper/figures/srcs/02_dgm_comparisons_polyglot.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-03-dgm-archive",
+      "label": "fig:dgm-archive",
+      "status": "active",
+      "wrapper_path": "paper/figures/03_dgm_archive.tex",
+      "asset_path": "paper/figures/srcs/03_dgm_archive.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-04-dgm-progress",
+      "label": "fig:dgm-progress",
+      "status": "active",
+      "wrapper_path": "paper/figures/04_dgm_progress.tex",
+      "asset_path": "paper/figures/srcs/04_dgm_progress.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-05-transfer-overview",
+      "label": "fig:transfer-overview",
+      "status": "active",
+      "wrapper_path": "paper/figures/05_transfer_overview.tex",
+      "asset_path": "paper/figures/srcs/05_transfer_overview.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-10-dgm-no-selfimprove",
+      "label": "fig:dgm-no-selfimprove",
+      "status": "active",
+      "wrapper_path": "paper/figures/10_dgm_no_selfimprove.tex",
+      "asset_path": "paper/figures/srcs/10_dgm_no_selfimprove.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-11-dgm-no-openended",
+      "label": "fig:dgm-no-openended",
+      "status": "active",
+      "wrapper_path": "paper/figures/11_dgm_no_openended.tex",
+      "asset_path": "paper/figures/srcs/11_dgm_no_openended.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-12-transfer-model-polyglot",
+      "label": "fig:transfer-model-polyglot",
+      "status": "active",
+      "wrapper_path": "paper/figures/12_transfer_model_polyglot.tex",
+      "asset_path": "paper/figures/srcs/12_transfer_model_polyglot.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "figure_id": "fig-13-dgm-halluc",
+      "label": "fig:dgm-halluc",
+      "status": "active",
+      "wrapper_path": "paper/figures/13_dgm_halluc.tex",
+      "asset_path": "paper/figures/srcs/13_dgm_halluc.pdf",
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

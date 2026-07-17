@@ -1,3 +1,95 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "swe-sota-openhands-full-53-0",
+      "value": 53.0,
+      "display_value": "53.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "swe-sota-openhands-200subset-51-0",
+      "value": 51.0,
+      "display_value": "51.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-greedy-swe-39-7",
+      "value": 39.7,
+      "display_value": "39.7%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-greedy-polyglot-30-0",
+      "value": 30.0,
+      "display_value": "30.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-wo-selfimprove-swe-39-0",
+      "value": 39.0,
+      "display_value": "39.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-wo-openended-swe-23-0",
+      "value": 23.0,
+      "display_value": "23.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "ablation-dgm-wo-openended-polyglot-14-0",
+      "value": 14.0,
+      "display_value": "14.0%",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

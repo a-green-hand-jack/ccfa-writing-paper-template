@@ -1,3 +1,19 @@
 {
-  "evidence": []
+  "evidence": [
+    {
+      "evidence_id": "evidence-arxiv-source",
+      "status": "active",
+      "verification_state": "verified",
+      "source": "https://arxiv.org/abs/2505.22954",
+      "external_source": "https://arxiv.org/abs/2505.22954",
+      "strength": "reported",
+      "claim_ids": [
+        "claim-swe-improve",
+        "claim-polyglot-improve",
+        "claim-ablation",
+        "claim-transfer"
+      ],
+      "notes": "Provenance for this case migration is the published arXiv source itself (2505.22954), not a local lab artifact -- there is no local experiment log backing these externally-reported numbers. See paper/supplementary/source-attribution.md and lab/harness-evals/ for the migration-debt discussion of this evidence model."
+    }
+  ]
 }

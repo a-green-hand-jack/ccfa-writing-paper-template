@@ -1,3 +1,30 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "parent-select-temperature-1-0",
+      "value": 1.0,
+      "display_value": "1.0",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    },
+    {
+      "numeric_id": "parent-select-alpha0-0-5",
+      "value": 0.5,
+      "display_value": "0.5",
+      "status": "verified",
+      "claim_ids": [
+        "claim-ablation"
+      ],
+      "evidence_ids": [
+        "evidence-arxiv-source"
+      ],
+      "source": "https://arxiv.org/abs/2505.22954"
+    }
+  ]
 }

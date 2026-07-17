@@ -1,1 +1,5 @@
 claim_id,evidence_id,relationship,status,notes
+claim-swe-improve,evidence-arxiv-source,supports,active,reported in arXiv 2505.22954 abstract/results
+claim-polyglot-improve,evidence-arxiv-source,supports,active,reported in arXiv 2505.22954 abstract/results
+claim-ablation,evidence-arxiv-source,supports,active,reported in arXiv 2505.22954 appendix
+claim-transfer,evidence-arxiv-source,supports,active,reported in arXiv 2505.22954 results/appendix

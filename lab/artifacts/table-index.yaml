@@ -1,3 +1,35 @@
 {
-  "tables": []
+  "tables": [
+    {
+      "table_id": "tab-fm-hyperparam",
+      "label": "tab:fm-hyperparam",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2505.22954",
+      "qualitative": true
+    },
+    {
+      "table_id": "tab-dgm-greedy",
+      "label": "tab:DGM-greedy",
+      "status": "verified",
+      "source": "https://arxiv.org/abs/2505.22954",
+      "numeric_ids": [
+        "ablation-dgm-greedy-swe-39-7",
+        "ablation-dgm-greedy-polyglot-30-0",
+        "ablation-dgm-wo-selfimprove-swe-39-0",
+        "ablation-dgm-wo-openended-swe-23-0",
+        "ablation-dgm-wo-openended-polyglot-14-0",
+        "ablation-dgm-wo-selfimprove-polyglot-28-0"
+      ]
+    },
+    {
+      "table_id": "tab-code-editing",
+      "label": "tab:code_editing",
+      "status": "verified",
+      "source": "https://arxiv.org/abs/2505.22954",
+      "numeric_ids": [
+        "code-editing-dgm-51-3",
+        "code-editing-dgm-wo-32-5"
+      ]
+    }
+  ]
 }

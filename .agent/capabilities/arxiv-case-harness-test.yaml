@@ -37,8 +37,8 @@
       "record": "paper/supplementary/source-attribution.md"
     },
     {
-      "id": "upstream-harness-change",
-      "required_when": "Proposing or implementing persistent validator, template, workflow, or CI/CD changes in research-project-harness.",
+      "id": "harness-change",
+      "required_when": "Proposing or implementing a persistent validator, template, workflow, or CI/CD change in this repository.",
       "record": "lab/harness-evals/"
     },
     {
@@ -92,11 +92,11 @@
   "completion_contract": {
     "success_requires": [
       "Read the source capability spec before editing.",
-      "Changed files are limited to declared outputs unless an upstream PR is explicitly being prepared.",
+      "Changed files are limited to declared outputs unless a harness-fix branch is explicitly being prepared.",
       "arXiv source provenance is recorded before migrated source is treated as paper state.",
       "Destructive stress probes run only in disposable /tmp copies.",
-      "Every stress finding is classified as upstream harness gap, generated template gap, case ledger debt, documentation friction, or accepted regression fixture.",
-      "Persistent harness changes are proposed against research-project-harness branch ccfa-writing-paper-template.",
+      "Every stress finding is classified as harness gap, case ledger debt, documentation friction, or accepted regression fixture.",
+      "Persistent harness changes land on a branch in this repository and reach main through a pull request.",
       "Declared validators pass, or the unresolved blocker is recorded."
     ],
     "required_outputs": [
@@ -126,14 +126,12 @@
   "adapter_contract": {
     "required_text": [
       "/tmp",
-      "lab/harness-evals/",
-      "research-project-harness"
+      "lab/harness-evals/"
     ],
     "forbidden_text": [
       "edit the live case branch for destructive probes",
       "destructive probes in the live case branch",
-      "directly modify /home/user/Projects/research-project-harness",
-      "directly modify `/home/user/Projects/research-project-harness`",
+      "research-project-harness",
       "skip lab/harness-evals/",
       "skip `lab/harness-evals/`",
       "do not use /tmp",

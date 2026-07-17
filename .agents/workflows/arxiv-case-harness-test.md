@@ -43,6 +43,7 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-release-package.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-release-freshness.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-conference-template.py
 PYTHONDONTWRITEBYTECODE=1 bash scripts/check-latex.sh --compile
+PYTHONDONTWRITEBYTECODE=1 bash scripts/compare-original-pdf.sh <arxiv-id>
 ```
 
 If compile is blocked by environment or package state, record the blocker and
@@ -67,6 +68,9 @@ continue with every non-compile validator that can run.
    source and ledgers are coherent.
 7. Run the full baseline validator set. Commit the first clean migration
    separately from stress reports.
+7a. Compare the compiled PDF against the original with
+   `scripts/compare-original-pdf.sh <arxiv-id>`. Reconcile any content or
+   section-order drift in `paper/` until it passes, or record the fetch blocker.
 8. Stress only disposable `/tmp` copies. For each probe, record mutation,
    expected contract, commands, actual diagnostics, classification, and follow-up
    in `lab/harness-evals/YYYYMMDD-arxiv-<id>-case-stress-roundN.md`.

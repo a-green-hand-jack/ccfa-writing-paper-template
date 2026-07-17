@@ -42,3 +42,41 @@ not just structurally checked).
 
 Not verified: the `overleaf-publish.yml` GitHub Action itself was not executed against the real GitHub
 remote (would require pushing/dispatching against the actual repo, which needs supervisor sign-off).
+
+## Case arxiv-2505-22954 (Darwin Gödel Machine) — harness stress test, 2026-07-17
+
+Branch `case/arxiv-2505-22954`. Migrated the full arXiv 2505.22954 LaTeX source into `paper/` (main.tex,
+10 sections, 10 figure wrappers + srcs assets, refs.bib with 195 entries, venue style files, ~30
+supplementary appendix fragments) and populated a minimal honest control plane (4 core claims, 1
+external-evidence entry keyed to the arXiv source itself, 31 verified numbers across 5 groups, 184-entry
+citation/reference ledgers bulk-imported at `fitness_status: needs-review`, 10 figures + 3 tables +
+13 floats, worktrees/venue/ccfa metadata). Provenance in `paper/supplementary/source-attribution.md`.
+
+All 7 declared validators pass clean on the committed tree: `check-capability-parity.py`,
+`check-paper-populated.py`, `check-writing-harness.py`, `check-release-package.py`,
+`check-release-freshness.py`, `check-conference-template.py`, `check-latex.sh --compile` (TeX Live 2026
+available locally — full `pdflatex`/`bibtex` compile actually verified, not just structurally checked).
+`research_project_harness validate --profile paper` is unavailable on this machine (no local
+`research-project-harness` checkout) and was not run; every validator command above used the repo's own
+`scripts/check-*.py` leaf checks instead.
+
+Ran all 25 probes from `.claude/skills/arxiv-case-harness-test/references/stress-probe-catalog.md`
+(catalog has 25 rows, not 26) against disposable `/tmp` copies. 20/25 caught cleanly. Two real misses:
+- **P15 (numeric exception masking)**: a fabricated, unregistered numeric claim slipped past
+  `check-numeric-consistency.py` because this migration's own `state/numbers/exceptions.yaml` date
+  exceptions (`2024`/`2025`/`2026`) use unscoped `match_scope: literal` with no `path_pattern`. Case
+  ledger debt — fixable locally, not an upstream gap.
+- **P9 (citation fitness debt)**: `check-citation-fitness.py` passes on all 184 `needs-review` bulk
+  citations as long as their per-citation locators aren't byte-identical; it verifies ledger
+  *completeness*, not real fitness review. Documentation friction, matches the catalog's own prediction.
+
+Two gates that work but ship inert by default: **P20** (worktree `physical_validation` absent by
+default lets a nonexistent branch be marked `status: active`) and **P22** (venue-usage semantic check
+is a no-op while `raw_template: TODO`, though `check-latex.sh --compile` independently catches the same
+mutation). Full findings, exact mutations/commands/exit codes, and an upstream proposal sketch for P20
+(no PR filed, no local `research-project-harness` checkout) are in
+`lab/harness-evals/20260717-arxiv-2505.22954-case-stress-round1.md`.
+
+Not verified: `research_project_harness validate --profile paper` (package absent locally);
+`state/conference-template.yaml` real-kit compile verification (`raw_template` intentionally left
+`TODO` with a `migration_exemption` note — no local ICLR 2026 official author kit available).

@@ -1,4 +1,8 @@
 {
+  "physical_validation": {
+    "enabled": true,
+    "branches": true
+  },
   "worktrees": [
     {
       "id": "main",
@@ -48,7 +52,9 @@
         "scripts/check-reference-existence.py",
         "scripts/check-citation-fitness.py"
       ],
-      "status": "active"
+      "status": "planned",
+      "activation_command": "bash scripts/create-main-dev-worktrees.sh ../ccfa-paper-template-main",
+      "activation_notes": "Planned worktrees are declarations only; physical path and branch checks start after status is active. The dev branch does not exist in a freshly generated repo until scripts/create-main-dev-worktrees.sh (or an explicit `git branch dev`) creates it — do not set this row to active until that branch physically exists, or physical_validation will correctly fail it."
     }
   ]
 }

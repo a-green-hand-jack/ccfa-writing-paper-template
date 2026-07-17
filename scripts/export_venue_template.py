@@ -10,31 +10,42 @@ paper/, paper/refs.bib, or the official kit files it copies from.
 from __future__ import annotations
 
 import argparse
+import json
 import shutil
 import subprocess
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from paper_harness_checks import ROOT, load_doc, missingish  # noqa: E402
+from paper_harness_checks import (  # noqa: E402
+    ROOT,
+    VENUE_EXPORT_PAPER_ITEMS,
+    git_value,
+    kit_fingerprint,
+    load_doc,
+    missingish,
+    normalized_venue_id,
+    paper_source_fingerprint,
+)
 
 FORBIDDEN_SEGMENTS = {".git", ".github", ".agent", ".claude", ".agents", "state", "lab", "memory", "human"}
-PAPER_COPY_ITEMS = ["sections", "figures", "tables", "generated", "refs.bib", "macros.tex"]
+PAPER_COPY_ITEMS = VENUE_EXPORT_PAPER_ITEMS
 KNOWN_VENUE_OPTIONS = {
     "cvpr": {"anonymous": "review", "camera-ready": "final"},
     "iccv": {"anonymous": "review", "camera-ready": "final"},
     "neurips": {"anonymous": "preprint", "camera-ready": "final"},
 }
 REQUIRED_SECTION_ORDER = [
-    "title",
-    "abstract",
-    "intro",
-    "related",
-    "method",
-    "exp",
-    "conclusion",
-    "limitations",
+    "00_title",
+    "01_abstract",
+    "02_intro",
+    "03_related",
+    "04_method",
+    "05_exp",
+    "06_conclusion",
+    "07_limitations",
 ]
 
 
@@ -159,15 +170,21 @@ def build_main_tex(*, cls_files, sty_files, bst_files, venue_id, mode, ccfa, ano
     lines.append(f"\\bibliographystyle{{{bibstyle}}}")
     lines.append("\\bibliography{refs}")
     lines.append("\\appendix")
-    lines.append("\\input{sections/appendix}")
+    lines.append("\\input{sections/10_appendix}")
     lines.append("\\end{document}")
     return "\n".join(lines) + "\n"
 
 
-def compile_check(dest: Path) -> int:
+def compile_check(dest: Path) -> tuple[int, bool]:
+    """Compile the generated venue export against the real kit.
+
+    Returns (exit_code, verified). A crash under the real venue class is a
+    hard failure (never a false pass); a missing TeX toolchain is reported
+    as an explicit UNVERIFIED rather than silently treated as a pass.
+    """
     if shutil.which("latexmk") is None:
-        print("WARN latexmk not found; skipping compile verification")
-        return 0
+        print("UNVERIFIED real-kit compile: latexmk not installed; no compile receipt recorded", file=sys.stderr)
+        return 0, False
     import tempfile
 
     with tempfile.TemporaryDirectory() as tmp:
@@ -183,9 +200,54 @@ def compile_check(dest: Path) -> int:
         if result.returncode != 0:
             print(result.stdout[-4000:])
             print(result.stderr[-4000:])
-            return fail(f"venue export failed to compile: {dest}")
+            return fail(f"venue export failed to compile: {dest}"), False
     print(f"OK venue-compile {dest.relative_to(ROOT)}")
-    return 0
+    return 0, True
+
+
+def relative_kit_identity(raw_template: Path) -> str:
+    try:
+        return raw_template.relative_to(ROOT).as_posix()
+    except ValueError:
+        return str(raw_template)
+
+
+def record_realkit_receipt(*, venue_id: str, venue_year, mode: str, raw_template: Path) -> None:
+    """Record a real-kit compile receipt so the camera-ready gate can enforce
+    it instead of relying on someone remembering to compile against the
+    real kit before submission."""
+    template_path = ROOT / "state/conference-template.yaml"
+    doc = load_doc("state/conference-template.yaml")
+    if not isinstance(doc, dict):
+        doc = {}
+    receipts = doc.get("realkit_receipts")
+    if not isinstance(receipts, list):
+        receipts = []
+    receipts = [
+        entry
+        for entry in receipts
+        if not (
+            isinstance(entry, dict)
+            and str(entry.get("venue")) == str(venue_id)
+            and str(entry.get("year")) == str(venue_year)
+            and entry.get("mode") == mode
+        )
+    ]
+    receipts.append(
+        {
+            "venue": venue_id,
+            "year": venue_year,
+            "mode": mode,
+            "kit_identity": relative_kit_identity(raw_template),
+            "kit_checksum": f"sha256:{kit_fingerprint(raw_template)}",
+            "source_fingerprint": f"sha256:{paper_source_fingerprint()}",
+            "verified_commit": git_value("rev-parse", "HEAD") or "untracked",
+            "verified_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "status": "verified",
+        }
+    )
+    doc["realkit_receipts"] = receipts
+    template_path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -204,7 +266,7 @@ def main() -> int:
 
     ccfa = load_doc("state/ccfa.yaml")
     venue = ccfa.get("venue", {}) if isinstance(ccfa.get("venue"), dict) else {}
-    venue_id = str(venue.get("id") or "venue").strip().lower() or "venue"
+    venue_id = normalized_venue_id(ccfa)
     venue_year = str(venue.get("year") or "").strip()
     slug = "-".join(part for part in [venue_id, venue_year, args.mode] if part)
 
@@ -234,8 +296,21 @@ def main() -> int:
         encoding="utf-8",
     )
 
+    verified = False
     if not args.no_compile:
-        code |= compile_check(dest)
+        compile_code, verified = compile_check(dest)
+        code |= compile_code
+    else:
+        print("UNVERIFIED real-kit compile: --no-compile requested; no compile receipt recorded", file=sys.stderr)
+
+    if code == 0 and verified:
+        record_realkit_receipt(
+            venue_id=venue_id,
+            venue_year=venue.get("year"),
+            mode=args.mode,
+            raw_template=raw_template,
+        )
+        print(f"OK realkit-receipt venue={venue_id} year={venue.get('year')} mode={args.mode}")
     if code == 0:
         print(f"OK export_venue_template {dest.relative_to(ROOT)}")
     return code

@@ -10,18 +10,33 @@ Source capability: `.agent/capabilities/venue-adapt.yaml`. Read this file first 
 - `state/conference-template.yaml`
 - `state/venue-profile.yaml`
 - `paper/venue_preamble.tex`
+- `paper/style/compat.sty`
+- `scripts/export-venue-template.sh`
 
 ## Declared Outputs
 
 - `state/venue-profile.yaml`
 - `state/conference-template.yaml`
 - `state/ccfa.yaml`
+- `release/venue/`
 
 ## Validators
 
 - `scripts/check-capability-parity.py`
 - `scripts/check-conference-template.py`
 - `scripts/check-anonymity.py`
+- `scripts/check-latex.sh`
+
+## Venue Conversion (compat.sty shim)
+
+`paper/style/compat.sty` reimplements the `paper/style/ccfa-paper.sty` Class
+API on packages an official venue class already loads, so
+`paper/sections/*.tex` compiles unmodified under CVPR/ICCV/NeurIPS/etc.
+`scripts/export-venue-template.sh --mode anonymous|camera-ready
+[--raw-template <local-kit-path>]` generates `release/venue/<venue>-<year>-<mode>/`
+from `paper/` plus a locally supplied official kit (never fetched), never
+edits `paper/` or the kit, and is gitignored (regenerate, do not commit).
+Run `scripts/check-anonymity.py` after an anonymous export.
 
 ## Human Gates
 

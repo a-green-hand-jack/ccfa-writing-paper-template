@@ -1,2 +1,19 @@
+% ==============================================================
 \section{Conclusion}
-TODO
+\label{sec:conclusion}
+% ==============================================================
+
+This report presented \aris{} as a research harness built around a conservative assumption: long-horizon research performed by a single agent is unreliable by default, and the relevant failure mode is not visible breakdown but \emph{plausible unsupported success}, where claims outrun evidence and later readers silently inherit the executor's framing.
+\aris{} responds by decomposing the workflow into the three bottlenecks framed in \S\ref{sec:intro}---persistent research state, modular execution, and independent assurance---and by adopting a two-role cross-family reviewer-executor pattern as the practical minimum for breaking self-review blind spots.
+These three bottlenecks map to three layers: an execution layer of reusable Markdown-defined skills and a persistent research wiki, an orchestration layer for configurable workflow control and reviewer routing, and an assurance layer for evidence-to-claim auditing and manuscript checks.
+A prototype meta-optimization loop provides an initial mechanism for improving skill prompts, defaults, and convergence rules over time.
+
+The main limitations are the absence of controlled evaluation and the reliance on observational deployment evidence.
+Future work includes compute-matched comparisons to estimate the contribution of cross-model heterogeneity (Appendix~\ref{app:benchmark}), local reviewer models for confidential settings, and user studies of researcher productivity.
+
+As a more speculative adjacent direction, the cross-model accountability primitives developed in \aris{}---reviewer independence, evidence-to-claim audit, and provenance-aware claim ledgers---are not specific to manuscripts.
+A natural adaptation is to insert them between any model output and any downstream training-data retention or reward signal, complementing recent self-improvement approaches~\citep{bai2022constitutional,lee2024rlaif,yuan2024selfrewarding,yu2025rlaifv} with an explicit oversight layer.
+Two known concerns motivate the hypothesis: LLM judges can exhibit systematic biases~\citep{zheng2023judging}, and recursive training on model-generated data can degrade quality across iterations~\citep{shumailov2024curse}; cross-family reviewer separation is a candidate mechanism for reducing judge-model coupling, but its downstream effect on long-horizon self-improvement remains an open empirical question.
+This is a testable future-work hypothesis, not a claim made in this report.
+
+Code and documentation are available at \url{https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep}.

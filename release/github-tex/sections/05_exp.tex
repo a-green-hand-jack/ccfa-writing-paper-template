@@ -1,2 +1,39 @@
-\section{Experiments}
-TODO
+% ==============================================================
+\section{Deployment Evidence and Limitations}
+\label{sec:evidence}
+% ==============================================================
+
+We summarize deployment footprint and limitations together.
+All reported outcomes are \emph{observational}; they cannot be causally attributed to \aris{} alone.
+
+\subsection{Ecosystem and Adoption}
+
+Table~\ref{tab:ecosystem} summarizes the current deployment footprint.
+At the time of writing, the skill library had grown from 21 core skills at initial release to more than 65 skills spanning robotics, hardware design, communications, mathematical proof, grant writing, and presentation generation.
+At the time of writing, three additional executor environments are documented through community-maintained adaptation guides hosted in external repositories.
+
+\begin{table}[t]
+\centering
+\caption{Deployment footprint as of April 2026.}
+\label{tab:ecosystem}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Dimension} & \textbf{Current Status} \\
+\midrule
+Executor platforms & 3 tested + 3 adapted (6 total) \\
+Reviewer models & 6+ (GPT, Gemini, GLM, MiniMax, Kimi, DeepSeek) \\
+GPU backends & 4 (local, SSH, Vast.ai, Modal) \\
+Venue templates & 9 families \\
+Free-tier API access & ModelScope (no paid API keys required) \\
+Community contributions & 30+ contributed skills across robotics, hardware, communications, math \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+To illustrate the auto-review loop's operational dynamics under realistic conditions, we documented one overnight run end-to-end.
+Over approximately eight hours, the system completed four review--revise rounds, increased an internal reviewer score from 5.0 to 7.5/10, launched more than 20 GPU experiments, and removed claims that were not supported by the available evidence.
+This is a single trajectory on one paper; we do not generalize from it.
+
+This run should be read as evidence that the harness can operationalize claim pruning and review-driven revision in one realistic trajectory, not as causal evidence that cross-family review is superior to same-family review or that two cross-family reviewers are an optimal committee size.
+The bandit and game-theoretic framing in \S\ref{sec:intro} is used as a design analogy that motivates the two-role pattern; isolating its effect from researcher expertise, model choice, and task difficulty requires the controlled benchmark protocol described in Appendix~\ref{app:benchmark} as future work.

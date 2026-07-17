@@ -1,2 +1,298 @@
-\section{Method}
-TODO
+% ==============================================================
+\section{System Overview}
+\label{sec:overview}
+% ==============================================================
+
+Following the harness-engineering taxonomy of \citet{lee2026metaharness}, \aris{} is a \emph{research harness}: a stateful system that orchestrates interactions with LLMs by selecting the context, tools, and feedback presented to them during each stage of a research workflow.
+Before describing how the harness is organized internally, we first summarize what it does end-to-end.
+Figure~\ref{fig:pipeline} shows the workflow library: five workflows---idea discovery, experiment bridge, auto-review, paper writing, and rebuttal---chained through plain-text artifact contracts and grouped into four research phases (Discovery, Experimentation, Manuscript, Post-Submission).
+Figures~\ref{fig:wf2} and~\ref{fig:wf3} zoom into the two assurance-heavy workflows revisited when describing workflow orchestration in \S\ref{sec:realization}: Workflow~2 (Auto Review Loop) and Workflow~3 (Paper Writing).
+The architecture, design principles, and adversarial-collaboration mechanism that realize these workflows are described in the remainder of this section; per-skill details follow in \S\ref{sec:realization}.
+
+\input{figures/05_pipeline}
+
+\input{figures/06_wf2}
+
+\input{figures/07_wf3}
+
+Figure~\ref{fig:arch} illustrates the three-layer architecture, and Table~\ref{tab:snapshot} summarizes the implementation described in this report.
+
+\input{figures/01_arch}
+
+\begin{table}[t]
+\centering
+\caption{Current \aris{} implementation footprint (v0.4, April 2026).}
+\label{tab:snapshot}
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Component} & \textbf{Scope} \\
+\midrule
+Skills & More than 65 Markdown-defined files \\
+Workflows & 5 end-to-end (+ full pipeline command) \\
+Model bridges & 6 MCP bridges (Codex, Oracle, Claude, Gemini, MiniMax, llm-chat) \\
+Tested executors & 3 (Claude Code, Codex CLI, Cursor); 3 adapted \\
+Assurance stack & 3-stage audit cascade + manuscript quality \\
+Persistent memory & Per-project research wiki (4 entity types) \\
+Effort presets & 4 levels (lite / balanced / max / beast) \\
+Dependencies & None for skills; single binary for CLI \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+These layers map to the three bottlenecks identified in \S\ref{sec:intro}: persistent state~(i) is realized by the per-project research wiki and versionable artifact contracts described in \S\ref{sec:wiki}; modular execution~(ii) is realized by self-contained Markdown skill files coordinated through the workflows of Figure~\ref{fig:pipeline}; and independent assurance~(iii) is realized by the assurance layer (\S\ref{sec:assurance}) under the cross-family executor/reviewer pairing detailed below.
+
+\subsection{Design Principles}
+
+The design of \aris{} is guided by five principles.
+Principles~(1), (3), and~(5) instantiate bottlenecks~(iii), (ii), and~(i) respectively from \S\ref{sec:intro}; principle~(2) is the implementation choice that makes (ii) ergonomic, and principle~(4) is the engineering constraint that lets these controls survive across executor environments.
+
+\paragraph{(1) Heterogeneous models over single-model self-refinement.}
+Single-model self-refinement loops~\citep{madaan2023selfrefine,shinn2023reflexion} have generator and validator that share inductive biases; heterogeneous multi-agent debate has been reported to elicit more diverse critiques than homogeneous configurations~\citep{liang2024divergent,du2024multiagentdebate}.
+\aris{} \emph{defaults to} pairing executor and reviewer from different model families and treats this as the recommended configuration.
+Here, a \emph{model family} denotes a shared model lineage or provider class (e.g., Claude models form one family; GPT models form another).
+The default configuration we ship and document is Claude-family executor with GPT-family reviewer (Codex MCP, Oracle MCP) or vice versa; users can also configure Gemini or MiniMax through dedicated MCP bridges, and GLM, Kimi, or DeepSeek as the reviewer through the generic OpenAI-compatible \texttt{llm-chat} bridge listed in Table~\ref{tab:snapshot}.
+% We do not enforce family separation in code; if a user runs Codex CLI as executor with the default Codex-bridged GPT-5.4 reviewer, the configuration violates the heterogeneity guideline and the assurance benefits of cross-family review do not apply.
+% For Codex-CLI users we therefore recommend Claude, Gemini, or GLM as the reviewer; Section~\ref{sec:adversarial} discusses the routing options.
+
+\paragraph{(2) Modular skill files over monolithic agents.}
+Each research capability is defined primarily by a \skillmd{} file, a plain-text Markdown specification that can be interpreted by multiple LLM-based coding agents, enabling independent development, domain-specific extensions, and component-level updates.
+
+\paragraph{(3) Composability over fixed pipelines.}
+Skills can be chained into workflows, with per-invocation parameter overrides and checkpoint-based recovery across sessions.
+
+\paragraph{(4) Portability over vendor lock-in.}
+The skill library is distributed as plain-text files and does not depend on a platform-specific runtime; in our current setup, the same \skillmd{} files can be used in Claude Code, Codex CLI, and Cursor with no file-level changes.
+
+\paragraph{(5) Persistent memory over ephemeral context.}
+Each project maintains a research wiki that stores papers, ideas, experiment records, and tracked claims across sessions, allowing the system to revisit and refine prior work rather than restarting from a stateless prompt each session~\citep{karpathy2026wiki}.
+
+\subsection{Cross-Model Adversarial Collaboration}
+\label{sec:adversarial}
+
+The core mechanism is a \emph{critique-to-action loop}.
+The executor first produces an artifact (code, manuscript section, or experiment design).
+A reviewer---which the recommended configuration draws from a different model family---then assigns a review score under a predefined rubric and returns structured action items.
+The executor addresses those items, after which a convergence check decides whether to run another round or accept the artifact as provisionally satisfactory.
+The loop terminates either when the review score exceeds a predefined threshold (default 6/10) and all critical review items have been resolved, or when it reaches a preset maximum number of rounds (default~4).
+
+\input{figures/02_loop}
+
+\paragraph{Reviewer independence.}
+The executor supplies file paths and a review objective.
+The reviewer then reads the referenced artifacts directly and forms an independent assessment.
+If the executor first summarized the artifact, the reviewer would assess the executor's framing rather than the underlying work, thereby increasing the risk of shared errors.
+This protocol is specified in a shared protocol document that every skill invoking a review step must follow.
+
+\paragraph{Reviewer access and context policy.}
+\aris{} configures reviewers along two orthogonal axes.
+The first axis is \emph{access scope}: \emph{document-only} (reviewer reads the manuscript text), \emph{artifact-augmented} (reviewer additionally reads supporting artifacts such as result files), and \emph{repository-level} (reviewer directly inspects the codebase and generated outputs through repository access tools).
+The second axis is \emph{context policy}: \emph{fresh} (each review round opens a new thread with no prior context, used to prevent confirmation bias) versus \emph{cross-round} (reviewer retains state across rounds and explicitly verifies whether previously raised issues have been addressed).
+Appendix~\ref{app:review} defines each axis in detail and notes which axis settings are required by specific assurance skills.
+
+\paragraph{Automatic debugging and fallback diagnosis.}
+When experiments fail, the system assigns the failure to a predefined error class, applies a class-specific remediation, and retries up to a configurable limit (default three attempts).
+The executor must attempt at least two distinct remediation strategies before marking a reviewer issue as unresolved.
+If both remediation attempts fail, a third, independently configured model can provide an independent diagnosis through a dedicated rescue step.
+
+% ==============================================================
+\section{Cross-Model Assurance Stack}
+\label{sec:assurance}
+% ==============================================================
+
+The adversarial collaboration described in \S\ref{sec:adversarial} provides a general critique loop.
+It seems perfectly natural that the executor agent only needs to communicate adversarially with the reviewer agent based on the article's content. However, the reality is much more complex. To improve the peer review score as quickly as possible, the executor agent will use various methods to deceive the reviewers during the dialogue. Therefore, we need to set up a strict assurance stack.
+
+This section presents the \emph{assurance stack} that \aris{} adds to the critique loop as its operational response to bottleneck~(iii) of \S\ref{sec:intro} and to the \emph{plausible unsupported success} risk introduced there: a three-stage evidence-to-claim audit cascade for experimental integrity (\S\ref{sec:audit}), a manuscript assurance layer for prose, proof, and presentation quality (\S\ref{sec:manuscript}), and two system-wide controls---effort levels and reviewer routing---that set audit depth and reviewer backend (\S\ref{sec:effort}).
+
+\subsection{Evidence-to-Claim Audit Cascade}
+\label{sec:audit}
+
+Community reports and internal debugging revealed that executor agents can produce misleading experimental outputs, including model-derived references, self-normalized metrics, and claims unsupported by output files.
+\aris{} addresses these failure modes with a three-stage audit pipeline (Figure~\ref{fig:audit}).
+Stage~1 audits evaluation integrity, Stage~2 maps results to explicit claims, and Stage~3 independently verifies manuscript claims against the source and raw evidence using a reviewer that the recommended configuration draws from a model family different from the executor's.
+
+\input{figures/03_audit}
+
+\paragraph{Stage~1: Experiment-integrity audit (\texttt{/experiment-audit}).}
+A cross-model reviewer audits the evaluation code and outputs against the following integrity failure modes:
+(1)~\emph{model-derived reference labels}---reference targets are synthesized from model outputs rather than obtained from the dataset or another declared source;
+(2)~\emph{self-normalized scores}---metrics use denominators derived from the model's own predictions, which can inflate or distort reported performance;
+(3)~\emph{phantom results}---claimed numbers that do not match actual output files;
+(4)~\emph{dead-code or unused-metric inflation}---evaluation code defines additional metrics or branches that are never executed but are described as part of the analysis;
+(5)~\emph{scope inflation}---claims generalize beyond the tested datasets, seeds, or experimental settings.
+The audit produces a structured report (\texttt{EXPERIMENT\_AUDIT.md}) and a machine-readable JSON summary.
+The audit is advisory at the workflow level: it does not halt execution, but downstream stages propagate warning or failure statuses into later claim judgments.
+
+\paragraph{Stage~2: Result-to-claim mapping (\texttt{/result-to-claim}).}
+Each candidate experimental claim is evaluated against the available evidence and assigned one of three verdicts: \emph{supported}, \emph{partially supported}, or \emph{invalidated}.
+If a Stage~1 audit report is available, its \texttt{integrity\_status} is propagated to each claim record; claims with \texttt{fail} cannot be marked fully supported until the integrity issue is resolved.
+The output is a \emph{claim ledger} that maps each experimental claim to the evidence that supports, qualifies, or contradicts it.
+
+\paragraph{Stage~3: Paper-claim audit (\texttt{/paper-claim-audit}).}
+A fresh zero-context reviewer---implemented as a new Codex thread with no prior conversation history---reads the manuscript \LaTeX{} source together with raw result and configuration files, then cross-checks the paper's quantitative claims.
+This fresh-thread design reduces the risk that prior executor context or accumulated reviewer expectations bias the audit.
+Representative checks include numerical mismatches, best-seed cherry-picking, configuration mismatches between the manuscript and experiment files, aggregation or delta-arithmetic errors, and scope overclaim.
+Each claim receives a structured audit status such as \texttt{exact\_match}, \texttt{rounding\_ok}, \texttt{number\_mismatch}, \texttt{config\_mismatch}, or \texttt{missing\_evidence}.
+
+Conceptually, the stages move from code-level integrity, to evidence-to-claim interpretation, to manuscript-level reporting fidelity.
+Each stage can be invoked independently.
+In the full research pipeline, Stage~1 runs after experiments, Stage~2 assembles claim records from results, and Stage~3 is used during paper writing and final manuscript review.
+
+\subsection{Manuscript Assurance}
+\label{sec:manuscript}
+
+Beyond evidence integrity, \aris{} adds four mechanisms for manuscript assurance.
+
+\paragraph{Five-pass scientific-editing pipeline.}
+Inspired by the principles of scientific writing pedagogy~\citep{sainani2019writing}, the \texttt{/paper-write} skill applies five automated editing passes after initial drafting:
+(1)~\emph{Clutter removal}: remove filler phrases, redundant words, and unnecessary hedging;
+(2)~\emph{Active voice}: convert passive constructions to active where appropriate;
+(3)~\emph{Sentence structure}: improve topic positioning and local coherence without forcing a single sentence template;
+(4)~\emph{Terminology consistency}: if the Methods section introduces a term such as ``validation split,'' later sections should use the same term rather than an informal variant---extract domain-specific key terms and verify consistent usage across sections;
+(5)~\emph{Numerical consistency}: cross-check repeated numerical statements against the corresponding table, figure, or cited result file.
+
+\paragraph{Proof verification (\texttt{/proof-checker}).}
+For theory-heavy papers, the proof-checker uses a 20-category issue taxonomy together with a two-axis severity scheme that separates proof status (e.g., invalid, unjustified, unclear) from impact (global, local, cosmetic).
+The checker verifies theorem applications against side-condition checklists and runs a counterexample red-team pass on key lemmas and major guarantees.
+The output is a \emph{proof-obligation ledger} that records the verification status of each theorem, lemma, and derived obligation.
+
+\paragraph{Visual PDF review.}
+The \texttt{/auto-paper-improvement-loop} sends \emph{both} the \LaTeX{} source and the compiled PDF to the reviewer.
+The reviewer assesses substantive content from the source and visual presentation from the PDF: figure readability, caption--figure alignment, layout quality (orphaned headers, misplaced floats), table formatting, and color consistency across all figures.
+This dual-input review catches presentation issues that source-only review misses.
+
+\paragraph{Citation audit (\texttt{/citation-audit}).}
+The fourth manuscript-assurance component verifies every \texttt{\textbackslash cite} in the paper along three independent axes:
+(i)~\emph{existence}---the cited paper resolves at the claimed arXiv ID, DOI, or venue;
+(ii)~\emph{metadata correctness}---author names, year, venue, and title match canonical sources (DBLP, arXiv, ACL Anthology, Nature, OpenReview);
+(iii)~\emph{context appropriateness}---the cited paper actually establishes the claim it is being used to support.
+The third axis is the most diagnostic: a real paper used to support a wrong claim is a credibility failure that metadata-only checks miss.
+Verification uses fresh cross-family reviewers with web access; verdicts are recorded in a per-entry ledger and surfaced as KEEP/FIX/REPLACE/REMOVE recommendations for human approval before submission.
+
+\subsection{Effort Levels and Reviewer Routing}
+\label{sec:effort}
+
+\paragraph{Effort levels.}
+\aris{} exposes four effort presets that scale breadth-, depth-, and iteration-related settings while leaving core review invariants unchanged:
+\texttt{lite} (${\approx}\,0.4\times$) reduces the number of papers surveyed, ideas generated, and review rounds for quick exploration;
+\texttt{balanced} ($1\times$, default) provides standard behavior;
+\texttt{max} (${\approx}\,2.5\times$) increases search depth, review thoroughness, and experiment repetitions;
+\texttt{beast} (${\approx}\,5$--$8\times$) pushes breadth- and iteration-related settings toward their upper bounds.
+Users can override the default with an inline directive such as \texttt{effort: max}.
+A key invariant is that Codex-based reviewer calls use \texttt{xhigh} reasoning effort regardless of the overall effort preset, so effort scaling changes coverage and iteration counts rather than the reviewer's reasoning budget.
+
+\paragraph{Reviewer routing.}
+In the current implementation, review requests route to GPT-5.4 via the Codex MCP bridge.
+For especially high-stakes reviews, users can explicitly route supported skills to GPT-5.4 Pro via the Oracle MCP bridge with an inline directive such as \texttt{reviewer: oracle-pro}.
+In the current implementation, Oracle routing is enabled for a subset of reviewer-invoking skills.
+Alternative reviewer backends can also be connected through the \texttt{llm-chat} bridge, subject to the same reviewer-independence protocol and the recommendation that reviewer and executor come from different model families (\S\ref{sec:overview}).
+
+% ==============================================================
+\section{Implementation: Skills, Workflows, and Tools}
+\label{sec:realization}
+% ==============================================================
+
+The assurance layer is covered in \S\ref{sec:assurance}.
+This section describes the implementation of the execution and orchestration layers: the skills layer that breaks long research trajectories into inspectable, replaceable units---ARIS's answer to the modular-execution bottleneck~(ii) of \S\ref{sec:intro} (\S\ref{sec:skills}); a per-project research wiki that addresses the persistent-state bottleneck~(i) (\S\ref{sec:wiki}); workflow orchestration (\S\ref{sec:workflows}); and supporting tools (\S\ref{sec:tools}); it then discusses a prototype meta-optimization outer loop (\S\ref{sec:metaopt}).
+
+\subsection{Skills Layer}
+\label{sec:skills}
+
+The foundation of \aris{} is a library of more than 65 research-oriented skills (Appendix~\ref{app:skills}), each encoded as a single \skillmd{} file.
+A \skillmd{} contains a YAML frontmatter (name, description, trigger conditions, allowed tools) followed by a natural-language workflow specification: inputs, outputs, step-by-step procedures, quality gates, and failure-handling instructions.
+Skills range from simple utilities such as \texttt{/arxiv}, which retrieves paper metadata, to multi-step workflows such as \texttt{/auto-review-loop}, which iteratively reviews, revises, and, when needed, runs follow-up experiments.
+
+Five shared reference documents provide cross-cutting guidance: \texttt{reviewer-independence.md}, \texttt{experiment-integrity.md}, \texttt{effort-contract.md}, \texttt{citation-discipline.md}, and \texttt{writing-principles.md}.
+Any skill can reference these; they codify system-wide invariants without duplicating rules across skill files.
+
+Skills exchange intermediate artifacts through versionable text files and structured Markdown pages.
+For example, \texttt{IDEA\_REPORT.md} is produced during idea discovery and consumed by \texttt{experiment-bridge}; \texttt{EXPERIMENT\_LOG.md} is consumed by \texttt{auto-review-loop}; and \texttt{NARRATIVE\_REPORT.md} is consumed by \texttt{paper-writing}.
+This design improves auditability, checkpoint-based recovery, and portability across model backends.
+Together, single-file skills and plain-text artifact contracts are how \aris{} discharges bottleneck~(ii) of \S\ref{sec:intro}: the long research trajectory is broken into inspectable, replaceable invocations whose inputs and outputs can be reviewed independently rather than hidden inside a single opaque agent transcript.
+
+\subsection{Research Wiki: Persistent Project Memory}
+\label{sec:wiki}
+
+\aris{} realizes bottleneck~(i) of \S\ref{sec:intro}---persistent research state across long-running, multi-session workflows---through four layered mechanisms: (1)~the research wiki described in this subsection, which records papers, ideas, experiments, and claims as a structured knowledge graph; (2)~the plain-text artifact contracts exchanged between skills (\S\ref{sec:skills}), which carry intermediate state across skill invocations; (3)~a \emph{file-system-as-state} design choice (Design Principle~5 of \S\ref{sec:overview}) that places all session state in versionable text files rather than in-memory caches or external databases, so any new session can pick up from the artifacts of a previous one; and (4)~checkpoint-based recovery (Design Principle~3 of \S\ref{sec:overview}), in which any workflow can resume from the saved artifacts of an earlier run.
+The wiki is the headline component and is described next; the other three mechanisms are referenced where relevant.
+
+The research wiki provides persistent, cross-session memory through four entity types---papers, ideas, experiments, and claims---stored as structured Markdown pages with canonical node IDs.
+Eight typed relationships (extends, contradicts, addresses\_gap, inspired\_by, tested\_by, supports, invalidates, supersedes) form a lightweight knowledge graph.
+
+Three skills integrate with the wiki:
+\texttt{/research-lit} ingests discovered papers as structured pages;
+\texttt{/idea-creator} reads a compressed \texttt{query\_pack.md} summary (capped at 8{,}000 characters) before ideation, using listed gaps as search seeds and previously rejected ideas to avoid revisiting unpromising directions;
+\texttt{/result-to-claim} updates claim status after each experiment.
+The key design choice is to retain rejected ideas: without persistent memory, an ideation pipeline can re-propose the same dead-end direction across sessions; with the wiki, the same direction is recognized as previously explored and the search moves on (Figure~\ref{fig:wiki}).
+
+\input{figures/04_wiki}
+
+\subsection{Workflow Orchestration}
+\label{sec:workflows}
+
+Five workflows chain skills into end-to-end pipelines.
+The overall composition is shown earlier in Figure~\ref{fig:pipeline} (\S\ref{sec:overview}); Table~\ref{tab:workflows} lists inputs, outputs, and key skills; full appendix figures for all five workflows are also in Appendix~\ref{app:workflows}.
+
+\begin{table*}[t]
+\centering
+\caption{\aris{} workflow library. Each workflow chains reusable skills through plain-text artifact contracts. For the idea discovery, the research taste is important for the idea quality, and we recommend the idea taste models provided by \citet{tong2026aitaste}. For experiments, users seeking SoTA results may also find AutoSoTA~\citep{li2026autosota} helpful.}
+\label{tab:workflows}
+\footnotesize
+\begin{tabular}{@{}p{2.6cm}p{2.3cm}p{2.6cm}p{5.5cm}@{}}
+\toprule
+\textbf{Workflow} & \textbf{Input} & \textbf{Output} & \textbf{Key Skills} \\
+\midrule
+1. Idea Discovery & Research direction & Ranked idea report & \texttt{research-lit}, \texttt{idea-creator}, \texttt{novelty-check}, \texttt{experiment-plan} \\
+1.5. Experiment Bridge & Experiment plan & Running code + results & \texttt{experiment-bridge}, \texttt{run-experiment}, \texttt{monitor-experiment} \\
+2. Auto Review Loop & Draft + results & Improved paper & \texttt{auto-review-loop}, \texttt{research-review}, \texttt{analyze-results} \\
+3. Paper Writing & Narrative report & Compiled PDF & \texttt{paper-plan}, \texttt{paper-figure}, \texttt{paper-write}, \texttt{proof-checker}, \texttt{paper-claim-audit}, \texttt{paper-compile}, \texttt{auto-paper-improvement-loop} \\
+4. Rebuttal & Paper + reviews & Paste-ready rebuttal & \texttt{rebuttal} (7-phase pipeline with 3 safety gates) \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\paragraph{Auto-review loop (Workflow~2).}
+In each round (Figure~\ref{fig:wf2}, \S\ref{sec:overview}), the draft is sent to a reviewer model from a different family for structured scoring; the system extracts actionable items, runs follow-up experiments when new evidence is requested and execution is permitted, revises affected sections, and resubmits the manuscript for review.
+The loop runs for up to four rounds or until the reviewer score exceeds a configurable threshold.
+One documented overnight run is described in \S\ref{sec:evidence}.
+
+\paragraph{Paper writing pipeline (Workflow~3).}
+This workflow (Figure~\ref{fig:wf3}, \S\ref{sec:overview}) incorporates the assurance components described in \S\ref{sec:assurance}.
+The pipeline currently chains seven core sub-skills, with \texttt{/proof-checker} invoked for theory-heavy papers:
+\texttt{/paper-plan} produces a structural outline and claims-evidence matrix;
+\texttt{/paper-figure} generates manuscript-ready figures and comparison tables;
+\texttt{/paper-write} drafts sections in \LaTeX{} with citation lookup and a five-pass revision routine;
+optional \texttt{/proof-checker} audits theory-heavy sections;
+\texttt{/paper-claim-audit} performs an independent numerical consistency check;
+\texttt{/paper-compile} runs multi-pass compilation and repairs common \LaTeX{} errors;
+and \texttt{/auto-paper-improvement-loop} performs two rounds of reviewer-model critique followed by revision.
+Users can invoke the full writing stack through \texttt{/research-pipeline}; setting \texttt{auto\_write: true} feeds Workflow~2 outputs directly into Workflow~3.
+
+\subsection{Tooling}
+\label{sec:tools}
+
+\paragraph{Model bridges.}
+\aris{} currently exposes six MCP bridges for executor and reviewer routing: dedicated bridges for Codex, GPT-5.4 Pro review, Gemini, Claude, MiniMax, and a generic OpenAI-compatible chat bridge.
+Additional tool bridges cover citation lookup (DBLP/CrossRef), literature search (Semantic Scholar), reference-library sync (Zotero/Obsidian), experiment tracking (W\&B), and mobile notifications (Feishu).
+
+\paragraph{FigureSpec renderer.}
+\aris{} includes \texttt{figure\_renderer.py}, a renderer that converts structured JSON FigureSpec descriptions into SVG figures.
+The renderer handles shape-aware edge clipping (for rectangular, circular, elliptical, and diamond nodes), self-loops, curved edges, multi-line labels with CJK text width estimation, and comprehensive input validation.
+FigureSpec is designed so that LLM agents can generate the JSON programmatically; under a fixed renderer version and font configuration, the same FigureSpec yields the same SVG output.
+All architecture and workflow diagrams in this report were generated with this pipeline.
+
+\paragraph{ARIS-Code CLI.}
+Beyond skill-based integration into existing IDEs, \ariscode{} is a standalone Rust-based CLI built on \texttt{claw-code}~\citep{ultraworkers2025} that bundles all skills as slash commands.
+It ships as a single binary with an interactive REPL, a setup wizard, five LLM providers, and a native \texttt{LlmReview} tool for cross-model critique (Appendix~\ref{app:ariscode}).
+
+\subsection{Meta-Optimization}
+\label{sec:metaopt}
+
+Workflows~1--4 optimize research artifacts using a fixed harness.
+Meta-optimization targets the harness itself: the skill prompts, default parameters, and convergence rules~\citep{lee2026metaharness}.
+
+\aris{} implements a prototype outer loop in three components:
+(1)~\emph{Passive event logging}: in the current prototype, Claude Code hooks record structured events to \texttt{.aris/meta/events.jsonl} during normal usage, including timestamps, tool names, success or failure, and parameter overrides, without requiring manual logging.
+(2)~\emph{Pattern analysis}: the \texttt{/meta-optimize} skill analyzes usage statistics---which parameters users override most (suggesting suboptimal defaults), which tools fail repeatedly, where review scores plateau---and proposes targeted patches to the relevant \skillmd{} files.
+(3)~\emph{Reviewer-gated application}: each proposed patch is reviewed by GPT-5.4 xhigh; only proposals scoring at least 7/10 are surfaced to the user as recommended candidates. The user makes the final decision; \aris{} never auto-applies harness changes.

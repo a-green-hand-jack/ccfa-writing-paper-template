@@ -1,2 +1,44 @@
+% ==============================================================
 \section{Introduction}
-TODO
+\label{sec:intro}
+% ==============================================================
+
+Recent work on harness engineering~\citep{lee2026metaharness} suggests that the performance of LLM systems can depend heavily on the \emph{harness}---the surrounding system logic that governs storage, retrieval, and presentation---as well as on model weights.
+Machine-learning research poses an unusually complex harness-engineering problem: the workflow spans literature review and hypothesis generation through experimentation, internal critique, manuscript preparation, and responses to external feedback.
+This research harness is still assembled manually in many settings: researchers coordinate compute, references, manuscript tooling, and feedback workflows across separate systems~\citep{lu2024aiscientist,schmidgall2025agentrxiv}.
+
+Several autonomous research agents now target specific parts of this workflow.
+The AI Scientist~\citep{lu2024aiscientist} and AI Scientist v2~\citep{yamada2025aiscientistv2} automate a pipeline from idea generation to manuscript drafting.
+Agent Laboratory~\citep{schmidgall2025agentrxiv}
+adds human-in-the-loop checkpoints to the workflow.
+These systems exhibit three recurring limitations that motivate our design:
+(1)~many rely on the same or closely related model family for both execution and review---a same-model self-refinement pattern in the spirit of~\citet{madaan2023selfrefine,shinn2023reflexion}---which can leave correlated errors uncaught when generator and validator share inductive biases (an effect that motivates work on heterogeneous multi-agent debate~\citealp{du2024multiagentdebate,liang2024divergent});
+(2)~workflows are tightly coupled end-to-end, making it difficult to replace individual stages or resume from saved intermediate states;
+(3)~few provide explicit, system-level checks on experimental integrity and manuscript quality.
+
+As current agents become more capable of carrying out long-horizon tasks, it is possible to conduct fully autonomous research from an intuition or a basic idea. However, when using a single agent to conduct a long-term hard task, it may exhibit laziness, hallucinations, or deceptive behavior.
+The central risk for an autonomous research harness is not only outright failure, but \emph{plausible unsupported success}: results may be real yet misreported, claims may outrun the evidence that licenses them, and downstream readers may silently inherit the executor's framing. Hence, we propose the following stringent assumption:
+\begin{center}
+    \textit{Any long-term task performed by a single agent is unreliable.}\\
+        \textit{We need to divide the total workflow into sub-workflows and cross-family models to review the output at each step independently.}
+\end{center}
+This assumption may understate the capabilities of current agents, but the trade-off favors strictness in a high-rigor field like research: an adversarial reviewer offers a clear quality gain even though adversarial review introduces a harder optimization problem for the executor. Think of it as adversarial vs.\ stochastic bandits---a single model self-reviewing is the stochastic case (predictable reward noise), while cross-model review is adversarial (the reviewer actively probes weaknesses the executor did not anticipate), and adversarial bandits are fundamentally harder to game. Two agents (executor and reviewer) are also the minimum needed to break self-play blind spots, and two-player games converge to a Nash equilibrium far more efficiently than $n$-player ones.
+
+This stringent assumption decomposes operationally into three bottlenecks.
+First, \emph{persistent research state}~(i) is required because stepwise review is meaningless if the system cannot preserve the artifacts, decisions, evidence, and claims that connect one sub-workflow to the next.
+Second, \emph{modular execution}~(ii) is required because a long research trajectory must be divided into replaceable stages rather than hidden inside a single opaque agent trajectory.
+Third, \emph{independent assurance}~(iii) is required because the reviewer must not merely continue the executor's reasoning, but examine the produced artifact from a sufficiently different model family, context policy, or audit role.
+These are not separate desiderata added after the fact; they are the system-level consequences of treating single-agent long-horizon research as unreliable by default.
+
+\aris{} responds by treating assurance as a first-class workflow layer rather than a single review pass, separating artifact production from evidence checking, claim mapping, and manuscript review. Concretely, reusable Markdown-defined skills are coordinated under a default cross-family executor/reviewer pairing, with explicit assurance checks at key experimental and manuscript stages. We default to cross-family pairings because prior work suggests that mixed-model agent configurations can produce less correlated and more varied critiques~\citep{du2024multiagentdebate,liang2024divergent}; we adopt this as a recommended configuration rather than a hard system constraint.
+
+We describe three aspects of \aris{}:
+\begin{enumerate}[nosep,leftmargin=*]
+    \item An \textbf{assurance stack} that uses separate executor and reviewer models, including a three-stage process for checking whether claims are supported by evidence (integrity verification, result-to-claim mapping, claim auditing against the claim ledger and raw evidence), a five-pass scientific-editing pipeline, mathematical-proof checks, and visual PDF inspection (\S\ref{sec:assurance}).
+    \item A \textbf{modular system architecture} organized into three layers---execution, orchestration, and assurance---with more than 65 reusable skills, a persistent research wiki for iterative reuse of prior findings, deterministic figure generation, adjustable effort levels, configurable reviewer routing, and a prototype self-improvement loop (\S\ref{sec:overview}--\S\ref{sec:metaopt}).
+    \item \textbf{Early deployment experience} across three tested executor platforms with adaptation guides for three additional platforms, including community usage reports and an analysis of current limitations (\S\ref{sec:evidence}).
+\end{enumerate}
+\begin{remark}[Discussion of Human in the Loop]
+    Though \aris{} is an auto-research system, we still note that human-in-the-loop can significantly improve the generation quality of final papers and can help users to gain more knowledge of writing papers, which is essential for cultivating one's research taste. 
+\end{remark}
+

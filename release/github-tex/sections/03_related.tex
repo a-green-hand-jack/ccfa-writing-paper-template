@@ -1,2 +1,61 @@
+% ==============================================================
 \section{Related Work}
-TODO
+\label{sec:related}
+% ==============================================================
+
+\paragraph{Autonomous research systems.}
+Prior autonomous research systems differ in scope.
+The AI Scientist~\citep{lu2024aiscientist} and AI Scientist-v2~\citep{yamada2025aiscientistv2} pursue end-to-end idea-to-paper automation; AI co-scientist~\citep{gottweis2025coscientist} emphasizes hypothesis generation; Agent Laboratory~\citep{schmidgall2025agentrxiv} introduces human-in-the-loop checkpoints; and data-to-paper~\citep{ifargan2024data2paper} targets annotated-data-to-paper workflows with human oversight, programmatic back-tracing, and human-verifiable, information-traceable manuscripts.
+These systems differ in how much research state they retain across sessions; some recent systems provide run-level checkpoints or shared research repositories for cumulative progress, such as AgentRxiv~\citep{schmidgall2025agentrxiv}. However, few expose a per-project, structured research memory that jointly records literature notes, ideas, experiments, negative outcomes, and claim status for reuse across sessions.
+In contrast, \aris{} defaults to cross-family executor-reviewer separation, ships reusable Markdown skill specifications, maintains a per-project research wiki for persistent cross-session memory of papers, ideas, experiments, and tracked claims (\S\ref{sec:wiki}), and targets portability across multiple executor platforms with limited platform-specific logic.
+Recent critical analyses of autonomous research systems~\citep{luo2025aiscientistpitfalls} identify integrity failure modes such as inappropriate benchmark selection, data leakage, metric misuse, and post-hoc selection bias, motivating the explicit assurance machinery we describe in \S\ref{sec:assurance}. Very recently, more interesting auto-research systems, for example, AutoResearchClaw \citep{liu2026autoresearchclaw} and EvoScientist \citep{evoscientist2026} have been built \footnote{Readers can find a broader catalog of auto-research systems at \url{https://cadslab.github.io/Pantheon/}.}.
+
+\paragraph{Self-refinement and multi-agent debate.}
+Self-Refine~\citep{madaan2023selfrefine} and Reflexion~\citep{shinn2023reflexion} demonstrate iterative self-feedback and verbal reflection. 
+Multi-agent debate~\citep{du2024multiagentdebate} has been reported to improve reasoning in some settings, while divergent-debate work~\citep{liang2024divergent} highlights both the value of forcing alternative arguments and the complications introduced when heterogeneous LLMs participate in judging or debate.
+\aris{} draws on these ideas by embedding cross-model review loops throughout the research workflow.
+The bandit and two-player game-theoretic language we use in \S\ref{sec:intro} should be read as a design analogy rather than a formal regret or equilibrium result: same-model self-review resembles repeated evaluation under correlated noise, whereas an external reviewer introduces an adversarial role that searches for failure modes the executor did not anticipate.
+\aris{} adopts the minimal two-role version of this idea to break self-review blind spots while avoiding the API cost and coordination overhead of larger reviewer committees.
+
+\paragraph{Automated reviewing.}
+ReviewerGPT~\citep{liu2023reviewergpt} and large-scale analyses~\citep{liang2024llmfeedback} suggest that LLMs can assist targeted review tasks and produce feedback overlapping with human reviewers on some dimensions, while remaining unsuitable as complete substitutes for expert peer review.
+\aris{} uses external-model review as a development tool---iterative improvement during the writing process---not as a substitute for human peer review.
+
+\paragraph{Harness engineering and agent frameworks.}
+Meta-Harness~\citep{lee2026metaharness} formalizes outer-loop search over harness code; \aris{} is a hand-engineered research harness with a prototype outer loop as a step in that direction (\S\ref{sec:metaopt}).
+AutoGen~\citep{wu2023autogen}, CAMEL~\citep{li2023camel}, OpenHands~\citep{wang2025openhands}, SWE-agent~\citep{yang2024sweagent}, MetaGPT~\citep{hong2024metagpt}, and ChatDev~\citep{qian2024chatdev} are general-purpose agent or software-engineering frameworks.
+By contrast, \aris{} focuses on research-specific workflows, domain-aware skill definitions, and reviewer-executor separation across model families.
+Table~\ref{tab:comparison} provides a structured comparison.
+
+\begin{table*}[t]
+\centering
+\caption{Feature comparison. Each column is operationally defined in the caption below; entries reflect features explicitly documented in the cited papers/repos as of our review (April 2026), not author judgment about overall system quality. 
+\emph{partial} denotes documented support for a narrower, non-default, or non-identical variant of the feature that does not satisfy the full operational definitions used here.
+$\dagger$: tested on 3 platforms (Claude Code, Codex CLI, Cursor) with documented adaptation guides for 3 more.
+$\ddagger$: data-driven end-to-end workflow from annotated data to manuscript, rather than open-ended idea-to-paper research.
+\textbf{Cross-family policy}: whether the system enforces, defaults to, optionally supports, or does not address cross-family executor/reviewer separation. Entries: \emph{required} (system refuses same-family configurations), \emph{default} (recommended and shipped configuration is cross-family, but not enforced), \emph{optional} (supported but not the default), \emph{none} (no notion of family separation).
+\textbf{Adversarial review}: explicit reviewer-vs-executor critique loop with revision.
+\textbf{Composable skills}: workflows assembled from independently invocable, single-file skill specifications.
+\textbf{E2E research workflows}: covers idea $\to$ experiment $\to$ paper end-to-end.
+\textbf{Assurance stack}: explicit, documented integrity/audit mechanisms beyond a single review pass. For this column, \emph{partial} includes narrower provenance, traceability, automated checking, or human-verifiability mechanisms that do not constitute a full assurance stack.
+\textbf{Cross-platform portability}: skills usable across multiple host environments without re-implementation.}
+\label{tab:comparison}
+\footnotesize
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+\textbf{System} & \textbf{Cross-family} & \textbf{Adversarial} & \textbf{Composable} & \textbf{E2E Research} & \textbf{Assurance} & \textbf{Cross-platform} \\
+& \textbf{policy} & \textbf{review} & \textbf{skills} & \textbf{workflows} & \textbf{stack} & \textbf{portability} \\
+\midrule
+AI Scientist~\citep{lu2024aiscientist} & none & partial & \texttimes & \checkmark & partial & \texttimes \\
+AI Scientist-v2~\citep{yamada2025aiscientistv2} & none & partial & \texttimes & \checkmark & partial & \texttimes \\
+Agent Laboratory~\citep{schmidgall2025agentrxiv} & none & \texttimes & \texttimes & \checkmark & \texttimes & \texttimes \\
+data-to-paper~\citep{ifargan2024data2paper} & none & partial & \texttimes & \checkmark$^{\ddagger}$ & partial & \texttimes  \\
+AutoGen~\citep{wu2023autogen} & none & \texttimes & partial & \texttimes & \texttimes & \texttimes \\
+MetaGPT~\citep{hong2024metagpt} & none & partial & partial & \texttimes & \texttimes & \texttimes \\
+OpenHands~\citep{wang2025openhands,openhands_skills} & none & \texttimes & partial & \texttimes & \texttimes & \texttimes \\
+\textbf{\aris{} (ours)} & default & \checkmark & \checkmark & \checkmark & \checkmark & \checkmark$^\dagger$ \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}

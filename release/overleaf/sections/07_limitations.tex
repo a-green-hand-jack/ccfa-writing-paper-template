@@ -1,2 +1,31 @@
-\section{Limitations}
-TODO
+% Migrated from arXiv 2605.03042 sec/5.evidence.tex 'Limitations and Responsible Use'
+% subsection, promoted to a standalone section to fill the fixed 07_limitations slot.
+% See paper/supplementary/source-attribution.md (migration debt).
+\section{Limitations and Responsible Use}
+\label{sec:limitations}
+
+\paragraph{No guarantee of correctness.}
+\aris{} cannot guarantee that any output is correct, novel, or scientifically sound.
+LLM outputs can include factual hallucinations and methodological gaps; cross-model review reduces some failure modes without eliminating them.
+Citation grounding via DBLP and CrossRef reduces but does not eliminate bibliography fabrication; Section~\ref{sec:realization} describes the lookup procedure used in our paper-writing workflow.
+
+\paragraph{Audit limitations.}
+The three-stage audit cascade can catch common integrity failures, but it cannot detect every error, inconsistency, or fabrication.
+It is an advisory safety net, not a formal verification system.
+
+\paragraph{Reviewer bias amplification.}
+The review loop can amplify reviewer biases: if the reviewer consistently demands a particular methodology, the loop may overfit to the reviewer model's preferences rather than improve broader scientific quality.
+Over-iteration past diminishing returns can degrade paper quality.
+
+\paragraph{Human responsibility.}
+\aris{} automates execution and review loops; humans provide research direction, validate evidence, and make final submission decisions.
+Configurable checkpoints (e.g., \texttt{human checkpoint: true}) can be used to require human approval at each workflow step.
+
+\paragraph{Security.}
+Repository-level review may send source code to external LLM APIs, raising confidentiality concerns.
+Users should not enable repository-level review on repositories containing sensitive code or secrets unless an approved local-only review path is available.
+Local-only reviewer routing is planned but not yet implemented.
+
+\paragraph{Self-referential disclosure.}
+\aris{} assisted with drafting and review of this technical report, but the authors manually reviewed, edited, and accepted responsibility for all final content.
+

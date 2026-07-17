@@ -143,3 +143,16 @@ Second real-paper case (after `case/arxiv-2505-22954` DGM), on branch
   machine; it was skipped and only the repo's self-contained leaf validators were
   run. Stress-test / mutation probes and the round-N report in `lab/harness-evals/`
   are the downstream audit station's job, not this migration station's.
+
+### Note: arxiv-flat compile is a pre-existing template limitation
+
+`scripts/check-latex.sh --compile-release arxiv` compiles `release/arxiv`
+(modular) but `release/arxiv-flat` fails with `style/ccfa-paper.sty not found`:
+the flatten copies venue `.sty/.bst` files to the flat root but does not rewrite
+the `\usepackage{style/...}` prefix in the latexpanded `main.tex`. The
+`case/arxiv-2505-22954` blueprint's `arxiv-flat` has the identical structure and
+the same limitation, so this is a harness/template gap (a `tex-release-export`
+flatten path-rewrite fix), not an ARIS-specific regression, and out of scope for
+this migration station. The two required release validators
+(`check-release-package.py` zero-leak, `check-release-freshness.py` fresh) pass,
+and the primary `paper/` compile (`check-latex.sh --compile`) passes.

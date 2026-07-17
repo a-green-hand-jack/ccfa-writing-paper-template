@@ -1,4 +1,11 @@
-% TODO: abstract may only use registered claims and verified numbers.
 \begin{abstract}
-TODO
+This report describes \aris{}(\textbf{A}utonomous \textbf{R}esearch via Adversarial Multi-Agent Collaboration), an open-source research harness for autonomous ML research, including its architecture, assurance mechanisms, and early deployment experience.The performance of agent systems built on large language models depends on both model weights and the \emph{harness} around them, which is the system logic that governs what information to store, retrieve, and present to the model.
+For long-horizon research workflows, the central failure mode is not visible breakdown but \emph{plausible unsupported success}: a long-running agent can produce claims whose evidential support is incomplete, misreported, or silently inherited from the executor's framing.
+Therefore, we present \aris{} as a research harness that coordinates machine-learning research workflows through cross-model adversarial collaboration as a default configuration: an executor model drives forward progress while a reviewer from a different model family is recommended to critique intermediate artifacts and request revisions.
+\aris{} has three architectural layers.
+The \emph{execution layer} provides more than 65 reusable Markdown-defined skills, model integrations via MCP, a persistent research wiki for iterative reuse of prior findings, and deterministic figure generation.
+The \emph{orchestration layer} coordinates five end-to-end workflows with adjustable effort settings and configurable routing to reviewer models.
+The \emph{assurance layer} includes a three-stage process for checking whether experimental claims are supported by evidence—integrity verification, result-to-claim mapping, and claim auditing that cross-checks manuscript statements against the claim ledger and raw evidence—as well as a five-pass scientific-editing pipeline, mathematical-proof checks, and visual inspection of the rendered PDF.
+A prototype self-improvement loop records research traces and proposes harness improvements that are adopted only after reviewer approval.
+
 \end{abstract}

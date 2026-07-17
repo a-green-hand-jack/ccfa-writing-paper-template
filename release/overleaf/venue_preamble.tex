@@ -1,1 +1,124 @@
 % Venue-specific preamble. Verify against official current-year author kit before submission.
+% Migrated verbatim from arXiv 2605.03042 main.tex preamble. See
+% paper/supplementary/source-attribution.md for the migration mapping.
+% Venue package/bibstyle resolve under paper/style/ (see main.tex \bibliographystyle{style/iclr2026_conference}).
+\usepackage{style/iclr2026_conference}
+\iclrfinalcopy
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+\usepackage{nicefrac}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{tabularx}
+\usepackage{subcaption}
+\usepackage{natbib}
+\usepackage{fancyhdr}
+
+% Pixel art characters (inlined verbatim from arXiv 2605.03042 pixel_chars.tex;
+% kept in this unscanned, release-copied preamble file so the arxiv-flat latexpand
+% surface has no dangling \input and the decorative TikZ coordinates are not
+% mis-scanned as paper numeric literals).
+\usepackage{tikz}
+
+% === Claude pixel character (tiny, for inline use) ===
+\newcommand{\pixelclaude}[1][0.035]{%
+\begin{tikzpicture}[scale=#1, baseline=-2pt]
+% Hair (brown)
+\fill[color={rgb,255:red,139;green,94;blue,60}] (2,12) rectangle (3,13);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (3,12) rectangle (4,13);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (4,12) rectangle (5,13);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (5,12) rectangle (6,13);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (1,11) rectangle (2,12);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (2,11) rectangle (3,12);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (3,11) rectangle (4,12);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (4,11) rectangle (5,12);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (5,11) rectangle (6,12);
+\fill[color={rgb,255:red,139;green,94;blue,60}] (6,11) rectangle (7,12);
+% Face (skin)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (1,10) rectangle (7,11);
+\fill[color={rgb,255:red,255;green,218;blue,185}] (1,9) rectangle (7,10);
+% Eyes (black)
+\fill[black] (2,9) rectangle (3,10);
+\fill[black] (5,9) rectangle (6,10);
+% Body (blue - Claude color)
+\fill[color={rgb,255:red,74;green,158;blue,218}] (1,7) rectangle (7,9);
+\fill[color={rgb,255:red,74;green,158;blue,218}] (0,6) rectangle (8,7);
+\fill[color={rgb,255:red,74;green,158;blue,218}] (1,5) rectangle (7,6);
+% Arms (skin)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (0,7) rectangle (1,9);
+\fill[color={rgb,255:red,255;green,218;blue,185}] (7,7) rectangle (8,9);
+% Legs (dark)
+\fill[color={rgb,255:red,70;green,70;blue,70}] (1,3) rectangle (3,5);
+\fill[color={rgb,255:red,70;green,70;blue,70}] (5,3) rectangle (7,5);
+% Shoes
+\fill[color={rgb,255:red,50;green,50;blue,50}] (1,2) rectangle (3,3);
+\fill[color={rgb,255:red,50;green,50;blue,50}] (5,2) rectangle (7,3);
+\end{tikzpicture}%
+}
+
+% === GPT pixel character (tiny, with sunglasses — matching SVG original) ===
+\newcommand{\pixelgpt}[1][0.035]{%
+\begin{tikzpicture}[scale=#1, baseline=-2pt]
+% Hair (dark #2C2C2C)
+\fill[color={rgb,255:red,44;green,44;blue,44}] (2,13) rectangle (6,14);
+\fill[color={rgb,255:red,44;green,44;blue,44}] (1,12) rectangle (7,13);
+% Face row 1 (skin, full width)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (1,11) rectangle (7,12);
+% Face row 2 (eyes + sunglasses)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (1,10) rectangle (7,11);
+% Sunglasses: two separate lenses + bridge (matching SVG #555)
+\fill[color={rgb,255:red,85;green,85;blue,85}] (1.5,10) rectangle (3.5,11);  % left lens
+\fill[color={rgb,255:red,85;green,85;blue,85}] (4.5,10) rectangle (6.5,11);  % right lens
+\fill[color={rgb,255:red,85;green,85;blue,85}] (3.5,10.3) rectangle (4.5,10.7);  % bridge
+% Mouth row (skin + smile)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (1,9) rectangle (7,10);
+\fill[color={rgb,255:red,212;green,149;blue,106}] (3,9) rectangle (5,10);  % mouth/smile #D4956A
+% Body (green #74AA63)
+\fill[color={rgb,255:red,116;green,170;blue,99}] (1,7) rectangle (7,9);
+\fill[color={rgb,255:red,116;green,170;blue,99}] (0,6) rectangle (8,7);
+\fill[color={rgb,255:red,116;green,170;blue,99}] (1,5) rectangle (7,6);
+% Arms (skin)
+\fill[color={rgb,255:red,255;green,218;blue,185}] (0,7) rectangle (1,9);
+\fill[color={rgb,255:red,255;green,218;blue,185}] (7,7) rectangle (8,9);
+% Legs (dark #444)
+\fill[color={rgb,255:red,68;green,68;blue,68}] (1.5,3) rectangle (3.5,5);
+\fill[color={rgb,255:red,68;green,68;blue,68}] (4.5,3) rectangle (6.5,5);
+% Shoes
+\fill[color={rgb,255:red,50;green,50;blue,50}] (1.5,2) rectangle (3.5,3);
+\fill[color={rgb,255:red,50;green,50;blue,50}] (4.5,2) rectangle (6.5,3);
+\end{tikzpicture}%
+}
+
+% === Header: "Technical Report" with pixel characters ===
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small\textcolor{gray}{\pixelclaude[0.028]\;\textsc{Aris} Technical Report\;\pixelgpt[0.028]}}
+\fancyhead[R]{\small\textcolor{gray}{April 2026}}
+\fancyfoot[C]{\thepage}
+
+% Title with pixel characters
+\title{%
+\pixelclaude[0.06]\quad
+ARIS: Autonomous Research via\\ Adversarial Multi-Agent Collaboration%
+\quad\pixelgpt[0.06]%
+}
+
+\author{
+\textbf{Ruofeng Yang}$^{1\dagger}$, \textbf{Yongcan Li}$^{1}$, \textbf{Shuai Li}$^{1,2*}$ \\[3pt]
+$^1$Shanghai Jiao Tong University \quad $^2$Shanghai Innovation Institute \\[2pt]
+\texttt{\{wanshuiyin, joseph\_y, shuaili8\}@sjtu.edu.cn} \\[3pt]
+$^\dagger$Project Leader \quad $^*$Corresponding Author \\[2pt]
+{\small Project page: \url{https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep}}
+}

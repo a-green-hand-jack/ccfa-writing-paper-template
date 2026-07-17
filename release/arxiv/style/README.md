@@ -15,6 +15,13 @@ Venue-provided `.sty`/`.cls`/`.bst` files may also be placed here after
 license and source checks, once the paper is hard-bound to a specific
 venue class.
 
+`compat.sty` is a separate, static shim that reimplements the same Class
+API on packages an official venue class already loads. It is not loaded
+by `paper/main.tex`; `scripts/export-venue-template.sh` copies it into a
+generated `release/venue/<venue>-<year>-<mode>/` preview alongside a
+locally supplied official kit, so the venue conversion never edits
+`paper/sections/*.tex`. See `.claude/skills/venue-adapt/SKILL.md`.
+
 ## Class API
 
 | Macro | Purpose |

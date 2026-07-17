@@ -3907,6 +3907,22 @@ def check_number_value_consistency(numeric_id: str, number: dict) -> int:
         display_values.extend(scalar_strings(display))
     if direct_values and display_values and not numeric_values_compatible(direct_values, display_values):
         return error(f"number {numeric_id} value contradicts display value")
+    # Cross-check the plain-number direct fields against each other. They all
+    # denote the same reported scalar (raw vs formatted), so a `value: 1400`
+    # paired with `display_value: "1363"` is a fabrication the display-vs-direct
+    # comparison above misses (it lumps both into direct_values). The LaTeX-form
+    # fields (latex_value/macro_value) are excluded: they legitimately hold
+    # macro forms like `\num{1363}` that are not bare-number comparable.
+    plain_values: list[str] = []
+    for field in ["value", "display_value", "reported_value"]:
+        plain_values.extend(scalar_strings(number.get(field)))
+    for i in range(len(plain_values)):
+        for j in range(i + 1, len(plain_values)):
+            if not numeric_values_compatible([plain_values[i]], [plain_values[j]]):
+                return error(
+                    f"number {numeric_id} has inconsistent reported values: "
+                    f"{plain_values[i]} vs {plain_values[j]}"
+                )
     return 0
 
 

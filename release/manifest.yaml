@@ -4,8 +4,8 @@
   "template_skeleton": true,
   "source_revision": {
     "treeish": "HEAD",
-    "commit": "78ba58403b1f0ca37f6962c17f5f6287c1f6bc53",
-    "tree": "e5622597f4434bccee6aaab9c496e6dda6ae1c56"
+    "commit": "6e747388fa72156f12049b92656ce7fee5a2fa56",
+    "tree": "7599542669cefa5b3f41626f972305619b6c4961"
   },
   "surfaces": [
     {
@@ -447,5 +447,36 @@
       ]
     }
   ],
-  "reports": "release/reports"
+  "reports": "release/reports",
+  "flatten": [
+    {
+      "id": "arxiv-flat",
+      "path": "release/arxiv-flat",
+      "source_surface": "arxiv",
+      "checksum_algorithm": "sha256",
+      "status": "flattened",
+      "files": [
+        {
+          "relpath": "ccfa-paper.sty",
+          "sha256": "efb25529dbe6545156b3e2b02d6662a132c90604da885e02acc8a7d42f534ca2",
+          "size": 2716
+        },
+        {
+          "relpath": "compat.sty",
+          "sha256": "7faf0f6e8e203ed28b1dd06785642252de8952f1ada6e1aa348e782bff0027ef",
+          "size": 3544
+        },
+        {
+          "relpath": "main.tex",
+          "sha256": "3614a62065e8b9d37288e06da7c0c4a2da4aa6f4db3cdcd44b618b186cc0ecee",
+          "size": 422
+        },
+        {
+          "relpath": "refs.bib",
+          "sha256": "49a8676e2cc62a316d991ea868e4657466619ac5169b04da65790898f0a37bd5",
+          "size": 84
+        }
+      ]
+    }
+  ]
 }

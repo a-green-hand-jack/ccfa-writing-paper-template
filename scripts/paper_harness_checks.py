@@ -184,6 +184,7 @@ RELEASE_ITEMS = [
     "generated",
     "supplementary",
 ]
+VENUE_EXPORT_PAPER_ITEMS = ["sections", "figures", "tables", "generated", "refs.bib", "macros.tex"]
 RELEASE_ROOT_FILES = {"README.md"}
 RELEASE_SYNC_STATUSES = {"synced", "fresh", "exported"}
 RELEASE_MANIFEST_VERSION = "release-manifest-v1"
@@ -1341,6 +1342,39 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def fingerprint_paths(root: Path, paths) -> str:
+    entries = sorted(f"{path.relative_to(root).as_posix()}:{sha256_file(path)}" for path in paths)
+    return hashlib.sha256("\n".join(entries).encode("utf-8")).hexdigest()
+
+
+def kit_fingerprint(raw_template: Path) -> str:
+    if raw_template.is_file():
+        return fingerprint_paths(raw_template.parent, [raw_template])
+    paths = [p for p in raw_template.rglob("*") if p.is_file() and not p.is_symlink()]
+    return fingerprint_paths(raw_template, paths)
+
+
+def paper_source_fingerprint() -> str:
+    paths = []
+    for item in VENUE_EXPORT_PAPER_ITEMS:
+        src = ROOT / "paper" / item
+        if not src.exists() or src.is_symlink():
+            continue
+        if src.is_dir():
+            paths.extend(p for p in src.rglob("*") if p.is_file() and not p.is_symlink())
+        else:
+            paths.append(src)
+    compat = ROOT / "paper/style/compat.sty"
+    if compat.exists() and not compat.is_symlink():
+        paths.append(compat)
+    return fingerprint_paths(ROOT, paths)
+
+
+def normalized_venue_id(ccfa: dict) -> str:
+    venue = ccfa.get("venue", {}) if isinstance(ccfa.get("venue"), dict) else {}
+    return str(venue.get("id") or "venue").strip().lower() or "venue"
+
+
 def collect_release_checksums(root: Path) -> list[dict]:
     files = []
     if not root.exists() or root.is_symlink():
@@ -2334,6 +2368,68 @@ def check_conference_template():
         for field in ["raw_template", "normalized_template", "delta"]:
             if not path_exists_or_external(template.get(field)):
                 code |= error(f"verified conference template path/source not found: {field}={template.get(field)}")
+    code |= check_realkit_verification()
+    return code
+
+
+def find_realkit_receipt(template: dict, venue_id, venue_year, mode) -> dict | None:
+    receipts = template.get("realkit_receipts")
+    if not isinstance(receipts, list):
+        return None
+    for entry in receipts:
+        if not isinstance(entry, dict):
+            continue
+        if (
+            str(entry.get("venue")) == str(venue_id)
+            and str(entry.get("year")) == str(venue_year)
+            and entry.get("mode") == mode
+        ):
+            return entry
+    return None
+
+
+def check_realkit_verification() -> int:
+    ccfa = load_doc("state/ccfa.yaml")
+    template = load_doc("state/conference-template.yaml")
+    if not paper_looks_populated():
+        return 0
+    raw_template_value = template.get("raw_template")
+    if missingish(raw_template_value) or external_reference(raw_template_value):
+        return 0
+
+    venue_id = normalized_venue_id(ccfa)
+    venue = ccfa.get("venue", {}) if isinstance(ccfa.get("venue"), dict) else {}
+    venue_year = venue.get("year")
+    team = ccfa.get("team", {}) if isinstance(ccfa.get("team"), dict) else {}
+    mode = "anonymous" if anonymous_mode_enabled(team) else "camera-ready"
+
+    entry = find_realkit_receipt(template, venue_id, venue_year, mode)
+    if entry is None:
+        return error(
+            f"no real-kit compile receipt recorded for venue={venue_id} year={venue_year} mode={mode}; "
+            f"run scripts/export-venue-template.sh --mode {mode} against the configured raw_template "
+            "to compile against the real kit and record one"
+        )
+
+    code = 0
+    if str(entry.get("status", "")).lower() != "verified":
+        code |= error(
+            f"real-kit compile receipt for venue={venue_id} mode={mode} has status != verified: {entry.get('status')}"
+        )
+    expected_source = f"sha256:{paper_source_fingerprint()}"
+    if entry.get("source_fingerprint") != expected_source:
+        code |= error(
+            f"real-kit compile receipt for venue={venue_id} mode={mode} is stale: "
+            "compat.sty or paper/ sources changed since the last verified real-kit compile"
+        )
+    raw_path = local_existing_path(raw_template_value)
+    if raw_path is not None:
+        expected_kit = f"sha256:{kit_fingerprint(raw_path)}"
+        if entry.get("kit_checksum") != expected_kit:
+            code |= error(
+                f"real-kit compile receipt for venue={venue_id} mode={mode} is stale: "
+                "the configured raw_template kit contents changed since the last verified real-kit compile"
+            )
     return code
 
 
@@ -4831,6 +4927,7 @@ CHECKS = {
     "capability_parity": check_capability_parity,
     "claim_experiment_plan": check_claim_experiment_plan,
     "conference_template": check_conference_template,
+    "realkit_verification": check_realkit_verification,
     "lab_lightweight": check_lab_lightweight,
     "release_package": check_release_package,
     "release_freshness": check_release_freshness,

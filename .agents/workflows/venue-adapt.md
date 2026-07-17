@@ -38,6 +38,17 @@ from `paper/` plus a locally supplied official kit (never fetched), never
 edits `paper/` or the kit, and is gitignored (regenerate, do not commit).
 Run `scripts/check-anonymity.py` after an anonymous export.
 
+Compiling against the real kit is a hard gate (#17): a crash under the
+official class fails the export immediately; a missing TeX toolchain
+prints an explicit `UNVERIFIED` and records no receipt. A successful
+compile appends a receipt to `state/conference-template.yaml`
+(`realkit_receipts`: venue/year/mode, kit checksum, `compat.sty` + `paper/`
+source fingerprint, verifying commit, timestamp). `camera-ready-check`
+blocks a populated paper with a real `raw_template` configured unless a
+matching, fresh receipt exists — editing `compat.sty`/`paper/` after the
+receipt was recorded makes it stale and re-blocks until the export is
+rerun.
+
 ## Human Gates
 
 - `current-year-official-rules`: required when Recording or changing current-year venue, anonymity, page-limit, or template rules. Record in `state/conference-template.yaml`.

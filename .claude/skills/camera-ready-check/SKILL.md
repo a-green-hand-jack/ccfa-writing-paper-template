@@ -30,6 +30,17 @@ Source capability: `.agent/capabilities/camera-ready-check.yaml`. Read this file
 - `scripts/check-release-package.py`
 - `scripts/check-release-freshness.py`
 
+`scripts/check-writing-harness.py` runs `scripts/check-conference-template.py`
+internally, which enforces the real-kit compile receipt gate (#17): once a
+populated paper has a real (non-`TODO`, non-URL) `raw_template` configured
+in `state/conference-template.yaml`, this run refuses to pass unless a
+`realkit_receipts` entry exists for the currently declared venue/year/mode
+(camera-ready vs. anonymous, from `state/ccfa.yaml` team.anonymous_mode),
+with `status: verified` and a `compat.sty`/`paper/` source fingerprint that
+matches the current tree. There is no way to "forget" this check — it
+blocks camera-ready release automatically. See
+`.claude/skills/venue-adapt/SKILL.md` for how to produce the receipt.
+
 ## Human Gates
 
 - `final-submission`: required when Declaring the camera-ready or submission package ready to send. Record in `human/decisions/README.md`.

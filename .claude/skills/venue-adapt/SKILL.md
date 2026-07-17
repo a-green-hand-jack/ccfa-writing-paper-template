@@ -51,6 +51,24 @@ commit it. In anonymous mode, run `scripts/check-anonymity.py` after
 export; it scans generated `*-anonymous/` venue exports for leaked
 author names and emails in addition to the three release surfaces.
 
+### Real-kit compile receipt (#17)
+
+Compiling against the real kit is a hard gate, not something to remember:
+a crash under the official class (missing package, macro conflict,
+undefined command) fails `export-venue-template.sh` immediately; a
+missing TeX toolchain prints an explicit `UNVERIFIED` line and records no
+receipt (never a silent false pass). On a successful compile, a receipt
+is appended to `state/conference-template.yaml` under `realkit_receipts`:
+venue/year/mode, the kit's checksum, a combined `compat.sty` + `paper/`
+source fingerprint, the verifying commit, and a timestamp. The
+`camera-ready-check` gate (via `scripts/check-conference-template.py`,
+run inside `check-writing-harness.py`) refuses to pass once a real
+`raw_template` is configured and the paper is populated unless a
+matching, fresh receipt exists for the venue/year/mode currently
+declared in `state/ccfa.yaml` — editing `compat.sty` or `paper/` sources
+after the receipt was recorded makes it stale and re-blocks until
+`export-venue-template.sh` is rerun.
+
 ## Human Gates
 
 - `current-year-official-rules`: required when Recording or changing current-year venue, anonymity, page-limit, or template rules. Record in `state/conference-template.yaml`.

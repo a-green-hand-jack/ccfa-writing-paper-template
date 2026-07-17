@@ -58,11 +58,16 @@ PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-release-package.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-release-freshness.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-conference-template.py
 PYTHONDONTWRITEBYTECODE=1 bash scripts/check-latex.sh --compile
+PYTHONDONTWRITEBYTECODE=1 bash scripts/compare-original-pdf.sh <arxiv-id>
 ```
 
 If compilation depends on missing TeX packages or external assets, record the
 blocker in `lab/harness-evals/` and still run every non-compile validator that
 can execute.
+
+The final `compare-original-pdf.sh` gate is mandatory for a real-paper case: a
+migration is only faithful if the compiled PDF reproduces the original. See
+step 4.5.
 
 ## Workflow
 
@@ -154,6 +159,31 @@ PYTHONDONTWRITEBYTECODE=1 bash scripts/export-tex-release.sh
 Run the validators listed above. Commit the first clean migration separately
 from stress reports so later sync/replay diffs are easy to read.
 
+### 4.5. Fidelity: Compare Against the Original PDF
+
+A migration that compiles is not automatically faithful. Always compare the
+compiled paper against the original source PDF before declaring the baseline
+done. This catches dropped sections, invented or reworded prose, and — most
+commonly — reordered sections that silently shift every `§`/Table cross-number.
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 bash scripts/compare-original-pdf.sh <arxiv-id>
+# e.g. scripts/compare-original-pdf.sh 2605.03042
+```
+
+The script downloads the original from arXiv (id, URL, or local PDF path all
+accepted), compiles `paper/main.tex` if `paper/main.pdf` is absent, and reports
+an order-insensitive content diff plus a page-count check. It ignores page
+furniture (running headers/footers, page numbers, the arXiv submission stamp),
+so residual differences are real content drift.
+
+If the gate fails (`FAIL pdf-fidelity`), reconcile `paper/` with the original —
+usually by fixing section order in `paper/main.tex` or restoring dropped
+content — then recompile and re-run until it passes. Record the before/after
+diff counts in the case's `lab/harness-evals/` report. If the original PDF
+cannot be fetched (offline, withdrawn id), record that blocker and note the
+comparison as unverified rather than skipping it silently.
+
 ### 5. Stress the Harness
 
 Run destructive probes only in disposable copies:
@@ -216,6 +246,9 @@ with the failing mutation and the command that currently passes.
   on chat memory.
 - Baseline contract: profile validation and relevant leaf checks pass, or every
   blocker is recorded with command output.
+- Fidelity contract: `scripts/compare-original-pdf.sh` was run against the
+  original PDF and passes, or the drift is reconciled in `paper/`, or the
+  original could not be fetched and that blocker is recorded.
 - Probe contract: destructive mutations happen in `/tmp` copies, not in the live
   case branch.
 - Fix contract: persistent template or validator changes land on a fix branch in

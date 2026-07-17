@@ -10,6 +10,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 import unicodedata
 from pathlib import Path
 
@@ -185,6 +186,17 @@ FORBIDDEN_RELEASE_PARTS = {
     "exemplars",
 }
 ALLOWABLE_RELEASE_METADATA_PARTS = {".github"}
+RELEASE_FLATTEN_SOURCE_SURFACE = "arxiv"
+RELEASE_FLATTEN_ID = "arxiv-flat"
+RELEASE_FLATTEN_PATH = f"release/{RELEASE_FLATTEN_ID}"
+RELEASE_FLATTEN_STYLE_PATTERNS = ("*.cls", "*.sty", "*.bst")
+RELEASE_FLATTEN_ASSET_EXTENSIONS = {
+    ".pdf", ".png", ".jpg", ".jpeg", ".eps", ".ps", ".tif", ".tiff", ".svg",
+    ".pdf_tex", ".pdf_t", ".pstex_t",
+}
+RELEASE_FLATTEN_ASSET_DIRS = ("figures", "tables", "generated")
+RELEASE_FLATTEN_STATUSES = {"flattened", "skipped-no-latexpand", "skipped-no-main", "error"}
+RELEASE_FLATTEN_SRCS_RE = re.compile(r"(?:figures|tables)/srcs/")
 
 
 def load_doc(path: str):
@@ -1370,6 +1382,295 @@ def validate_release_source_item(src: Path) -> list[str]:
     return mismatches
 
 
+def flatten_asset_relpath(rel_parts: tuple[str, ...]) -> Path:
+    if len(rel_parts) >= 3 and rel_parts[1] == "srcs":
+        return Path("srcs", *rel_parts[2:])
+    return Path(*rel_parts)
+
+
+def rewrite_flatten_asset_paths(text: str) -> str:
+    return RELEASE_FLATTEN_SRCS_RE.sub("srcs/", text)
+
+
+def compute_flatten_bundle(arxiv_dest: Path, out_dir: Path) -> tuple[str, str | None]:
+    """Render a latexpand-flattened, single-entry bundle of an arxiv release surface into out_dir.
+
+    Never touches arxiv_dest; purely optional and skipped (not failed) when latexpand
+    or the source main.tex is unavailable, so environments without a TeX toolchain can
+    still export releases and get an explicit unverified status instead of a false pass.
+    """
+    main_tex = arxiv_dest / "main.tex"
+    if not main_tex.exists():
+        return "skipped-no-main", None
+    if not shutil.which("latexpand"):
+        return "skipped-no-latexpand", None
+    result = subprocess.run(
+        ["latexpand", "main.tex"],
+        cwd=arxiv_dest,
+        capture_output=True,
+        text=True,
+    )
+    if result.returncode != 0:
+        return "error", result.stderr.strip()[:500]
+    if "Could not find file" in result.stderr:
+        # latexpand exits 0 and leaves the unresolved \input in place on a missing
+        # file, only warning on stderr; treat that as a hard failure so a hidden
+        # dependency is caught here instead of silently reaching the compile gate.
+        return "error", result.stderr.strip()[:500]
+    flattened_text = rewrite_flatten_asset_paths(result.stdout)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / "main.tex").write_text(flattened_text, encoding="utf-8")
+    bib = arxiv_dest / "refs.bib"
+    if bib.exists():
+        shutil.copy2(bib, out_dir / "refs.bib")
+    style_dir = arxiv_dest / "style"
+    if style_dir.exists():
+        for pattern in RELEASE_FLATTEN_STYLE_PATTERNS:
+            for src in sorted(style_dir.glob(pattern)):
+                shutil.copy2(src, out_dir / src.name)
+    for asset_root_name in RELEASE_FLATTEN_ASSET_DIRS:
+        asset_root = arxiv_dest / asset_root_name
+        if not asset_root.exists():
+            continue
+        for src in sorted(asset_root.rglob("*")):
+            if not src.is_file() or src.is_symlink():
+                continue
+            if src.suffix.lower() not in RELEASE_FLATTEN_ASSET_EXTENSIONS:
+                continue
+            out_rel = flatten_asset_relpath(src.relative_to(arxiv_dest).parts)
+            out_path = out_dir / out_rel
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(src, out_path)
+    return "flattened", None
+
+
+def flatten_release_surface(surfaces: list[dict]) -> dict | None:
+    if not any(str(s.get("id")) == RELEASE_FLATTEN_SOURCE_SURFACE for s in surfaces if isinstance(s, dict)):
+        return None
+    arxiv_dest = ROOT / "release" / RELEASE_FLATTEN_SOURCE_SURFACE
+    flat_dir = ROOT / RELEASE_FLATTEN_PATH
+    if flat_dir.exists():
+        if flat_dir.is_symlink():
+            flat_dir.unlink()
+        else:
+            shutil.rmtree(flat_dir)
+    status, message = compute_flatten_bundle(arxiv_dest, flat_dir)
+    record = {
+        "id": RELEASE_FLATTEN_ID,
+        "path": RELEASE_FLATTEN_PATH,
+        "source_surface": RELEASE_FLATTEN_SOURCE_SURFACE,
+        "checksum_algorithm": CHECKSUM_ALGORITHM,
+        "status": status,
+    }
+    if message:
+        record["error"] = message
+    if status == "flattened":
+        record["files"] = collect_release_checksums(flat_dir)
+    elif flat_dir.exists():
+        shutil.rmtree(flat_dir)
+    return record
+
+
+def check_release_flatten_scan(entry_id: str, root: Path) -> int:
+    code = 0
+    for candidate in sorted(root.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+        if candidate.is_symlink():
+            code |= error(f"release flatten {entry_id} contains symlink: {candidate.relative_to(ROOT).as_posix()}")
+        rel_parts = candidate.relative_to(root).parts
+        if any(part in FORBIDDEN_RELEASE_PARTS for part in rel_parts):
+            code |= error(f"release flatten {entry_id} leaks harness or metadata path: {candidate.relative_to(ROOT).as_posix()}")
+    return code
+
+
+def verify_flatten_manifest_checksums(entry_id: str, root: Path, entry: dict) -> int:
+    files = entry.get("files")
+    if not isinstance(files, list):
+        return error(f"release flatten {entry_id} missing manifest checksums")
+    code = 0
+    expected: dict[str, dict] = {}
+    for index, item in enumerate(files, start=1):
+        if not isinstance(item, dict):
+            code |= error(f"release flatten {entry_id} checksum entry {index} is not a mapping")
+            continue
+        relpath = item.get("relpath")
+        sha256 = item.get("sha256")
+        size = item.get("size")
+        if not isinstance(relpath, str) or not relpath:
+            code |= error(f"release flatten {entry_id} checksum entry {index} missing relpath")
+            continue
+        if not isinstance(sha256, str) or not re.fullmatch(r"[0-9a-f]{64}", sha256):
+            code |= error(f"release flatten {entry_id} checksum entry {relpath} has invalid sha256")
+        if not isinstance(size, int) or size < 0:
+            code |= error(f"release flatten {entry_id} checksum entry {relpath} has invalid size")
+        expected[relpath] = {"sha256": sha256, "size": size}
+    actual = {item["relpath"]: item for item in collect_release_checksums(root)}
+    missing = sorted(set(expected) - set(actual))
+    extra = sorted(set(actual) - set(expected))
+    if missing:
+        code |= error(f"release flatten {entry_id} missing files from manifest: {missing[:10]}")
+    if extra:
+        code |= error(f"release flatten {entry_id} has files not in manifest: {extra[:10]}")
+    for relpath in sorted(set(expected) & set(actual)):
+        if expected[relpath]["sha256"] != actual[relpath]["sha256"] or expected[relpath]["size"] != actual[relpath]["size"]:
+            code |= error(f"release flatten {entry_id} checksum drift for {relpath}")
+    return code
+
+
+def check_release_flatten_package() -> int:
+    manifest = load_doc("release/manifest.yaml")
+    if not isinstance(manifest, dict):
+        return 0
+    entries = manifest.get("flatten", [])
+    if not entries:
+        return 0
+    if not isinstance(entries, list):
+        return error("release manifest flatten must be a list")
+    code = 0
+    seen_ids: set[str] = set()
+    for entry in entries:
+        if not isinstance(entry, dict):
+            code |= error("release manifest flatten entry must be a mapping")
+            continue
+        entry_id = str(entry.get("id", "")).strip()
+        if not entry_id:
+            code |= error("release manifest flatten entry missing id")
+            continue
+        if entry_id in seen_ids:
+            code |= error(f"duplicate release flatten id: {entry_id}")
+        seen_ids.add(entry_id)
+        path_value = str(entry.get("path", "")).strip()
+        path = Path(path_value) if path_value else None
+        if not path or path.is_absolute() or ".." in path.parts or not path.parts or path.parts[0] != "release" or len(path.parts) < 2:
+            code |= error(f"release flatten {entry_id} has unsafe path: {path_value or '<missing>'}")
+            continue
+        root = ROOT / path
+        if root.is_symlink():
+            code |= error(f"release flatten {entry_id} is a symlink: {rel_posix(root)}")
+            continue
+        status = str(entry.get("status", "")).strip()
+        if status not in RELEASE_FLATTEN_STATUSES:
+            code |= error(f"release flatten {entry_id} has unknown status: {status or '<missing>'}")
+            continue
+        if status != "flattened":
+            continue
+        if not root.exists():
+            code |= error(f"missing release flatten output: {path_value}")
+            continue
+        code |= check_release_flatten_scan(entry_id, root)
+        code |= verify_flatten_manifest_checksums(entry_id, root, entry)
+    return code
+
+
+def check_release_flatten_freshness() -> int:
+    manifest = load_doc("release/manifest.yaml")
+    if not isinstance(manifest, dict):
+        return 0
+    entries = manifest.get("flatten", [])
+    if not entries or not isinstance(entries, list):
+        return 0
+    code = 0
+    for entry in entries:
+        if not isinstance(entry, dict):
+            continue
+        entry_id = str(entry.get("id", "")).strip()
+        if str(entry.get("status", "")).strip() != "flattened":
+            continue
+        if not shutil.which("latexpand"):
+            continue
+        path_value = str(entry.get("path", "")).strip()
+        root = ROOT / path_value if path_value else None
+        source_surface = str(entry.get("source_surface", RELEASE_FLATTEN_SOURCE_SURFACE))
+        arxiv_dest = ROOT / "release" / source_surface
+        if not root or not root.exists() or not arxiv_dest.exists():
+            code |= error(f"release flatten {entry_id} output missing for freshness check")
+            continue
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_dir = Path(tmp) / "flat"
+            status, _ = compute_flatten_bundle(arxiv_dest, tmp_dir)
+            if status != "flattened":
+                code |= error(f"release flatten {entry_id} could not be recomputed for freshness check")
+                continue
+            current_files = {item["relpath"]: item for item in collect_release_checksums(root)}
+            fresh_files = {item["relpath"]: item for item in collect_release_checksums(tmp_dir)}
+        if set(current_files) != set(fresh_files):
+            code |= error(f"release flatten {entry_id} is stale: file set differs from a fresh latexpand run")
+            continue
+        for relpath, info in fresh_files.items():
+            if current_files[relpath]["sha256"] != info["sha256"]:
+                code |= error(f"release flatten {entry_id} is stale: {relpath} differs from a fresh latexpand run")
+    return code
+
+
+ARXIV_PORTABLE_ASSET_EXTENSIONS = {".pdf", ".png", ".jpg", ".jpeg"}
+ARXIV_PATH_ARG_RE = re.compile(
+    r"\\(input|include|includegraphics(?:\[[^\]]*\])?|bibliography|usepackage|lstinputlisting)"
+    r"\s*\{([^{}]*)\}"
+)
+ARXIV_GRAPHICSPATH_RE = re.compile(r"\\graphicspath\s*\{((?:\{[^{}]*\}\s*)+)\}")
+ARXIV_GRAPHICSPATH_ENTRY_RE = re.compile(r"\{([^{}]*)\}")
+ARXIV_NONPORTABLE_FONT_RE = re.compile(
+    r"\\(?:setmainfont|setsansfont|setmonofont|newfontfamily)\b"
+    r"|\\usepackage(?:\[[^\]]*\])?\{fontspec\}"
+)
+
+
+def is_absolute_tex_path(value: str) -> bool:
+    value = value.strip()
+    return bool(value) and (value.startswith("/") or bool(re.match(r"^[A-Za-z]:[\\/]", value)))
+
+
+def check_arxiv_portability_text(relpath: str, text: str) -> list[str]:
+    problems = []
+    for match in ARXIV_NONPORTABLE_FONT_RE.finditer(text):
+        problems.append(f"{relpath} uses a non-standard font command requiring system fonts: {match.group(0)}")
+    for command, arg in ARXIV_PATH_ARG_RE.findall(text):
+        for part in arg.split(","):
+            if is_absolute_tex_path(part):
+                problems.append(f"{relpath} \\{command} uses an absolute path: {part.strip()}")
+    for match in ARXIV_GRAPHICSPATH_RE.finditer(text):
+        for entry in ARXIV_GRAPHICSPATH_ENTRY_RE.findall(match.group(1)):
+            if is_absolute_tex_path(entry):
+                problems.append(f"{relpath} \\graphicspath uses an absolute path: {entry.strip()}")
+    return problems
+
+
+def check_arxiv_portability(surface_id: str = RELEASE_FLATTEN_SOURCE_SURFACE) -> int:
+    root = ROOT / "release" / surface_id
+    if not root.exists():
+        return 0
+    code = 0
+    for tex_path in sorted(root.rglob("*.tex"), key=lambda item: item.relative_to(root).as_posix()):
+        if tex_path.is_symlink():
+            continue
+        relpath = tex_path.relative_to(root).as_posix()
+        for problem in check_arxiv_portability_text(relpath, tex_path.read_text(encoding="utf-8")):
+            code |= error(f"arxiv portability: {problem}")
+    for asset_dir_name in RELEASE_FLATTEN_ASSET_DIRS:
+        asset_dir = root / asset_dir_name
+        if not asset_dir.exists():
+            continue
+        for asset in sorted(asset_dir.rglob("*"), key=lambda item: item.relative_to(root).as_posix()):
+            if not asset.is_file() or asset.is_symlink():
+                continue
+            if asset.suffix.lower() in RELEASE_FLATTEN_ASSET_EXTENSIONS and asset.suffix.lower() not in ARXIV_PORTABLE_ASSET_EXTENSIONS:
+                code |= error(
+                    f"arxiv portability: {asset.relative_to(root).as_posix()} is not a preferred PDF/PNG/JPG asset"
+                )
+    style_dir = root / "style"
+    if style_dir.exists():
+        project_macro_names = set(re.findall(r"\\(?:new|renew)command\*?\{?\\([A-Za-z]+)\}?", (root / "macros.tex").read_text(encoding="utf-8"))) if (root / "macros.tex").exists() else set()
+        for cls_path in sorted(style_dir.glob("*.cls")):
+            if cls_path.is_symlink():
+                continue
+            class_macro_names = set(re.findall(r"\\(?:new|renew)command\*?\{?\\([A-Za-z]+)\}?", cls_path.read_text(encoding="utf-8")))
+            leaked = sorted(project_macro_names & class_macro_names)
+            if leaked:
+                code |= error(
+                    f"arxiv portability: {cls_path.relative_to(root).as_posix()} redefines project macros that belong in macros.tex: {leaked}"
+                )
+    return code
+
+
 def parse_manifest_files(surface_id: str, surface: dict) -> tuple[int, dict[str, dict] | None]:
     files = surface.get("files")
     if not isinstance(files, list):
@@ -1810,6 +2111,8 @@ def check_release_package():
             "release manifest surfaces do not match state/ccfa.yaml: "
             f"expected {sorted(expected_surfaces)}, found {sorted(actual_surfaces)}"
         )
+    code |= check_release_flatten_package()
+    code |= check_arxiv_portability()
     return code
 
 
@@ -1840,6 +2143,7 @@ def check_release_freshness():
             dest = root / item
             for mismatch in compare_tree(src, dest):
                 code |= error(f"release surface {surface_id} is stale: {mismatch}")
+    code |= check_release_flatten_freshness()
     return code
 
 
@@ -4415,6 +4719,18 @@ def export_release():
     if code:
         return code
     manifest["surfaces"] = surfaces
+    flatten_record = flatten_release_surface(surfaces)
+    manifest["flatten"] = [flatten_record] if flatten_record else []
+    if flatten_record:
+        status = flatten_record["status"]
+        if status == "flattened":
+            print(f"INFO release flatten {flatten_record['id']} produced at {flatten_record['path']}")
+        elif status == "error":
+            code |= error(f"release flatten {flatten_record['id']} latexpand failed: {flatten_record.get('error', '')}")
+        else:
+            print(f"INFO release flatten {flatten_record['id']} skipped: {status}")
+    if code:
+        return code
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     return check_release_package() | check_release_freshness()
 
@@ -4447,6 +4763,7 @@ CHECKS = {
     "figures_tables": check_figures_tables,
     "import_main_edits": lambda: require(["state/worktrees.yaml", "paper/ANATOMY.md"]),
     "export_release": export_release,
+    "arxiv_portability": check_arxiv_portability,
 }
 
 REPORT_COMMANDS = {"numeric_exception_report", "citation_audit_report"}

@@ -2,7 +2,11 @@
   "manifest_version": "release-manifest-v1",
   "checksum_algorithm": "sha256",
   "template_skeleton": true,
-  "source_revision": {},
+  "source_revision": {
+    "treeish": "HEAD",
+    "commit": "ec6c1b78fc0f2880b2bb836f9f75df75f55517e9",
+    "tree": "5baf629562a6a19171d595f9ff8103520451ba3f"
+  },
   "surfaces": [
     {
       "id": "arxiv",
@@ -398,5 +402,26 @@
       ]
     }
   ],
-  "reports": "release/reports"
+  "reports": "release/reports",
+  "flatten": [
+    {
+      "id": "arxiv-flat",
+      "path": "release/arxiv-flat",
+      "source_surface": "arxiv",
+      "checksum_algorithm": "sha256",
+      "status": "flattened",
+      "files": [
+        {
+          "relpath": "main.tex",
+          "sha256": "a9867e0a07d3a4ce29744aa6302f2f7c66ca795d09866161f4ccdc7acea4b888",
+          "size": 392
+        },
+        {
+          "relpath": "refs.bib",
+          "sha256": "49a8676e2cc62a316d991ea868e4657466619ac5169b04da65790898f0a37bd5",
+          "size": 84
+        }
+      ]
+    }
+  ]
 }

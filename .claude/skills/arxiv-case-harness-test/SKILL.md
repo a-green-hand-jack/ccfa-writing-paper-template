@@ -1,13 +1,14 @@
 ---
 name: arxiv-case-harness-test
-description: Migrate arXiv TeX sources into the CCFA evidence-first writing template, populate the paper/state/lab/release control plane, run mutation-based harness stress tests, and prepare upstream research-project-harness feedback or PRs. Use when testing ccfa-writing-paper-template with a real arXiv paper case, replaying a case against a newly synced template, or turning template friction into upstream harness changes.
+description: Migrate arXiv TeX sources into the CCFA evidence-first writing template, populate the paper/state/lab/release control plane, run mutation-based harness stress tests, and turn any friction into fixes that land in this repository. Use when testing ccfa-writing-paper-template with a real arXiv paper case, replaying a case after a harness change, or hardening the template against real-paper edge cases.
 ---
 
 # arxiv-case-harness-test
 
 Purpose: turn a real arXiv paper into a reusable stress case for
-`ccfa-writing-paper-template`, then use the case to test whether the template
-and upstream paper harness enforce evidence-first writing contracts.
+`ccfa-writing-paper-template`, then use the case to test whether this repository's
+evidence-first harness enforces its writing contracts. This repository is the
+source of truth; durable fixes land here.
 
 Source capability: `.agent/capabilities/arxiv-case-harness-test.yaml`. Read it
 first and treat it as the path and validator contract for this run.
@@ -18,13 +19,11 @@ after the case compiles and baseline validators pass.
 
 ## Repository Roles
 
-- Generated template or case repo:
-  `/home/user/Projects/ccfa-writing-paper-template`.
-- Upstream harness repo:
-  `/home/user/Projects/research-project-harness`.
-- Permanent template, validator, and workflow fixes belong in upstream on the
-  `ccfa-writing-paper-template` branch, not as hand-edited generated-template
-  code.
+- This repository (`ccfa-writing-paper-template`) is the standalone source of
+  truth for the template, validators, and workflows. There is no upstream to
+  feed changes back to.
+- Permanent template, validator, and workflow fixes land on a fix branch here and
+  reach `main` through a pull request.
 - Case-specific paper migration, ledgers, reports, and replay notes belong in a
   case branch such as `case/arxiv-2505-22954`.
 
@@ -34,7 +33,6 @@ after the case compiles and baseline validators pass.
 - Downloaded arXiv source archive or `https://arxiv.org/e-print/<id>`.
 - Existing template files under `paper/`, `state/`, `lab/`, `release/`,
   `.agent/`, `.claude/`, `.agents/`, and `scripts/`.
-- Upstream harness checkout when proposing validator or template fixes.
 
 ## Declared Outputs
 
@@ -49,13 +47,10 @@ after the case compiles and baseline validators pass.
 
 ## Validators
 
-Run the relevant leaf checks and the upstream profile. For a full migration or
-post-sync replay, use:
+Run the relevant leaf checks. For a full migration or a post-fix replay, use the
+repository's self-contained validators:
 
 ```bash
-PYTHONPATH=/home/user/Projects/research-project-harness/src \
-  PYTHONDONTWRITEBYTECODE=1 python3 -m research_project_harness validate --profile paper .
-
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-capability-parity.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-paper-populated.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-writing-harness.py
@@ -81,15 +76,15 @@ git status -sb
 git remote -v
 ```
 
-If starting a new case, branch from the generated template mainline:
+If starting a new case, branch from the repository mainline:
 
 ```bash
 git fetch origin
 git switch -c case/arxiv-<id> origin/main
 ```
 
-If replaying an existing case after a template sync, merge or rebase the latest
-generated template branch into the case branch, then validate before editing.
+If replaying an existing case after a harness change, merge or rebase the latest
+`main` into the case branch, then validate before editing.
 
 ### 2. Fetch and Normalize arXiv Source
 
@@ -176,8 +171,8 @@ For each probe, record:
 - expected contract: what should fail and why;
 - commands: validator/profile commands and exit codes;
 - actual result: caught, missed, noisy, or false positive;
-- classification: upstream harness gap, generated template gap, case ledger
-  debt, documentation friction, or accepted regression fixture;
+- classification: harness gap, case ledger debt, documentation friction, or
+  accepted regression fixture;
 - follow-up: PR, issue, case cleanup, or no action.
 
 Write the report to:
@@ -186,34 +181,31 @@ Write the report to:
 lab/harness-evals/YYYYMMDD-arxiv-<id>-case-stress-roundN.md
 ```
 
-### 6. Feed Findings Upstream
+### 6. Land Durable Fixes In This Repo
 
-For an upstream harness gap, work in `/home/user/Projects/research-project-harness`
-from the paper product branch:
+For a harness gap, fix it directly in this repository from a dedicated fix
+branch off `main`:
 
 ```bash
-cd /home/user/Projects/research-project-harness
 git fetch origin
-git switch -c agent/<short-gap-name> origin/ccfa-writing-paper-template
+git switch -c fix/<short-gap-name> origin/main
 ```
 
-Fix the validator, template source, docs, or generated workflow in upstream.
-Add focused tests or eval fixtures when practical. Validate locally, commit, and
-open the PR against `ccfa-writing-paper-template`:
+Fix the validator, template source, docs, or workflow under `scripts/`,
+`.agent/`, `.claude/`, `.agents/`, or the template surfaces. Add a focused
+negative regression test when practical (see `scripts/test-*-negative.sh`).
+Validate locally, commit, and open the PR against `main`:
 
 ```bash
-gh pr create \
-  --repo a-green-hand-jack/research-project-harness \
-  --base ccfa-writing-paper-template \
-  --head agent/<short-gap-name>
+gh pr create --base main --head fix/<short-gap-name>
 ```
 
-After merge and template sync, return to the case branch, merge the generated
-template update from `origin/main`, replay the original probe, and append the
-result to the same `lab/harness-evals/` report or a follow-up round.
+After the fix merges, return to the case branch, merge `origin/main`, replay the
+original probe, and append the result to the same `lab/harness-evals/` report or
+a follow-up round.
 
-If the fix is not ready, still record a precise upstream proposal in the stress
-report with the failing mutation and the command that currently passes.
+If the fix is not ready, still record a precise proposal in the stress report
+with the failing mutation and the command that currently passes.
 
 ## Completion Contract
 
@@ -226,7 +218,7 @@ report with the failing mutation and the command that currently passes.
   blocker is recorded with command output.
 - Probe contract: destructive mutations happen in `/tmp` copies, not in the live
   case branch.
-- Upstream contract: persistent template or validator changes are proposed
-  against `research-project-harness` branch `ccfa-writing-paper-template`.
+- Fix contract: persistent template or validator changes land on a fix branch in
+  this repository and reach `main` through a pull request.
 - Handoff contract: the final response names commits, reports, validators run,
-  unresolved case debt, and any upstream PR or proposal.
+  unresolved case debt, and any harness-fix PR or proposal.

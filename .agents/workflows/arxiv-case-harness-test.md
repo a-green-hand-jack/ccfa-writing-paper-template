@@ -1,8 +1,9 @@
 # arxiv-case-harness-test
 
 Purpose: migrate a real arXiv TeX source into `ccfa-writing-paper-template`,
-populate the evidence-first control plane, stress-test the generated template,
-and feed durable findings back to upstream `research-project-harness`.
+populate the evidence-first control plane, stress-test the template, and land any
+durable fixes in this repository. This repository is the standalone source of
+truth; there is no upstream to feed findings back to.
 
 Source capability: `.agent/capabilities/arxiv-case-harness-test.yaml`. Read it
 first and treat it as the contract for this run.
@@ -14,10 +15,8 @@ after the case compiles and baseline validators pass.
 ## Inputs
 
 - arXiv id, abstract URL, or downloaded source archive.
-- Generated template or case repo:
+- This repository (template or case repo):
   `/home/user/Projects/ccfa-writing-paper-template`.
-- Upstream harness repo:
-  `/home/user/Projects/research-project-harness`.
 - Existing paper harness files under `paper/`, `state/`, `lab/`, `release/`,
   `.agent/`, `.claude/`, `.agents/`, and `scripts/`.
 
@@ -34,12 +33,9 @@ after the case compiles and baseline validators pass.
 
 ## Validators
 
-For a full migration or replay, run:
+For a full migration or replay, run the repository's self-contained validators:
 
 ```bash
-PYTHONPATH=/home/user/Projects/research-project-harness/src \
-  PYTHONDONTWRITEBYTECODE=1 python3 -m research_project_harness validate --profile paper .
-
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-capability-parity.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-paper-populated.py
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/check-writing-harness.py
@@ -74,36 +70,32 @@ continue with every non-compile validator that can run.
 8. Stress only disposable `/tmp` copies. For each probe, record mutation,
    expected contract, commands, actual diagnostics, classification, and follow-up
    in `lab/harness-evals/YYYYMMDD-arxiv-<id>-case-stress-roundN.md`.
-9. For an upstream gap, branch in `/home/user/Projects/research-project-harness`
-   from `origin/ccfa-writing-paper-template`, implement the validator/template
-   fix, validate, commit, and open a PR with base `ccfa-writing-paper-template`.
-10. After upstream merge and generated-template sync, merge `origin/main` into
-    the case branch, replay the original probe, and append the result.
+9. For a harness gap, branch off `main` here, implement the validator/template
+   fix, add a negative regression test when practical, validate, commit, and open
+   a PR with base `main`.
+10. After the fix merges, merge `origin/main` into the case branch, replay the
+    original probe, and append the result.
 
-## Upstream PR Path
+## Fix PR Path
 
 ```bash
-cd /home/user/Projects/research-project-harness
 git fetch origin
-git switch -c agent/<short-gap-name> origin/ccfa-writing-paper-template
-# edit upstream validator/template/docs/tests
-gh pr create \
-  --repo a-green-hand-jack/research-project-harness \
-  --base ccfa-writing-paper-template \
-  --head agent/<short-gap-name>
+git switch -c fix/<short-gap-name> origin/main
+# edit validator/template/docs/tests under scripts/, .agent/, .claude/, .agents/
+gh pr create --base main --head fix/<short-gap-name>
 ```
 
-Generated-template scripts may be patched only as temporary case debugging.
-Persistent behavior belongs upstream under `src/research_project_harness/`,
-`src/research_project_harness/templates/paper/`, `docs/`, `tests/`, or `evals/`.
+Persistent template, validator, docs, workflow, and CI behavior lives in this
+repository under `scripts/`, `.agent/`, `.claude/`, `.agents/`, and the template
+surfaces. There is no separate generated-template source to keep in sync.
 
 ## Completion Contract
 
 - Source capability reviewed:
   `.agent/capabilities/arxiv-case-harness-test.yaml`.
 - Migration provenance is recorded in repo files.
-- Profile validation and relevant leaf checks pass, or blockers are recorded.
+- Baseline validation and relevant leaf checks pass, or blockers are recorded.
 - Destructive probes ran in `/tmp` copies.
 - Stress findings are written to `lab/harness-evals/`.
-- Upstream changes or proposals target `research-project-harness`
-  `ccfa-writing-paper-template`, not `main`.
+- Harness fixes land on a branch in this repository and target `main` through a
+  pull request.

@@ -57,8 +57,8 @@ Actual:
 - <exit code and key diagnostic>
 
 Classification:
-- upstream harness gap | generated template gap | case ledger debt |
-  documentation friction | accepted regression fixture
+- harness gap | case ledger debt | documentation friction |
+  accepted regression fixture
 
 Follow-up:
 - <PR, issue, case cleanup, or no action>
@@ -67,11 +67,11 @@ Follow-up:
 ## Interpreting Results
 
 - Caught cleanly: keep as a regression idea or no-op.
-- Caught with noisy duplicate diagnostics: propose upstream diagnostic grouping
-  only if noise hides the primary failure.
-- Missed by a leaf check but caught by profile: decide whether the leaf check is
-  advertised as an independent gate. If yes, strengthen it.
-- Missed by both leaf and profile: create an upstream harness PR or a precise
-  proposal.
-- Fails on valid migrated paper: classify as false positive, then fix upstream
-  or narrow the case ledger.
+- Caught with noisy duplicate diagnostics: group the diagnostics in the relevant
+  validator only if noise hides the primary failure.
+- Missed by a leaf check but caught by a broader check: decide whether the leaf
+  check is advertised as an independent gate. If yes, strengthen it.
+- Missed by every check: open a harness-fix PR in this repository or record a
+  precise proposal.
+- Fails on valid migrated paper: classify as false positive, then fix the
+  validator here or narrow the case ledger.

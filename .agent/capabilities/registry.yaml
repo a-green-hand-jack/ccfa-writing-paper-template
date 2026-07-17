@@ -1,5 +1,9 @@
 {
   "registry_version": "paper-capabilities-v1",
+  "contract_version": "paper-capabilities-v1",
+  "schema_version": "1.0.0",
+  "profile": "writing",
+  "ownership": "writing-owned",
   "parity_policy": "required unless explicitly exempt",
   "capabilities": [
     {

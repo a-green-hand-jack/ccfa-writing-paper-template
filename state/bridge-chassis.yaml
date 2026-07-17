@@ -1,0 +1,104 @@
+{
+  "schema": "bridge-chassis-writing-v1",
+  "kind": "writing-side-adoption-preflight",
+  "profile": "writing",
+  "ownership": "writing-owned",
+  "conformance_scope": "writing-side-self-consistency-only",
+  "disclaimer": "This surface is a Writing-side adoption-readiness preflight, NOT upstream Bridge conformance. The research-writing-bridge chassis-spec, protocol schemas, and golden fixtures are not vendored or pinned here, and the Bridge issues (#3/#6/#7) remain open. The version numbers below are Writing-declared adoption targets/baselines, not values validated against a published Bridge contract. scripts/check-bridge-chassis.py only proves this file is internally consistent with the local capability registry and config surface.",
+  "summary": "Writing-side pins and self-consistency preflight for adopting the research-writing-bridge chassis. Writing keeps its own implementation and paper-specific capabilities and intends to consume the Bridge chassis-spec without silently drifting from Research once that spec is published. Bridge protocol schemas are not vendored; these are Writing-owned declarative pins validated locally by scripts/check-bridge-chassis.py.",
+  "chassis": {
+    "spec": "research-writing-bridge/chassis-spec",
+    "spec_ref": "https://github.com/a-green-hand-jack/research-writing-bridge/issues/3",
+    "spec_version": "1.0.0",
+    "spec_version_status": "writing-declared-adoption-target",
+    "compatible_range": ">=1.0.0 <2.0.0",
+    "pin_policy": "explicit-semver-only",
+    "approved_major": 1,
+    "major_gate": {
+      "id": "bridge-chassis-major-upgrade",
+      "required_when": "Any change that moves chassis.spec_version to a new MAJOR. approved_major must be edited in tandem (the preflight fails otherwise) and the bump recorded as a human decision.",
+      "enforced_guarantee": "scripts/check-bridge-chassis.py fails when spec_version MAJOR != approved_major, so a silent MAJOR bump cannot pass; the decision record surface must also exist.",
+      "record": "human/decisions/README.md"
+    }
+  },
+  "protocol": {
+    "spec_ref": "https://github.com/a-green-hand-jack/research-writing-bridge/issues/6",
+    "contract_version": "1.0.0",
+    "schema_version": "1.0.0",
+    "version_status": "writing-declared-adoption-target",
+    "compatible_range": ">=1.0.0 <2.0.0",
+    "pin_policy": "explicit-semver-only"
+  },
+  "capabilities": {
+    "registry": ".agent/capabilities/registry.yaml",
+    "registry_contract_version": "paper-capabilities-v1",
+    "schema_version": "1.0.0",
+    "ownership": "writing-owned",
+    "parity_policy": "required unless explicitly exempt",
+    "promotion_lifecycle_ref": "https://github.com/a-green-hand-jack/research-writing-bridge/issues/7"
+  },
+  "compatibility_matrix_authority": "provisional-adoption-targets",
+  "compatibility_matrix_note": "Provisional Writing-side adoption targets, not authoritative supported-compatibility statements. Rows with a canonical local counterpart (chassis-spec -> chassis.spec_version, version-pins -> protocol.contract_version) are cross-checked against those pins by scripts/check-bridge-chassis.py; other rows track Bridge workstreams that have no local canonical pin yet.",
+  "compatibility_matrix": [
+    {
+      "component": "chassis-spec",
+      "pinned": "1.0.0",
+      "range": ">=1.0.0 <2.0.0",
+      "status": "adoption-target",
+      "canonical_source": "chassis.spec_version",
+      "source": "research-writing-bridge#3"
+    },
+    {
+      "component": "version-pins",
+      "pinned": "1.0.0",
+      "range": ">=1.0.0 <2.0.0",
+      "status": "adoption-target",
+      "canonical_source": "protocol.contract_version",
+      "source": "research-writing-bridge#6"
+    },
+    {
+      "component": "capability-promotion-lifecycle",
+      "pinned": "1.0.0",
+      "range": ">=1.0.0 <2.0.0",
+      "status": "adoption-target",
+      "canonical_source": null,
+      "source": "research-writing-bridge#7"
+    }
+  ],
+  "promotion_proposals": [
+    {
+      "capability": "declarative-capability-registry-parity",
+      "direction": "writing-to-research",
+      "status": "candidate",
+      "rfc": null,
+      "fixtures": "not-vendored",
+      "governance": "Promotion to a generic Bridge capability requires a Bridge RFC and golden fixtures before status can advance to 'proposed'.",
+      "note": "Candidate generic capability Writing may offer upstream: a declarative capability registry with explicit contract/schema versioning and Claude/Codex adapter parity. The implementation stays Writing-owned; only the pattern is offered to Research."
+    }
+  ],
+  "profile_specific_capabilities": [
+    "paper-init",
+    "contribution-lock",
+    "claim-evidence-map",
+    "claim-experiment-plan",
+    "numeric-registry",
+    "reference-audit",
+    "outline-contract",
+    "section-draft",
+    "float-placement-map",
+    "latex-compile-review",
+    "venue-adapt",
+    "rebuttal-plan",
+    "camera-ready-check",
+    "tex-release-export",
+    "arxiv-case-harness-test"
+  ],
+  "generic_capabilities": [],
+  "non_goals": [
+    "Research is not a framework upstream for Writing.",
+    "Do not vendor Research hooks, skills, or validators wholesale.",
+    "Do not promote citation, LaTeX, numeric, or release capabilities to generic chassis.",
+    "Do not require byte-identical directories or implementations across repos.",
+    "Do not present this preflight as upstream Bridge conformance."
+  ]
+}

@@ -42,3 +42,68 @@ not just structurally checked).
 
 Not verified: the `overleaf-publish.yml` GitHub Action itself was not executed against the real GitHub
 remote (would require pushing/dispatching against the actual repo, which needs supervisor sign-off).
+## Branch: fix/bridge-chassis-preflight-on-main — Bridge chassis adoption-readiness preflight (issue #6)
+
+Note: this replays the original `bridge/chassis-writing-profile` preflight commit
+onto current `main` (the old branch had diverged from main, pre-dating #14–#19).
+Only the 9 chassis files from that commit are replayed; no unrelated work is
+reverted.
+
+Scope: Writing-side chassis/profile/pin/validator closure. This is an
+**adoption-readiness preflight**, not upstream Bridge conformance — the Bridge
+chassis-spec, protocol schemas, and golden fixtures are not vendored/pinned here
+and Bridge issues #3/#6/#7 are open. See `DECISIONS.md` DEC-0003.
+
+Changes:
+- `state/ccfa.yaml`: declared `profile: writing` and `bridge.chassis_pin`.
+- `state/bridge-chassis.yaml` (new): profile, explicit chassis/protocol semver
+  pins (Writing-declared adoption targets), dual contract/schema versions,
+  executable MAJOR baseline (`approved_major`), provisional compatibility matrix,
+  MAJOR human gate, Writing-owned capability classification, and a
+  governance-gated (candidate) writing->research promotion proposal. Framed
+  explicitly as a preflight, not upstream conformance.
+- `.agent/capabilities/registry.yaml`: added explicit `contract_version`,
+  `schema_version`, `profile`, `ownership` (kept Writing-owned).
+- `scripts/paper_harness_checks.py`: `check_bridge_chassis_preflight` and
+  `check_capability_registry_contract`. Semver validation is fully anchored
+  (rejects suffixed pins) and ranges require explicit comparator grammar. Pins
+  are also proven to be *contained* in their declared range (`version_in_range`):
+  `chassis.spec_version` in `chassis.compatible_range`, both `protocol.*` pins in
+  `protocol.compatible_range`, and each matrix row's `pinned` in its own `range`.
+  The provisional matrix must contain exactly one `chassis-spec` and one
+  `version-pins` row (required + de-duplicated) before the canonical cross-checks
+  run. The preflight independently catches registry drift (missing contract/schema
+  version, wrong profile/ownership), asserts `capabilities.registry` equals the
+  registry path, and runs an executable MAJOR gate. Proposed promotions must have
+  a concrete non-placeholder `rfc` and concrete existing fixture path(s)
+  (`not-vendored`/`TODO`/etc. are rejected). `check_capability_parity` also
+  enforces registry contract/schema versioning and explicit parity/exemptions.
+  Registered as `bridge_chassis_preflight` and wired into `check_writing_harness`.
+- `scripts/check-bridge-chassis.py` (wrapper -> `bridge_chassis_preflight`);
+  `scripts/ANATOMY.md` and `state/ANATOMY.md` documented the new surfaces.
+
+Validator evidence (this branch, from repo root):
+- `python3 -m py_compile scripts/paper_harness_checks.py scripts/check-bridge-chassis.py` -> exit 0.
+- `python3 scripts/check-bridge-chassis.py` -> exit 0 (`OK bridge_chassis_preflight`; local self-consistency only).
+- `python3 scripts/check-capability-parity.py` -> exit 0 (`OK capability_parity`).
+- `python3 scripts/check-writing-harness.py` -> exit 0 (`OK writing_harness`).
+- `git diff --check main...HEAD` -> clean.
+- Negative checks (temp copies) confirm rejection of: suffixed semver
+  (`1.0.0foo`), non-comparator range (`abc1`, `1.x`, `^1.0.0`), pin outside its
+  range (`1.0.0` with `>=1.1.0 <2.0.0`) for chassis/protocol/matrix rows, missing
+  or duplicate canonical matrix rows (`chassis-spec`, `version-pins`),
+  `status: proposed` with placeholder fixtures (`not-vendored`), missing registry
+  `contract_version`/`schema_version`, registry `profile`/`ownership` drift,
+  `capabilities.registry` mismatch, matrix/pin contradiction, silent chassis
+  MAJOR bump (`spec_version` 2.0.0 with `approved_major` 1), missing profile/pins,
+  default-latest pins, contract mismatch, non-required parity without exemption,
+  and any unclassified registry capability.
+
+Remaining known limitations (out of scope here):
+- #5/#4: real upstream Bridge conformance is not implemented. The Bridge
+  chassis-spec, protocol schemas, and golden fixtures are not vendored; only
+  Writing-owned pins and local self-consistency preflight exist. The `1.0.0`
+  values and the compatibility matrix are provisional Writing-declared adoption
+  targets and must be reconciled with the published Bridge chassis-spec once it
+  exists. The promotion proposal stays a governance-gated candidate until a
+  Bridge RFC and fixtures are in place.

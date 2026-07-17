@@ -2034,8 +2034,520 @@ def check_source_revision_freshness(manifest: dict) -> int:
     return code
 
 
+BRIDGE_CHASSIS_PATH = "state/bridge-chassis.yaml"
+BRIDGE_PROFILE = "writing"
+CAPABILITY_REGISTRY_PATH = ".agent/capabilities/registry.yaml"
+DEFAULT_LATEST_PIN_TOKENS = {
+    "*",
+    "**",
+    "x",
+    "x.x",
+    "x.x.x",
+    "*.*.*",
+    "any",
+    "latest",
+    "current",
+    "head",
+    "main",
+    "master",
+    "stable",
+    "edge",
+    "next",
+    "default",
+}
+# Full anchored semver (per semver.org) so suffix-garbage pins like "1.0.0foo" or
+# "abc1" are rejected, not merely accepted by a permissive prefix match.
+SEMVER_RE = re.compile(
+    r"^(?P<major>0|[1-9]\d*)"
+    r"\.(?P<minor>0|[1-9]\d*)"
+    r"\.(?P<patch>0|[1-9]\d*)"
+    r"(?:-(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*)(?:\.(?:0|[1-9]\d*|\d*[A-Za-z-][0-9A-Za-z-]*))*)?"
+    r"(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?$"
+)
+# Range comparators, longest-first so ">=" is matched before ">".
+RANGE_COMPARATORS = (">=", "<=", ">", "<", "=")
+# One explicit comparator clause applied to a full X.Y.Z version. Floating forms
+# ("^1.0", "~1.2", "1.x", "*", "latest") are intentionally rejected.
+RANGE_CLAUSE_RE = re.compile(r"^(?:>=|<=|>|<|=)(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)$")
+
+
+def is_default_latest_pin(value) -> bool:
+    """True when a version pin is missing or a floating/default-latest style token."""
+    if missingish(value):
+        return True
+    token = str(value).strip().lower()
+    if token in DEFAULT_LATEST_PIN_TOKENS:
+        return True
+    return "latest" in token
+
+
+def is_explicit_semver(value) -> bool:
+    """True only for a fully anchored X.Y.Z semver (optional prerelease/build)."""
+    if is_default_latest_pin(value):
+        return False
+    return bool(SEMVER_RE.match(str(value).strip()))
+
+
+def is_explicit_range(value) -> bool:
+    """True only for an explicit comparator range, e.g. '>=1.0.0 <2.0.0'."""
+    if is_default_latest_pin(value):
+        return False
+    tokens = str(value).strip().split()
+    return bool(tokens) and all(RANGE_CLAUSE_RE.match(token) for token in tokens)
+
+
+def semver_major(value):
+    """Integer MAJOR component of a full semver, or None when unparseable."""
+    if is_default_latest_pin(value):
+        return None
+    match = SEMVER_RE.match(str(value).strip())
+    return int(match.group("major")) if match else None
+
+
+def range_clause_majors(value) -> dict:
+    """Map each range comparator to the MAJOR of its version, e.g. {'>=': 1, '<': 2}."""
+    majors = {}
+    if is_default_latest_pin(value):
+        return majors
+    for token in str(value).strip().split():
+        if not RANGE_CLAUSE_RE.match(token):
+            continue
+        for comparator in RANGE_COMPARATORS:
+            if token.startswith(comparator):
+                majors[comparator] = semver_major(token[len(comparator):])
+                break
+    return majors
+
+
+def semver_tuple(value):
+    """Return (major, minor, patch) ints for a full semver, or None if unparseable.
+
+    Prerelease/build metadata is ignored for range-membership comparison.
+    """
+    if is_default_latest_pin(value):
+        return None
+    match = SEMVER_RE.match(str(value).strip())
+    if not match:
+        return None
+    return (int(match.group("major")), int(match.group("minor")), int(match.group("patch")))
+
+
+def _clause_satisfied(version_tuple, comparator, bound_tuple) -> bool:
+    if version_tuple is None or bound_tuple is None:
+        return False
+    if comparator == ">=":
+        return version_tuple >= bound_tuple
+    if comparator == "<=":
+        return version_tuple <= bound_tuple
+    if comparator == ">":
+        return version_tuple > bound_tuple
+    if comparator == "<":
+        return version_tuple < bound_tuple
+    if comparator == "=":
+        return version_tuple == bound_tuple
+    return False
+
+
+def version_in_range(version, range_str) -> bool:
+    """True when a full semver is contained in an explicit comparator range.
+
+    Returns False for unparseable versions/ranges; callers guard with
+    is_explicit_semver/is_explicit_range so membership errors are not
+    double-reported on inputs already flagged as malformed.
+    """
+    version_tuple = semver_tuple(version)
+    if version_tuple is None or not is_explicit_range(range_str):
+        return False
+    for token in str(range_str).strip().split():
+        if not RANGE_CLAUSE_RE.match(token):
+            return False
+        for comparator in RANGE_COMPARATORS:
+            if token.startswith(comparator):
+                bound = semver_tuple(token[len(comparator):])
+                if not _clause_satisfied(version_tuple, comparator, bound):
+                    return False
+                break
+    return True
+
+
+# Placeholder tokens that must not satisfy a "concrete value required" gate.
+PLACEHOLDER_TOKENS = {
+    "not-vendored",
+    "not vendored",
+    "none",
+    "n/a",
+    "na",
+    "todo",
+    "tbd",
+    "pending",
+    "placeholder",
+    "null",
+    "nil",
+    "-",
+}
+
+
+def is_placeholder(value) -> bool:
+    """True when a value is missing or a placeholder standing in for a real value."""
+    if missingish(value):
+        return True
+    return str(value).strip().lower() in PLACEHOLDER_TOKENS
+
+
+def check_capability_registry_contract():
+    """Registry-level contract/schema versioning and explicit parity/exemptions.
+
+    Rejects a capability registry that omits contract/schema versioning, omits an
+    explicit parity policy, or declares a non-required parity without an explicit
+    exemption record. Keeps the declarative registry Writing-owned and legible to
+    the Bridge chassis compatibility surface.
+    """
+    if not (ROOT / CAPABILITY_REGISTRY_PATH).exists():
+        return error(f"missing {CAPABILITY_REGISTRY_PATH}")
+    registry = load_doc(CAPABILITY_REGISTRY_PATH)
+    if not isinstance(registry, dict):
+        return error("capability registry must be a mapping")
+    code = 0
+    for field in ["contract_version", "schema_version"]:
+        if missingish(registry.get(field)):
+            code |= error(f"capability registry missing {field}")
+    if missingish(registry.get("parity_policy")):
+        code |= error("capability registry missing explicit parity_policy")
+    for cap in registry.get("capabilities", []):
+        if not isinstance(cap, dict):
+            code |= error("capability registry entry must be a mapping")
+            continue
+        cid = cap.get("id", "<missing>")
+        parity = cap.get("parity")
+        if missingish(parity):
+            code |= error(f"capability missing explicit parity: {cid}")
+            continue
+        if str(parity).strip().lower() != "required":
+            exemptions = cap.get("exceptions")
+            has_exemption = isinstance(exemptions, list) and any(meaningful(item) for item in exemptions)
+            if not has_exemption:
+                code |= error(
+                    f"capability parity is not required but declares no explicit exemption: {cid}"
+                )
+    return code
+
+
+def check_bridge_chassis_preflight():
+    """Writing-side Bridge chassis adoption-readiness preflight.
+
+    This validates the repo's *local* Writing-side pins and self-consistency for
+    adopting the research-writing-bridge chassis. It is NOT upstream Bridge
+    conformance: the Bridge chassis-spec, protocol schemas, and golden fixtures
+    are not vendored or pinned here, and the Bridge issues remain open. Passing
+    means the Writing-side adoption surface is internally consistent, not that
+    Writing has been validated against a published Bridge contract.
+
+    It enforces that the repo declares profile: writing, pins the chassis/protocol
+    contracts with fully explicit semver (no default-latest / floating pins),
+    keeps its capability registry versioned and Writing-owned, cross-checks the
+    provisional compatibility matrix against the canonical local pins, holds the
+    chassis MAJOR baseline steady (so a silent MAJOR bump fails), and classifies
+    every registered capability so Writing's paper capabilities are never demanded
+    as generic Bridge chassis.
+    """
+    code = require([BRIDGE_CHASSIS_PATH, "state/ccfa.yaml", CAPABILITY_REGISTRY_PATH])
+    if code:
+        return code
+    chassis = load_doc(BRIDGE_CHASSIS_PATH)
+    if not isinstance(chassis, dict):
+        return error(f"{BRIDGE_CHASSIS_PATH} must be a mapping")
+
+    profile = chassis.get("profile")
+    if missingish(profile):
+        code |= error(f"{BRIDGE_CHASSIS_PATH} missing profile")
+    elif str(profile).strip() != BRIDGE_PROFILE:
+        code |= error(f"{BRIDGE_CHASSIS_PATH} profile must be '{BRIDGE_PROFILE}': {profile}")
+
+    ccfa = load_doc("state/ccfa.yaml")
+    if not isinstance(ccfa, dict):
+        ccfa = {}
+    ccfa_profile = ccfa.get("profile")
+    if missingish(ccfa_profile):
+        code |= error("state/ccfa.yaml missing profile")
+    elif str(ccfa_profile).strip() != BRIDGE_PROFILE:
+        code |= error(f"state/ccfa.yaml profile must be '{BRIDGE_PROFILE}': {ccfa_profile}")
+    bridge_ptr = ccfa.get("bridge", {}) if isinstance(ccfa.get("bridge"), dict) else {}
+    if str(bridge_ptr.get("chassis_pin", "")).strip() != BRIDGE_CHASSIS_PATH:
+        code |= error(f"state/ccfa.yaml bridge.chassis_pin must point to {BRIDGE_CHASSIS_PATH}")
+
+    # --- chassis-spec pins + executable MAJOR baseline gate ---
+    chassis_spec = chassis.get("chassis", {}) if isinstance(chassis.get("chassis"), dict) else {}
+    spec_version = chassis_spec.get("spec_version")
+    if missingish(chassis_spec.get("spec")):
+        code |= error(f"{BRIDGE_CHASSIS_PATH} chassis.spec missing")
+    if not is_explicit_semver(spec_version):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} chassis.spec_version must be a full explicit semver pin "
+            f"(not default/latest/suffixed): {spec_version}"
+        )
+    spec_range = chassis_spec.get("compatible_range")
+    if not is_explicit_range(spec_range):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} chassis.compatible_range must be an explicit comparator range "
+            f"(e.g. '>=1.0.0 <2.0.0'): {spec_range}"
+        )
+    gate = chassis_spec.get("major_gate", {}) if isinstance(chassis_spec.get("major_gate"), dict) else {}
+    for field in ["id", "required_when", "record"]:
+        if missingish(gate.get(field)):
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} chassis.major_gate.{field} missing "
+                "(chassis MAJOR upgrades must be gated)"
+            )
+    record_path = gate.get("record")
+    if not missingish(record_path) and not (ROOT / str(record_path)).exists():
+        code |= error(f"{BRIDGE_CHASSIS_PATH} chassis.major_gate.record does not exist: {record_path}")
+    # Executable MAJOR gate: the declared baseline must equal the current spec MAJOR,
+    # so bumping spec_version to a new MAJOR fails until approved_major is edited in
+    # tandem (a deliberate, reviewable change recorded at major_gate.record).
+    approved_major = chassis_spec.get("approved_major")
+    current_major = semver_major(spec_version)
+    if not isinstance(approved_major, int) or isinstance(approved_major, bool):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} chassis.approved_major must be an integer baseline for the MAJOR "
+            f"gate: {approved_major}"
+        )
+    elif current_major is not None and current_major != approved_major:
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} chassis.spec_version MAJOR ({current_major}) does not match "
+            f"chassis.approved_major ({approved_major}); a chassis MAJOR bump requires updating "
+            f"approved_major in tandem and recording the decision at {gate.get('record')}"
+        )
+    if isinstance(approved_major, int) and not isinstance(approved_major, bool):
+        spec_range_majors = range_clause_majors(spec_range)
+        lower = spec_range_majors.get(">=", spec_range_majors.get(">"))
+        if lower is not None and lower != approved_major:
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} chassis.compatible_range lower bound MAJOR ({lower}) does not "
+                f"match chassis.approved_major ({approved_major})"
+            )
+        upper = spec_range_majors.get("<", spec_range_majors.get("<="))
+        if upper is not None and upper not in (approved_major, approved_major + 1):
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} chassis.compatible_range upper bound MAJOR ({upper}) is not "
+                f"within the approved MAJOR ({approved_major})"
+            )
+    if (
+        is_explicit_semver(spec_version)
+        and is_explicit_range(spec_range)
+        and not version_in_range(spec_version, spec_range)
+    ):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} chassis.spec_version {spec_version} is not within "
+            f"chassis.compatible_range {spec_range}"
+        )
+
+    # --- protocol dual semver pins ---
+    protocol = chassis.get("protocol", {}) if isinstance(chassis.get("protocol"), dict) else {}
+    for field in ["contract_version", "schema_version"]:
+        if not is_explicit_semver(protocol.get(field)):
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} protocol.{field} must be a full explicit semver pin "
+                f"(not default/latest/suffixed): {protocol.get(field)}"
+            )
+    protocol_range = protocol.get("compatible_range")
+    if not is_explicit_range(protocol_range):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} protocol.compatible_range must be an explicit comparator range "
+            f"(e.g. '>=1.0.0 <2.0.0'): {protocol_range}"
+        )
+    for field in ["contract_version", "schema_version"]:
+        pin = protocol.get(field)
+        if (
+            is_explicit_semver(pin)
+            and is_explicit_range(protocol_range)
+            and not version_in_range(pin, protocol_range)
+        ):
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} protocol.{field} {pin} is not within "
+                f"protocol.compatible_range {protocol_range}"
+            )
+
+    # --- capability registry: versioned, Writing-owned, and pointer-consistent ---
+    registry = load_doc(CAPABILITY_REGISTRY_PATH)
+    if not isinstance(registry, dict):
+        registry = {}
+    for field in ["contract_version", "schema_version"]:
+        if missingish(registry.get(field)):
+            code |= error(
+                f"{CAPABILITY_REGISTRY_PATH} missing {field} "
+                "(bridge chassis preflight requires a versioned registry)"
+            )
+    registry_profile = registry.get("profile")
+    if missingish(registry_profile) or str(registry_profile).strip() != BRIDGE_PROFILE:
+        code |= error(f"{CAPABILITY_REGISTRY_PATH} profile must be '{BRIDGE_PROFILE}': {registry_profile}")
+    registry_ownership = registry.get("ownership")
+    if missingish(registry_ownership) or str(registry_ownership).strip() != "writing-owned":
+        code |= error(f"{CAPABILITY_REGISTRY_PATH} ownership must be 'writing-owned': {registry_ownership}")
+
+    caps = chassis.get("capabilities", {}) if isinstance(chassis.get("capabilities"), dict) else {}
+    declared_registry = caps.get("registry")
+    if missingish(declared_registry) or str(declared_registry).strip() != CAPABILITY_REGISTRY_PATH:
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} capabilities.registry must equal {CAPABILITY_REGISTRY_PATH}: "
+            f"{declared_registry}"
+        )
+    chassis_contract = caps.get("registry_contract_version")
+    registry_contract = registry.get("contract_version")
+    if missingish(chassis_contract):
+        code |= error(f"{BRIDGE_CHASSIS_PATH} capabilities.registry_contract_version missing")
+    elif not missingish(registry_contract) and str(chassis_contract).strip() != str(registry_contract).strip():
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} capabilities.registry_contract_version does not match registry "
+            f"contract_version: {chassis_contract} vs {registry_contract}"
+        )
+    chassis_reg_schema = caps.get("schema_version")
+    if not is_explicit_semver(chassis_reg_schema):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} capabilities.schema_version must be a full explicit semver pin: "
+            f"{chassis_reg_schema}"
+        )
+    registry_schema = registry.get("schema_version")
+    if (
+        not missingish(chassis_reg_schema)
+        and not missingish(registry_schema)
+        and str(chassis_reg_schema).strip() != str(registry_schema).strip()
+    ):
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} capabilities.schema_version does not match registry schema_version: "
+            f"{chassis_reg_schema} vs {registry_schema}"
+        )
+    if str(caps.get("ownership", "")).strip() != "writing-owned":
+        code |= error(f"{BRIDGE_CHASSIS_PATH} capabilities.ownership must be 'writing-owned'")
+    if missingish(caps.get("parity_policy")):
+        code |= error(f"{BRIDGE_CHASSIS_PATH} capabilities.parity_policy missing")
+
+    # --- provisional compatibility matrix, cross-checked against canonical pins ---
+    canonical_rows = {
+        "chassis-spec": (spec_version, spec_range),
+        "version-pins": (protocol.get("contract_version"), protocol_range),
+    }
+    matrix = chassis.get("compatibility_matrix")
+    if not isinstance(matrix, list) or not matrix:
+        code |= error(f"{BRIDGE_CHASSIS_PATH} compatibility_matrix must be a non-empty list")
+    else:
+        component_counts = {}
+        for entry in matrix:
+            if isinstance(entry, dict):
+                comp = str(entry.get("component", "")).strip()
+                if comp:
+                    component_counts[comp] = component_counts.get(comp, 0) + 1
+        for required in canonical_rows:
+            count = component_counts.get(required, 0)
+            if count == 0:
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix missing required canonical row: {required}"
+                )
+            elif count > 1:
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix has duplicate canonical row: "
+                    f"{required} (x{count})"
+                )
+        for index, entry in enumerate(matrix, start=1):
+            if not isinstance(entry, dict):
+                code |= error(f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] must be a mapping")
+                continue
+            component = str(entry.get("component", "")).strip()
+            row_pin = entry.get("pinned")
+            row_range = entry.get("range")
+            if missingish(entry.get("component")):
+                code |= error(f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] missing component")
+            if missingish(entry.get("status")):
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] missing status "
+                    "(rows are provisional adoption targets until Bridge publishes canonical pins)"
+                )
+            if not is_explicit_semver(row_pin):
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] pinned must be a full explicit "
+                    f"semver pin (not default/latest/suffixed): {row_pin}"
+                )
+            if not is_explicit_range(row_range):
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] range must be an explicit "
+                    f"comparator range: {row_range}"
+                )
+            if (
+                is_explicit_semver(row_pin)
+                and is_explicit_range(row_range)
+                and not version_in_range(row_pin, row_range)
+            ):
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] pinned {row_pin} is not within "
+                    f"its range {row_range}"
+                )
+            if component in canonical_rows:
+                canon_pin, canon_range = canonical_rows[component]
+                if not missingish(canon_pin) and str(entry.get("pinned", "")).strip() != str(canon_pin).strip():
+                    code |= error(
+                        f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] '{component}' pinned "
+                        f"contradicts canonical pin: {entry.get('pinned')} vs {canon_pin}"
+                    )
+                if not missingish(canon_range) and str(entry.get("range", "")).strip() != str(canon_range).strip():
+                    code |= error(
+                        f"{BRIDGE_CHASSIS_PATH} compatibility_matrix[{index}] '{component}' range "
+                        f"contradicts canonical range: {entry.get('range')} vs {canon_range}"
+                    )
+
+    # --- promotion proposals governance ---
+    for index, prop in enumerate(as_list(chassis.get("promotion_proposals")), start=1):
+        if not isinstance(prop, dict):
+            code |= error(f"{BRIDGE_CHASSIS_PATH} promotion_proposals[{index}] must be a mapping")
+            continue
+        status = str(prop.get("status", "")).strip().lower()
+        if status == "proposed":
+            if is_placeholder(prop.get("rfc")):
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} promotion_proposals[{index}] status 'proposed' requires a "
+                    f"concrete rfc (placeholders like 'not-vendored'/'TODO' do not count); downgrade to "
+                    f"'candidate' until governance exists"
+                )
+            concrete_fixtures = [f for f in strings(prop.get("fixtures")) if not is_placeholder(f)]
+            if not concrete_fixtures:
+                code |= error(
+                    f"{BRIDGE_CHASSIS_PATH} promotion_proposals[{index}] status 'proposed' requires "
+                    f"concrete fixtures (placeholders like 'not-vendored' do not count); downgrade to "
+                    f"'candidate' until governance exists"
+                )
+            for fixture in concrete_fixtures:
+                if not (ROOT / fixture).exists():
+                    code |= error(
+                        f"{BRIDGE_CHASSIS_PATH} promotion_proposals[{index}] fixture path does not exist: "
+                        f"{fixture}"
+                    )
+
+    # --- capability classification: Writing owns its whole catalog ---
+    registered_ids = {
+        str(cap.get("id"))
+        for cap in registry.get("capabilities", [])
+        if isinstance(cap, dict) and cap.get("id")
+    }
+    profile_specific = set(strings(chassis.get("profile_specific_capabilities")))
+    generic = set(strings(chassis.get("generic_capabilities")))
+    overlap = profile_specific & generic
+    if overlap:
+        code |= error(
+            f"{BRIDGE_CHASSIS_PATH} capability is both profile-specific and generic: {sorted(overlap)}"
+        )
+    for cid in sorted(profile_specific | generic):
+        if cid not in registered_ids:
+            code |= error(f"{BRIDGE_CHASSIS_PATH} classifies capability not in registry: {cid}")
+    for cid in sorted(registered_ids):
+        if cid not in profile_specific and cid not in generic:
+            code |= error(
+                f"{BRIDGE_CHASSIS_PATH} registry capability not classified as profile-specific "
+                f"or generic: {cid}"
+            )
+    return code
+
+
 def check_capability_parity():
-    code = require([".agent/capabilities/registry.yaml", ".claude/ANATOMY.md", ".agents/ANATOMY.md"])
+    code = check_capability_registry_contract()
+    code |= require([".agent/capabilities/registry.yaml", ".claude/ANATOMY.md", ".agents/ANATOMY.md"])
     registry = load_doc(".agent/capabilities/registry.yaml")
     registered_ids = set()
     for cap in registry.get("capabilities", []):
@@ -4813,6 +5325,7 @@ def check_writing_harness():
     code |= require(["state/ccfa.yaml", "state/claim-evidence-map.yaml", "state/numeric-registry.yaml", "lab/research/reference-ledger.yaml", "paper/main.tex", "release/manifest.yaml"])
     code |= check_anatomy_drift()
     code |= check_capability_parity()
+    code |= check_bridge_chassis_preflight()
     code |= check_paper_surface()
     code |= check_conference_template()
     code |= check_worktrees()
@@ -4925,6 +5438,7 @@ CHECKS = {
     "paper_populated": check_paper_populated,
     "anatomy_drift": check_anatomy_drift,
     "capability_parity": check_capability_parity,
+    "bridge_chassis_preflight": check_bridge_chassis_preflight,
     "claim_experiment_plan": check_claim_experiment_plan,
     "conference_template": check_conference_template,
     "realkit_verification": check_realkit_verification,

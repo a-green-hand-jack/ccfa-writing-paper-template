@@ -40,5 +40,9 @@
   },
   "capabilities": {
     "parity": "claude-and-codex"
+  },
+  "profile": "writing",
+  "bridge": {
+    "chassis_pin": "state/bridge-chassis.yaml"
   }
 }

@@ -1,3 +1,8 @@
 {
-  "claims": []
+  "claims": [
+    { "claim_id": "claim-autonomous-multiagent-evolution", "required_experiments": [], "optional_experiments": [], "notes": "External case-replay of a published paper; evidence is the published source itself." },
+    { "claim_id": "claim-sota-open-ended", "required_experiments": [], "optional_experiments": [], "notes": "External case-replay of a published paper; evidence is the published source itself." },
+    { "claim_id": "claim-kernel-multiagent", "required_experiments": [], "optional_experiments": [], "notes": "External case-replay of a published paper; evidence is the published source itself." },
+    { "claim_id": "claim-safeguards", "required_experiments": [], "optional_experiments": [], "notes": "External case-replay of a published paper; evidence is the published source itself." }
+  ]
 }

@@ -1,3 +1,12 @@
 {
-  "results": []
+  "results": [
+    {
+      "result_id": "result-kernel-multiagent",
+      "status": "verified",
+      "claims_supported": ["claim-kernel-multiagent"],
+      "numeric_ids": ["kernel-prev-best", "kernel-coral-best"],
+      "evidence_ids": ["evidence-arxiv-source"],
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    }
+  ]
 }

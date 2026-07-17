@@ -1,3 +1,12 @@
 {
-  "tables": []
+  "tables": [
+    { "table_id": "tab-main-results", "label": "tab:main_results", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": false, "notes": "Per-task main results; numeric literals bulk-imported (see state/numbers/exceptions.yaml)." },
+    { "table_id": "tab-multi-agent", "label": "tab:multi-agent", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": false, "notes": "Multi-agent scaling results; numeric literals bulk-imported." },
+    { "table_id": "tab-ablations", "label": "tab:ablations", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": false, "notes": "Ablation results; numeric literals bulk-imported." },
+    { "table_id": "tab-cli-commands", "label": "tab:cli_commands", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": true },
+    { "table_id": "tab-heartbeat-config", "label": "tab:heartbeat_config", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": true },
+    { "table_id": "tab-single-agent-trajectory", "label": "tab:single_agent_trajectory_analysis", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": false, "notes": "Appendix trajectory statistics; numeric literals bulk-imported." },
+    { "table_id": "tab-task-level-trajectory", "label": "tab:task_level_trajectory_analysis", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": false, "notes": "Appendix trajectory statistics; numeric literals bulk-imported." },
+    { "table_id": "tab-eval-fixes", "label": "tab:eval_fixes", "status": "active", "source": "https://arxiv.org/abs/2604.01658v1", "qualitative": true }
+  ]
 }

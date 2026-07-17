@@ -107,3 +107,21 @@ Remaining known limitations (out of scope here):
   targets and must be reconciled with the published Bridge chassis-spec once it
   exists. The promotion proposal stays a governance-gated candidate until a
   Bridge RFC and fixtures are in place.
+
+## Case: arXiv 2604.01658 (CORAL) migration — 2026-07-18
+
+Branch `case/arxiv-2604-01658` (worktree). Migration (authoring) lane only;
+destructive stress probes out of scope.
+
+- Normalized the COLM 2026 preprint TeX into `paper/` (sections, figures/srcs +
+  wrappers, `style/colm2026_conference.sty|.bst`, `refs.bib`, `macros.tex`,
+  `venue_preamble.tex`). Section `\input` order is ascending per anatomy; the
+  fully-commented `07_limitations` slot renders nothing so fidelity is preserved.
+- Populated the smallest honest control plane (claims, evidence, floats,
+  figure/table/result indexes, notation, citation/reference ledgers).
+- Fidelity gate `compare-original-pdf.sh 2604.01658`: 27 vs 27 pages, 0 compiled-only
+  / 1 original-only line, within threshold — PASS.
+- Migration debt recorded in
+  `lab/harness-evals/20260718-arxiv-2604-01658-migration-baseline.md`
+  (bulk numeric exception, citation fitness needs-review, ui subfigure convention
+  gap, COLM venue-kit exemption).

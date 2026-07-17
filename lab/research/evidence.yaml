@@ -1,3 +1,19 @@
 {
-  "evidence": []
+  "evidence": [
+    {
+      "evidence_id": "evidence-arxiv-source",
+      "status": "active",
+      "verification_state": "verified",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "external_source": "https://arxiv.org/abs/2604.01658v1",
+      "strength": "reported",
+      "claim_ids": [
+        "claim-autonomous-multiagent-evolution",
+        "claim-sota-open-ended",
+        "claim-kernel-multiagent",
+        "claim-safeguards"
+      ],
+      "notes": "Provenance for this case migration is the published arXiv source itself (2604.01658 CORAL, COLM 2026 preprint), not a local lab artifact. The reported experimental numbers are source-stated; see paper/supplementary/source-attribution.md and state/numbers/exceptions.yaml for the bulk-import migration-debt discussion."
+    }
+  ]
 }

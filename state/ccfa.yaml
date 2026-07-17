@@ -1,13 +1,13 @@
 {
   "paper": {
-    "slug": "ccfa-paper-template",
-    "title": "TODO Paper Title",
-    "short_title": "TODO Paper",
-    "owner": "TODO"
+    "slug": "coral-arxiv-2604-01658",
+    "title": "CORAL: Towards Autonomous Multi-Agent Evolution for Open-Ended Discovery",
+    "short_title": "CORAL",
+    "owner": "case-arxiv-2604-01658-harness-test"
   },
   "venue": {
-    "id": "iclr",
-    "year": 2027,
+    "id": "colm",
+    "year": 2026,
     "must_verify_current_year_rules": true
   },
   "paper_type": {
@@ -17,8 +17,13 @@
     "repo_mode": "standalone"
   },
   "team": {
-    "authors": [],
-    "anonymous_mode": "TODO"
+    "authors": [
+      "Ao Qu", "Han Zheng", "Zijian Zhou", "Yihao Yan", "Yihong Tang",
+      "Shao Yong Ong", "Fenglu Hong", "Kaichen Zhou", "Chonghe Jiang",
+      "Minwei Kong", "Jiacheng Zhu", "Xuan Jiang", "Sirui Li",
+      "Cathy Wu", "Bryan Kian Hsiang Low", "Jinhua Zhao", "Paul Pu Liang"
+    ],
+    "anonymous_mode": false
   },
   "submission": {
     "track": "TODO",
@@ -32,11 +37,7 @@
     "normalized_profile": "TODO"
   },
   "release": {
-    "surfaces": [
-      "arxiv",
-      "overleaf",
-      "github-tex"
-    ]
+    "surfaces": ["arxiv", "overleaf", "github-tex"]
   },
   "capabilities": {
     "parity": "claude-and-codex"
@@ -44,5 +45,10 @@
   "profile": "writing",
   "bridge": {
     "chassis_pin": "state/bridge-chassis.yaml"
+  },
+  "case_provenance": {
+    "arxiv_id": "2604.01658",
+    "source_url": "https://arxiv.org/abs/2604.01658v1",
+    "attribution": "paper/supplementary/source-attribution.md"
   }
 }

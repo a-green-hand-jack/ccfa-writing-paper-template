@@ -1,3 +1,130 @@
 {
-  "floats": []
+  "floats": [
+    {
+      "float_id": "fig-00-teaser",
+      "label": "fig:teaser",
+      "status": "active",
+      "figure_id": "fig-00-teaser",
+      "asset_path": "paper/figures/srcs/00_teaser.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-01-paradigm",
+      "label": "fig:paradigm_comparison",
+      "status": "active",
+      "figure_id": "fig-01-paradigm",
+      "asset_path": "paper/figures/srcs/01_paradigm.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-02-overview",
+      "label": "fig:coral-diagram",
+      "status": "active",
+      "figure_id": "fig-02-overview",
+      "asset_path": "paper/figures/srcs/02_overview.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-10-polyominoes",
+      "label": "fig:polyominoes_demo",
+      "status": "active",
+      "figure_id": "fig-10-polyominoes",
+      "asset_path": "paper/figures/srcs/10_polyominoes.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-11-architecture",
+      "label": "fig:architecture",
+      "status": "active",
+      "figure_id": "fig-11-architecture",
+      "asset_path": "paper/figures/srcs/11_architecture.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-12-ui-overview",
+      "label": "fig:coral-ui-overview",
+      "status": "active",
+      "figure_id": "fig-12-ui-overview",
+      "asset_path": "paper/figures/srcs/12_ui1.png",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-13-ui-knowledge",
+      "label": "fig:coral-ui-knowledge",
+      "status": "active",
+      "figure_id": "fig-13-ui-knowledge",
+      "asset_path": "paper/figures/srcs/13_ui2.png",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-main-results",
+      "label": "tab:main_results",
+      "status": "active",
+      "table_id": "tab-main-results",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-multi-agent",
+      "label": "tab:multi-agent",
+      "status": "active",
+      "table_id": "tab-multi-agent",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-ablations",
+      "label": "tab:ablations",
+      "status": "active",
+      "table_id": "tab-ablations",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-cli-commands",
+      "label": "tab:cli_commands",
+      "status": "active",
+      "table_id": "tab-cli-commands",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-heartbeat-config",
+      "label": "tab:heartbeat_config",
+      "status": "active",
+      "table_id": "tab-heartbeat-config",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-single-agent-trajectory",
+      "label": "tab:single_agent_trajectory_analysis",
+      "status": "active",
+      "table_id": "tab-single-agent-trajectory",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-task-level-trajectory",
+      "label": "tab:task_level_trajectory_analysis",
+      "status": "active",
+      "table_id": "tab-task-level-trajectory",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "tab-eval-fixes",
+      "label": "tab:eval_fixes",
+      "status": "active",
+      "table_id": "tab-eval-fixes",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-coral-ui",
+      "label": "fig:coral-ui",
+      "status": "active",
+      "figure_id": "fig-coral-ui",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    },
+    {
+      "float_id": "fig-workspace-layout",
+      "label": "fig:workspace_layout",
+      "status": "active",
+      "figure_id": "fig-workspace-layout",
+      "source": "https://arxiv.org/abs/2604.01658v1"
+    }
+  ]
 }

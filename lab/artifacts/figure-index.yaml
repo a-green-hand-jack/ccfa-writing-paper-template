@@ -1,3 +1,79 @@
 {
-  "figures": []
+  "figures": [
+    {
+      "figure_id": "fig-00-teaser",
+      "label": "fig:teaser",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/00_teaser.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/00_teaser.tex",
+      "notes": "Teaser banner shown inline under the title; label present in source but not cross-referenced."
+    },
+    {
+      "figure_id": "fig-01-paradigm",
+      "label": "fig:paradigm_comparison",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/01_paradigm.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/01_paradigm.tex"
+    },
+    {
+      "figure_id": "fig-02-overview",
+      "label": "fig:coral-diagram",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/02_overview.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/02_overview.tex"
+    },
+    {
+      "figure_id": "fig-10-polyominoes",
+      "label": "fig:polyominoes_demo",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/10_polyominoes.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/10_polyominoes.tex"
+    },
+    {
+      "figure_id": "fig-11-architecture",
+      "label": "fig:architecture",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/11_architecture.pdf",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/11_architecture.tex"
+    },
+    {
+      "figure_id": "fig-12-ui-overview",
+      "label": "fig:coral-ui-overview",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/12_ui1.png",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/12_ui1.tex",
+      "notes": "Rendered inline as a subfigure of fig:coral-ui in paper/sections/10_appendix.tex; 12_ui1.tex is a comment-only alignment stub (subfigure grouping not expressible as a one-asset wrapper)."
+    },
+    {
+      "figure_id": "fig-13-ui-knowledge",
+      "label": "fig:coral-ui-knowledge",
+      "status": "active",
+      "asset_path": "paper/figures/srcs/13_ui2.png",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "wrapper_path": "paper/figures/13_ui2.tex",
+      "notes": "Rendered inline as a subfigure of fig:coral-ui in paper/sections/10_appendix.tex; 13_ui2.tex is a comment-only alignment stub."
+    },
+    {
+      "figure_id": "fig-coral-ui",
+      "label": "fig:coral-ui",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "qualitative": true,
+      "notes": "Container figure grouping the two CORAL UI subfigures (fig:coral-ui-overview 12_ui1.png, fig:coral-ui-knowledge 13_ui2.png); rendered inline in paper/sections/10_appendix.tex. No single asset of its own."
+    },
+    {
+      "figure_id": "fig-workspace-layout",
+      "label": "fig:workspace_layout",
+      "status": "active",
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "qualitative": true,
+      "notes": "Text/promptbox figure (per-run workspace layout listing); no includegraphics asset."
+    }
+  ]
 }

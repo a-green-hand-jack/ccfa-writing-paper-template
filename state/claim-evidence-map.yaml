@@ -1,3 +1,36 @@
 {
-  "claims": []
+  "claims": [
+    {
+      "claim_id": "claim-autonomous-multiagent-evolution",
+      "statement": "CORAL is a framework for autonomous multi-agent evolution on open-ended problems that replaces rigid, hard-coded exploration control with long-running agents which explore, reflect, and collaborate through shared persistent memory, asynchronous multi-agent execution, and heartbeat-based interventions.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [],
+      "evidence_ids": ["evidence-arxiv-source"]
+    },
+    {
+      "claim_id": "claim-sota-open-ended",
+      "statement": "Evaluated on diverse mathematical, algorithmic, and systems optimization tasks, CORAL sets new state-of-the-art results on ten tasks, achieving substantially higher improvement rates with far fewer evaluations than fixed evolutionary-search baselines.",
+      "status": "active",
+      "claim_strength": "core",
+      "numeric_ids": [],
+      "evidence_ids": ["evidence-arxiv-source"]
+    },
+    {
+      "claim_id": "claim-kernel-multiagent",
+      "statement": "On Anthropic's kernel engineering task, four co-evolving CORAL agents improve the best known score from the prior best to a better score in fewer cycles, discovering solutions that no single agent finds even when the single agent is given several times the compute.",
+      "status": "active",
+      "claim_strength": "supporting",
+      "numeric_ids": ["kernel-prev-best", "kernel-coral-best"],
+      "evidence_ids": ["evidence-arxiv-source"]
+    },
+    {
+      "claim_id": "claim-safeguards",
+      "statement": "CORAL provides practical operational safeguards, including isolated per-agent workspaces, evaluator separation, resource management, and agent session and health management.",
+      "status": "active",
+      "claim_strength": "supporting",
+      "numeric_ids": [],
+      "evidence_ids": ["evidence-arxiv-source"]
+    }
+  ]
 }

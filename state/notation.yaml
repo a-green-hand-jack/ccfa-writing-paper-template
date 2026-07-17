@@ -1,3 +1,7 @@
 {
-  "symbols": []
+  "symbols": [
+    { "symbol": "\\mathcal{M}", "meaning": "global shared persistent memory of the CORAL search process", "status": "active", "first_defined": "paper/sections/04_method.tex", "description": "Migrated from arXiv 2604.01658 method section." },
+    { "symbol": "\\mathcal{M}_t", "meaning": "shared persistent memory available at search step t", "status": "active", "first_defined": "paper/sections/04_method.tex:11", "description": "Prior candidate solutions and their evaluation outcomes at step t." },
+    { "symbol": "\\hat{\\mathcal{M}}_t", "meaning": "working context constructed from shared memory at step t during Retrieve", "status": "active", "first_defined": "paper/sections/04_method.tex:13", "description": "Retrieved context subset used to condition proposal." }
+  ]
 }

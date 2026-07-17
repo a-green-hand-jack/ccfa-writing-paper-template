@@ -1,3 +1,718 @@
 {
-  "citations": []
+  "bulk_import_status": "bulk-imported-arxiv-migration",
+  "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+  "fitness_review_status": "pending",
+  "citations": [
+    {
+      "citation_id": "agrawal2025gepa",
+      "bibkey": "agrawal2025gepa",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:14",
+      "locators": [
+        "paper/sections/02_intro.tex:14",
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "Recent advances in LLM-powered agents have made this paradigm increasingly effective. Systems such as FunSearch~\\citep{romera2024funsearch}, AlphaEvolve~\\citep{",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "anthropic_takehome",
+      "bibkey": "anthropic_takehome",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/05_exp.tex:15",
+      "locators": [
+        "paper/sections/05_exp.tex:15"
+      ],
+      "context": "The two challenging stress-test problems are further used for multi-agent evaluation: Anthropic's kernel engineering ~\\citep{anthropic_takehome}, a VLIW SIMD tr",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "assumpcao2026codeevolve",
+      "bibkey": "assumpcao2026codeevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "cemri2026adaevolve",
+      "bibkey": "cemri2026adaevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:14",
+      "locators": [
+        "paper/sections/02_intro.tex:14",
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "Recent advances in LLM-powered agents have made this paradigm increasingly effective. Systems such as FunSearch~\\citep{romera2024funsearch}, AlphaEvolve~\\citep{",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "chen2024agentverse",
+      "bibkey": "chen2024agentverse",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:14",
+      "locators": [
+        "paper/sections/03_related.tex:14"
+      ],
+      "context": "Multi-agent LLM systems decompose complex tasks through role assignment and structured communication~\\citep{wu2023autogen,langgraph2024,qian2024chatdev,hong2024",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "chen2025heurigym",
+      "bibkey": "chen2025heurigym",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12"
+      ],
+      "context": "Many important scientific problems do not come with ground-truth answers~\\citep{mang2025frontiercs}. What is the best heuristic for a logistics problem~\\citep{c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "chen2026avoagenticvariationoperators",
+      "bibkey": "chen2026avoagenticvariationoperators",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/06_conclusion.tex:7",
+      "locators": [
+        "paper/sections/06_conclusion.tex:7"
+      ],
+      "context": "We introduced \\method{}, a framework for autonomous multi-agent evolution for open-ended problems. By replacing rigid evolutionary search heuristics with autono",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gao2026agentic",
+      "bibkey": "gao2026agentic",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "gottweis2025towards",
+      "bibkey": "gottweis2025towards",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:22",
+      "locators": [
+        "paper/sections/02_intro.tex:22"
+      ],
+      "context": "The rigidity of these strategies is further amplified in multi-agent systems. Much of the existing literature relies on \\emph{vertical scaling}: humans decompos",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "hong2024metagpt",
+      "bibkey": "hong2024metagpt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:22",
+      "locators": [
+        "paper/sections/02_intro.tex:22",
+        "paper/sections/03_related.tex:14"
+      ],
+      "context": "The rigidity of these strategies is further amplified in multi-agent systems. Much of the existing literature relies on \\emph{vertical scaling}: humans decompos",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "karpathy2026autoresearch",
+      "bibkey": "karpathy2026autoresearch",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/06_conclusion.tex:7",
+      "locators": [
+        "paper/sections/06_conclusion.tex:7"
+      ],
+      "context": "We introduced \\method{}, a framework for autonomous multi-agent evolution for open-ended problems. By replacing rigid evolutionary search heuristics with autono",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "khrulkov2025gigaevo",
+      "bibkey": "khrulkov2025gigaevo",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "kong2025alphaopt",
+      "bibkey": "kong2025alphaopt",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lange2025shinkaevolve",
+      "bibkey": "lange2025shinkaevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:14",
+      "locators": [
+        "paper/sections/02_intro.tex:14",
+        "paper/sections/03_related.tex:6",
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/10_appendix.tex:652"
+      ],
+      "context": "Recent advances in LLM-powered agents have made this paradigm increasingly effective. Systems such as FunSearch~\\citep{romera2024funsearch}, AlphaEvolve~\\citep{",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "langgraph2024",
+      "bibkey": "langgraph2024",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:14",
+      "locators": [
+        "paper/sections/03_related.tex:14",
+        "paper/sections/04_method.tex:137"
+      ],
+      "context": "Multi-agent LLM systems decompose complex tasks through role assignment and structured communication~\\citep{wu2023autogen,langgraph2024,qian2024chatdev,hong2024",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "li2023camel",
+      "bibkey": "li2023camel",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:22",
+      "locators": [
+        "paper/sections/02_intro.tex:22",
+        "paper/sections/03_related.tex:14"
+      ],
+      "context": "The rigidity of these strategies is further amplified in multi-agent systems. Much of the existing literature relies on \\emph{vertical scaling}: humans decompos",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2026autoevolver",
+      "bibkey": "liu2026autoevolver",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/06_conclusion.tex:7",
+      "locators": [
+        "paper/sections/06_conclusion.tex:7"
+      ],
+      "context": "We introduced \\method{}, a framework for autonomous multi-agent evolution for open-ended problems. By replacing rigid evolutionary search heuristics with autono",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "liu2026evox",
+      "bibkey": "liu2026evox",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6",
+        "paper/sections/05_exp.tex:14",
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/05_exp.tex:32",
+        "paper/sections/10_appendix.tex:653"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "lu2024aiscientist",
+      "bibkey": "lu2024aiscientist",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:22",
+      "locators": [
+        "paper/sections/02_intro.tex:22",
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "The rigidity of these strategies is further amplified in multi-agent systems. Much of the existing literature relies on \\emph{vertical scaling}: humans decompos",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "madaan2023selfrefine",
+      "bibkey": "madaan2023selfrefine",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "mang2025frontiercs",
+      "bibkey": "mang2025frontiercs",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12",
+        "paper/sections/05_exp.tex:15",
+        "paper/sections/10_appendix.tex:21"
+      ],
+      "context": "Many important scientific problems do not come with ground-truth answers~\\citep{mang2025frontiercs}. What is the best heuristic for a logistics problem~\\citep{c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "minimax2026m25",
+      "bibkey": "minimax2026m25",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/05_exp.tex:18",
+      "locators": [
+        "paper/sections/05_exp.tex:18"
+      ],
+      "context": "For single-agent experiments, we compare CORAL against OpenEvolve~\\citep{sharma2025openevolve}, ShinkaEvolve~\\citep{lange2025shinkaevolve}, and EvoX~\\citep{liu2",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "novikov2025alphaevolve",
+      "bibkey": "novikov2025alphaevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:14",
+      "locators": [
+        "paper/sections/02_intro.tex:14",
+        "paper/sections/03_related.tex:6",
+        "paper/sections/04_method.tex:62"
+      ],
+      "context": "Recent advances in LLM-powered agents have made this paradigm increasingly effective. Systems such as FunSearch~\\citep{romera2024funsearch}, AlphaEvolve~\\citep{",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "opencode2025",
+      "bibkey": "opencode2025",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/05_exp.tex:18",
+      "locators": [
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/10_appendix.tex:647"
+      ],
+      "context": "For single-agent experiments, we compare CORAL against OpenEvolve~\\citep{sharma2025openevolve}, ShinkaEvolve~\\citep{lange2025shinkaevolve}, and EvoX~\\citep{liu2",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ouyang2025reasoningbank",
+      "bibkey": "ouyang2025reasoningbank",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "ouyangkernelbench",
+      "bibkey": "ouyangkernelbench",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12"
+      ],
+      "context": "Many important scientific problems do not come with ground-truth answers~\\citep{mang2025frontiercs}. What is the best heuristic for a logistics problem~\\citep{c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "qian2024chatdev",
+      "bibkey": "qian2024chatdev",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:14",
+      "locators": [
+        "paper/sections/03_related.tex:14"
+      ],
+      "context": "Multi-agent LLM systems decompose complex tasks through role assignment and structured communication~\\citep{wu2023autogen,langgraph2024,qian2024chatdev,hong2024",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "rllmorg2026hive",
+      "bibkey": "rllmorg2026hive",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/06_conclusion.tex:7",
+      "locators": [
+        "paper/sections/06_conclusion.tex:7"
+      ],
+      "context": "We introduced \\method{}, a framework for autonomous multi-agent evolution for open-ended problems. By replacing rigid evolutionary search heuristics with autono",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "romera2024funsearch",
+      "bibkey": "romera2024funsearch",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:14",
+      "locators": [
+        "paper/sections/02_intro.tex:14",
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "Recent advances in LLM-powered agents have made this paradigm increasingly effective. Systems such as FunSearch~\\citep{romera2024funsearch}, AlphaEvolve~\\citep{",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "sharma2025openevolve",
+      "bibkey": "sharma2025openevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6",
+        "paper/sections/05_exp.tex:18",
+        "paper/sections/10_appendix.tex:651"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "shinn2023reflexion",
+      "bibkey": "shinn2023reflexion",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "skydiscover2026",
+      "bibkey": "skydiscover2026",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/10_appendix.tex:605",
+      "locators": [
+        "paper/sections/10_appendix.tex:605",
+        "paper/sections/10_appendix.tex:655"
+      ],
+      "context": "The systems optimization tasks in our evaluation follow the ADRS folder in the SkyDiscover repository~\\citep{skydiscover2026}, which provides evaluator implemen",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2024openhands",
+      "bibkey": "wang2024openhands",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wang2025thetaevolve",
+      "bibkey": "wang2025thetaevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wu2023autogen",
+      "bibkey": "wu2023autogen",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:14",
+      "locators": [
+        "paper/sections/03_related.tex:14"
+      ],
+      "context": "Multi-agent LLM systems decompose complex tasks through role assignment and structured communication~\\citep{wu2023autogen,langgraph2024,qian2024chatdev,hong2024",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "wu2024autogen",
+      "bibkey": "wu2024autogen",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:22",
+      "locators": [
+        "paper/sections/02_intro.tex:22"
+      ],
+      "context": "The rigidity of these strategies is further amplified in multi-agent systems. Much of the existing literature relies on \\emph{vertical scaling}: humans decompos",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yan2026pacevolve",
+      "bibkey": "yan2026pacevolve",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yang2024sweagent",
+      "bibkey": "yang2024sweagent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yao2023react",
+      "bibkey": "yao2023react",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yu2026memagent",
+      "bibkey": "yu2026memagent",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "yuksekgonul2026tttdiscover",
+      "bibkey": "yuksekgonul2026tttdiscover",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:6",
+      "locators": [
+        "paper/sections/03_related.tex:6",
+        "paper/sections/05_exp.tex:14"
+      ],
+      "context": "A growing line of work embeds LLMs as mutation operators within evaluator-guided evolutionary loops. FunSearch~\\citep{romera2024funsearch} introduced this parad",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zheng2026learning",
+      "bibkey": "zheng2026learning",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/02_intro.tex:12",
+      "locators": [
+        "paper/sections/02_intro.tex:12"
+      ],
+      "context": "Many important scientific problems do not come with ground-truth answers~\\citep{mang2025frontiercs}. What is the best heuristic for a logistics problem~\\citep{c",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    },
+    {
+      "citation_id": "zhou2026mem",
+      "bibkey": "zhou2026mem",
+      "status": "active",
+      "purpose": "migrated citation from arXiv 2604.01658 source prose",
+      "locator": "paper/sections/03_related.tex:10",
+      "locators": [
+        "paper/sections/03_related.tex:10"
+      ],
+      "context": "A separate line of work grants LLM agents the autonomy to carry out open-ended tasks without rigid external scaffolding. Autonomous coding agents~\\citep{yang202",
+      "fitness_status": "needs-review",
+      "bulk_import_status": "bulk-imported-arxiv-migration",
+      "migration_source": "arXiv 2604.01658 colm2026_conference.bib + section \\cite occurrences",
+      "fitness_review_status": "pending",
+      "notes": "Sentence-level citation fitness not audited during mechanical migration; case ledger debt, see lab/harness-evals report."
+    }
+  ]
 }

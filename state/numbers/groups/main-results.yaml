@@ -1,3 +1,26 @@
 {
-  "numbers": []
+  "numbers": [
+    {
+      "numeric_id": "kernel-prev-best",
+      "value": 1363,
+      "display_value": "1363",
+      "status": "verified",
+      "claim_ids": ["claim-kernel-multiagent"],
+      "evidence_ids": ["evidence-arxiv-source"],
+      "result_ids": ["result-kernel-multiagent"],
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "notes": "Prior best-known score (cycles) on Anthropic's kernel engineering task, as reported in the arXiv source."
+    },
+    {
+      "numeric_id": "kernel-coral-best",
+      "value": 1103,
+      "display_value": "1103",
+      "status": "verified",
+      "claim_ids": ["claim-kernel-multiagent"],
+      "evidence_ids": ["evidence-arxiv-source"],
+      "result_ids": ["result-kernel-multiagent"],
+      "source": "https://arxiv.org/abs/2604.01658v1",
+      "notes": "Best score (cycles) reached by four co-evolving CORAL agents, as reported in the arXiv source."
+    }
+  ]
 }

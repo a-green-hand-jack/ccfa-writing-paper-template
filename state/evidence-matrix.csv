@@ -1,1 +1,5 @@
 claim_id,evidence_id,relationship,status,notes
+claim-autonomous-multiagent-evolution,evidence-arxiv-source,supports,active,reported in arXiv 2604.01658 abstract/method
+claim-sota-open-ended,evidence-arxiv-source,supports,active,reported in arXiv 2604.01658 abstract/experiments
+claim-kernel-multiagent,evidence-arxiv-source,supports,active,reported in arXiv 2604.01658 abstract/experiments
+claim-safeguards,evidence-arxiv-source,supports,active,reported in arXiv 2604.01658 abstract/method

@@ -1,4 +1,10 @@
-% TODO: abstract may only use registered claims and verified numbers.
+% ============================================================
+% Abstract
+% ============================================================
+
 \begin{abstract}
-TODO
+% We present Coral, an autonomous infrastructure for self-evolving agents, replacing rigid, hardcoded constraints with long-running exploration, reflection, and collaboration. Compared with structured evolutionary search, Coral achieves a 2.5$\times$ higher improvement rate and 10$\times$ faster evolution on the Erd\H{o}s Minimum Overlap problem using the same model, outperforming the score achieved by AlphaEvolve. On Anthropic's kernel benchmark, four agents push the best known score from 1363 to 1103 cycles. Together, these results suggest that giving agents more autonomy and enabling multiple agents to improve together can unlock substantially stronger performance.
+
+Large language model (LLM)-based evolution is a promising approach for open-ended discovery, where progress requires sustained search and knowledge accumulation. Existing methods still rely heavily on fixed heuristics and hard-coded exploration rules, which limit the autonomy of LLM agents. We present \textbf{CORAL}, the first framework for autonomous multi-agent evolution on open-ended problems. CORAL replaces rigid control with long-running agents that explore, reflect, and collaborate through shared persistent memory, asynchronous multi-agent execution, and heartbeat-based interventions. It also provides practical safeguards, including isolated workspaces, evaluator separation, resource management, and agent session and health management. Evaluated on diverse mathematical, algorithmic, and systems optimization tasks, CORAL sets new state-of-the-art results on 10 tasks, achieving 3--10$\times$ higher improvement rates with far fewer evaluations than fixed evolutionary search baselines across tasks. On Anthropic's kernel engineering task, four co-evolving agents improve the best known score from 1363 to 1103 cycles. Mechanistic analyses further show how these gains arise from knowledge reuse and multi-agent exploration and communication. Together, these results suggest that greater agent autonomy and multi-agent evolution can substantially improve open-ended discovery. Code is available at \url{https://github.com/Human-Agent-Society/CORAL}.
+
 \end{abstract}

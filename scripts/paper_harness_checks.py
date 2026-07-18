@@ -148,27 +148,21 @@ REQUIRED_PAPER_SURFACE = [
     "paper/refs.bib",
     "paper/sections/00_title.tex",
     "paper/sections/01_abstract.tex",
-    "paper/sections/02_intro.tex",
-    "paper/sections/03_related.tex",
-    "paper/sections/04_method.tex",
-    "paper/sections/05_exp.tex",
-    "paper/sections/06_conclusion.tex",
-    "paper/sections/07_limitations.tex",
-    "paper/sections/08_acknowledgement.tex",
     "paper/sections/10_appendix.tex",
 ]
 # NN_name convention: first digit 0=body/1=appendix, second digit=order within
 # that group. See paper/ANATOMY.md and .agent/anatomy-policy.md.
 NN_NAME_RE = re.compile(r"^[01]\d_[a-z][a-z0-9_]*$")
-SECTION_INPUT_FILES = [
+# Structural anchors every paper carries, independent of body-section naming.
+# The body sections (02_..-09_) are declared by the migrated case itself: their
+# names and count follow the source paper's real structure so the compiled PDF
+# reproduces the original's section order (a fidelity requirement). We therefore
+# do NOT mandate specific body-section stems; we only require the framing anchors
+# below plus the structural invariants in check_section_naming_and_order
+# (NN_name convention, body-before-\appendix, ascending \input order).
+SECTION_ANCHOR_INPUTS = [
     "00_title",
     "01_abstract",
-    "02_intro",
-    "03_related",
-    "04_method",
-    "05_exp",
-    "06_conclusion",
-    "07_limitations",
     "10_appendix",
 ]
 FIGURE_ASSET_EXTENSIONS = (".pdf", ".png", ".jpg", ".jpeg")
@@ -3065,9 +3059,17 @@ def check_paper_surface():
     if not main.exists():
         return code
     text = main.read_text(encoding="utf-8")
-    for section in SECTION_INPUT_FILES:
+    # Framing anchors must be present regardless of body-section naming.
+    for section in SECTION_ANCHOR_INPUTS:
         if f"\\input{{sections/{section}}}" not in text:
             code |= error(f"paper/main.tex does not input paper/sections/{section}.tex")
+    # Every sections/ input must resolve to an existing file (catches dangling
+    # inputs left behind after a rename/renumber). Body-section names are
+    # case-declared, so we validate resolution + structure, not fixed stems.
+    for match in re.finditer(r"\\input\{sections/([^}]+)\}", text):
+        stem = match.group(1)
+        if not (ROOT / f"paper/sections/{stem}.tex").exists():
+            code |= error(f"paper/main.tex inputs sections/{stem}.tex which does not exist")
     if "\\bibliography{refs}" not in text:
         code |= error("paper/main.tex must use paper/refs.bib via \\bibliography{refs}")
     return code

@@ -4,8 +4,8 @@
   "template_skeleton": true,
   "source_revision": {
     "treeish": "HEAD",
-    "commit": "6e747388fa72156f12049b92656ce7fee5a2fa56",
-    "tree": "7599542669cefa5b3f41626f972305619b6c4961"
+    "commit": "c424ffaa52d02343e5257a52a801b7998164348c",
+    "tree": "88066c9cae6ab3eb6c26def3a8d1599e67502e7a"
   },
   "surfaces": [
     {
@@ -468,8 +468,8 @@
         },
         {
           "relpath": "main.tex",
-          "sha256": "3614a62065e8b9d37288e06da7c0c4a2da4aa6f4db3cdcd44b618b186cc0ecee",
-          "size": 422
+          "sha256": "81597d7a5e4ebaf5ebfbc4c7f412c770c521a23813fe5df5f7f48801cce70271",
+          "size": 416
         },
         {
           "relpath": "refs.bib",

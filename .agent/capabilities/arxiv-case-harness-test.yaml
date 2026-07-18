@@ -28,7 +28,8 @@
     "scripts/check-release-package.py",
     "scripts/check-release-freshness.py",
     "scripts/check-conference-template.py",
-    "scripts/check-latex.sh"
+    "scripts/check-latex.sh",
+    "scripts/compare-original-pdf.sh"
   ],
   "human_gates": [
     {
@@ -73,6 +74,7 @@
     "scripts/check-release-freshness.py",
     "scripts/check-conference-template.py",
     "scripts/check-latex.sh",
+    "scripts/compare-original-pdf.sh",
     ".claude/skills/arxiv-case-harness-test/",
     ".agents/workflows/arxiv-case-harness-test.md"
   ],

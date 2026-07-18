@@ -213,6 +213,10 @@ RELEASE_FLATTEN_ASSET_EXTENSIONS = {
 RELEASE_FLATTEN_ASSET_DIRS = ("figures", "tables", "generated")
 RELEASE_FLATTEN_STATUSES = {"flattened", "skipped-no-latexpand", "skipped-no-main", "error"}
 RELEASE_FLATTEN_SRCS_RE = re.compile(r"(?:figures|tables)/srcs/")
+# Style files (*.cls/*.sty/*.bst) are copied to the flat bundle root, so any
+# `{style/NAME}` reference in the flattened main.tex (e.g. \usepackage,
+# \documentclass, \bibliographystyle) must drop the `style/` prefix to resolve.
+RELEASE_FLATTEN_STYLE_RE = re.compile(r"\{style/")
 
 
 def load_doc(path: str):
@@ -1438,7 +1442,8 @@ def flatten_asset_relpath(rel_parts: tuple[str, ...]) -> Path:
 
 
 def rewrite_flatten_asset_paths(text: str) -> str:
-    return RELEASE_FLATTEN_SRCS_RE.sub("srcs/", text)
+    text = RELEASE_FLATTEN_SRCS_RE.sub("srcs/", text)
+    return RELEASE_FLATTEN_STYLE_RE.sub("{", text)
 
 
 def compute_flatten_bundle(arxiv_dest: Path, out_dir: Path) -> tuple[str, str | None]:
@@ -3907,6 +3912,22 @@ def check_number_value_consistency(numeric_id: str, number: dict) -> int:
         display_values.extend(scalar_strings(display))
     if direct_values and display_values and not numeric_values_compatible(direct_values, display_values):
         return error(f"number {numeric_id} value contradicts display value")
+    # Cross-check the plain-number direct fields against each other. They all
+    # denote the same reported scalar (raw vs formatted), so a `value: 1400`
+    # paired with `display_value: "1363"` is a fabrication the display-vs-direct
+    # comparison above misses (it lumps both into direct_values). The LaTeX-form
+    # fields (latex_value/macro_value) are excluded: they legitimately hold
+    # macro forms like `\num{1363}` that are not bare-number comparable.
+    plain_values: list[str] = []
+    for field in ["value", "display_value", "reported_value"]:
+        plain_values.extend(scalar_strings(number.get(field)))
+    for i in range(len(plain_values)):
+        for j in range(i + 1, len(plain_values)):
+            if not numeric_values_compatible([plain_values[i]], [plain_values[j]]):
+                return error(
+                    f"number {numeric_id} has inconsistent reported values: "
+                    f"{plain_values[i]} vs {plain_values[j]}"
+                )
     return 0
 
 
